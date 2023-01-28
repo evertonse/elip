@@ -1,3 +1,6 @@
+/*/*
+nested comment 
+*/*/
 int main(int argc, char const *argv[])
 {
   float a = 1.;

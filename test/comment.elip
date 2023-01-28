@@ -14,3 +14,13 @@ Comentario de bloco
 # Aqui é a entrada
 entrada ( inteiro principal () : 
 	(aplica_operador(7 | 5 | max) )
+
+{--Comentario blocol{-- comentario mais
+ interno nested, e agora deve falar --} --}
+ --}
+
+(inteiro baskara(real x | real y):
+  baskara(2,3 | 3,2) +
+  baskara(0b10001,1 | 3,2)
+)
+
