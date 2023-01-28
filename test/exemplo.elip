@@ -1,0 +1,10 @@
+( inteiro max (inteiro x | inteiro y) : 
+	(se (x>y) entao x senao y)
+)
+
+( inteiro aplica_operador (inteiro x | inteiro y | inteiro op(inteiro | inteiro) ) : 
+	(op(x, y) # função de alta ordem
+)     
+
+entrada ( inteiro principal () : 
+	(aplica_operador(7 | 5 | max) )

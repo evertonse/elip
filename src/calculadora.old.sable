@@ -1,0 +1,25 @@
+Package calculadora;
+
+Helpers
+ digito = ['0' .. '9'];
+ espaco = ' ';
+ rc = 13;
+ nl = 10;
+ nondigit	=	[ '_' + [[ 'a' .. 'z' ] + [ 'A' .. 'Z' ]]];
+
+Tokens
+ numero = digito+;
+ soma = '+';
+ menos = '-';
+ mult = '*';
+ div = '/';
+ mod = '%';
+ par_esq = '(';
+ valor = 'valor';
+ par_dir = ')';
+ vazio = (espaco | rc | nl)+;
+
+
+Ignored Tokens
+ vazio;
+

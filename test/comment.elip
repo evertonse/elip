@@ -1,0 +1,16 @@
+
+( inteiro max (inteiro x | inteiro y) : 
+	(se (x>y) entao x senao y)
+  # Somo pica
+)
+
+{--
+Comentario de bloco
+--}
+( inteiro aplica_operador (inteiro x | inteiro y | inteiro op(inteiro | inteiro) ) : 
+	(op(x, y) # função de alta ordem
+)     
+
+# Aqui é a entrada
+entrada ( inteiro principal () : 
+	(aplica_operador(7 | 5 | max) )

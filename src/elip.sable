@@ -1,0 +1,107 @@
+Package elip;
+
+Helpers
+  digit     = ['0' .. '9'];
+  bin_digit     = ('0' | '1');
+
+  letter    = [['a' .. 'z'] + ['A' .. 'Z']];
+  nondigit	=	[ '_' + [[ 'a' .. 'z' ] + [ 'A' .. 'Z' ]]];
+
+  any = [0x0 .. 0xfffff];
+  ascii_char = [32 .. 127] ;
+
+  // empty
+  cr = 13 ; // carriage return
+  lf = 10 ; // line feed
+  tab = 9 ; // tab char
+  space = ' ';
+  nl = '\n';
+  eol = lf | cr | cr lf;
+  not_eol = [any - [cr + lf]];
+
+  hashtag = '#';
+
+  // thingy
+  l_curly = '{';
+  r_curly = '}';  
+  l_paren = '(';
+  r_paren = ')';
+
+  l_curly_double_minus = '{--';
+  r_curly_double_minus = '--}';
+  
+ 
+Tokens
+/* These are token definitions. It is allowed to use helper regular *
+ * expressions in the body of a token definition.                   *
+ * On a given input, the longest valid definition is chosen, In     *
+ * case of a match, the definition that appears first is chosen.    *
+ * Example: on input -> 's' <- "char" will have precedence on       *
+ * "string", because it appears first.                              */
+ 
+  plus    = '+';
+  minus   = '-';
+  mult    =	'*';
+  div     = '/';
+  mod     = '%';
+  comma   = ',';
+  l_paren = '(';
+  r_paren = ')';
+  pipe = '|';
+  colon = ':';
+  
+  //keyword
+  entry = 'entrada';
+  
+  if   = 'se';
+  then = 'entao';
+  else = 'senao';
+
+  excl_mark	=	'!';
+  quest_mark	=	'?';
+  ellipsis	=	'...';
+  equal	=	'=';
+  eq	=	'==';
+  neq	=	'!=';
+  lt	=	'<';
+  gt	=	'>';
+
+  l_curly_double_minus = '{--';
+  r_curly_double_minus = '--}';
+
+  // types 
+  interger = 'inteiro';
+  real = 'real';
+  bool =  'booleano';
+
+  // type values
+  true  =  'verdade';
+  false =  'false';
+
+  // reserved
+
+  // digits are not allowed in identifier
+  // neither can have accents, weird chars and can't be no keyword
+	identifier	=	nondigit+;
+  
+
+  // arithmetic
+  number  = digit+;
+  frac_number =  digit+ ',' digit+;
+
+  bin_number = '0b' bin_digit+;
+  bin_frac_number = '0b' bin_digit+ ',' bin_digit+;
+
+
+  // comment
+  comment_line  = hashtag not_eol* eol;
+  comment_block = l_curly_double_minus  any* r_curly_double_minus;  
+  //empty shit
+  blank	=	( cr | lf | tab | space ) +;
+
+  
+Ignored Tokens
+
+  comment_line,
+  comment_block,
+  blank;
