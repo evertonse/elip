@@ -7,17 +7,17 @@ from shutil import rmtree as rmdir
 
 ####################################################################################################################
 ####################################################################################################################
-base_path = Path("src/elip")
+base_path = Path("src/Elipses")
 dirs = [Path(base_path, i) for i in {'analysis', 'lexer', 'node', 'parser'}]
 dirs.append(Path('bin'))
 
 sablecc_jar_path        = Path("vendor/sablecc.jar")
-sablecc_grammar_path    = Path("src/elip.sable")
+sablecc_grammar_path    = Path("src/Elipses.sable")
 ####################################################################################################################
 ####################################################################################################################
 
 
-def refresh_dirs(dirs):
+def refresh_dirs(dirs: Path):
   for dir in dirs:
     if dir.exists():
       result = rmdir(dir)

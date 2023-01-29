@@ -3,24 +3,32 @@
 	(se (x>y) entao x senao y)
   # Somo pica
 )
-
+{-- --------testing comment with various minus------- -------- -- -- --}
 {--
 Comentario de bloco
 --}
 ( inteiro aplica_operador (inteiro x | inteiro y | inteiro op(inteiro | inteiro) ) : 
 	(op(x, y) # função de alta ordem
 )     
-
-# Aqui é a entrada
+{--{{{{--}
+# Aqui é a entrada 
 entrada ( inteiro principal () : 
 	(aplica_operador(7 | 5 | max) )
 
-{--Comentario blocol{-- comentario mais
- interno nested, e agora deve falar --} --}
- --}
+{----}
 
+{--Comentar
+io blocol {-- c --}
+
+{--comentario mais--}
+{--{--In C this compiles so should in Elip--}
 (inteiro baskara(real x | real y):
   baskara(2,3 | 3,2) +
   baskara(0b10001,1 | 3,2)
 )
 
+{-- NESTED {--comment, this should be not be all included in one comment,
+ and error should occurr right after here because Elip's comments are like C comments--} --}
+
+{-- Next should give a lexical error 
+-}

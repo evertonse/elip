@@ -24,9 +24,10 @@ def allfiles(start:str | Path, extension:str, ignore:set) -> list[Path]:
   return files
 
 classpath = Path("./bin")
-srcpath = Path("./src")
-mainclass = "elip.Main"
-argsfilename: str = "javafiles.args"
+srcpath   = Path("./src")
+
+mainclass = "Elipses.Main"
+argsfilename: str = "java.args"
 
 javafiles: list[Path] =  allfiles(start=srcpath, extension='.java', ignore=EXCLUDE_FOLDERS)
 datfiles:  list[Path] =  allfiles(start=srcpath, extension='.dat', ignore=EXCLUDE_FOLDERS)
