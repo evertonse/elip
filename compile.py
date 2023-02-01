@@ -8,7 +8,7 @@ from shutil import copyfile
 ####################################################################################################################
 EXCLUDE_FOLDERS: set = {"bin", "test", "vendor", "__pycache__", "docs"}
 
-def allfiles(start:str | Path, extension:str, ignore:set) -> list[Path]:
+def allfiles(start: Path, extension:str, ignore:set) -> list:
   """
   @return all files with extension 'extension' recursevely find from 'start'
   @input 'start' is the dir which we'll start the walk 
@@ -29,9 +29,9 @@ srcpath   = Path("./src")
 mainclass = "Elipses.Main"
 argsfilename: str = "java.args"
 
-javafiles: list[Path] =  allfiles(start=srcpath, extension='.java', ignore=EXCLUDE_FOLDERS)
-datfiles:  list[Path] =  allfiles(start=srcpath, extension='.dat', ignore=EXCLUDE_FOLDERS)
-txtfiles:  list[Path] =  allfiles(start=srcpath, extension='.txt', ignore=EXCLUDE_FOLDERS)
+javafiles: list =  allfiles(start=srcpath, extension='.java', ignore=EXCLUDE_FOLDERS)
+datfiles:  list =  allfiles(start=srcpath, extension='.dat', ignore=EXCLUDE_FOLDERS)
+txtfiles:  list =  allfiles(start=srcpath, extension='.txt', ignore=EXCLUDE_FOLDERS)
 
 os.makedirs(classpath, exist_ok=True)
 ####################################################################################################################

@@ -1,5 +1,4 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+#from os import system as run
 from subprocess import run
 from os import mkdir
 from pathlib import Path
@@ -19,7 +18,7 @@ sablecc_grammar_path    = Path("src/Elipses.sable")
 ####################################################################################################################
 
 
-def refresh_dirs(dirs: list[Path]):
+def refresh_dirs(dirs: Path):
   for dir in dirs:
     if dir.exists() and dir.is_dir():
       result = rmdir(dir)
@@ -41,7 +40,7 @@ def __main__():
   # Method 1 - find the main sablecc manually
   #cmd = f"java -cp {sablecc_jar_path} org.sablecc.sablecc.SableCC src/calculadora.sable"
   # Method 2 - pass the flag -jar and let java find the main
-  cmd = f"java -jar {sablecc_jar_path} {sablecc_grammar_path}"
+  cmd = ["java", "-jar", str(sablecc_jar_path), str(sablecc_grammar_path)]
   print(f'INFO running cmd: \n{cmd}')
 
   result: int = run(cmd)
