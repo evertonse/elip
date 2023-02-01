@@ -1,0 +1,21 @@
+# Testing Inteiro
+(inteiro min (inteiro x | inteiro y) : 
+	(se (x < y) 
+    entao x 
+    senao y
+  )
+)
+
+entrada ( inteiro main() : 
+	(aplica_operador(7 | 5 | max) )
+
+(inteiro baskara(real x | real y):
+  baskara(2,3 | 3,2) +
+  baskara(0b10001,1 | 3,2)
+)
+
+{-- NESTED {--comment, this should be not be all included in one comment,
+ and error should occurr right after here because Elip's comments are like C comments--} --}
+
+{-- Next should give a lexical error 
+-}

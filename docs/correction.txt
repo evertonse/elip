@@ -1,0 +1,3 @@
+( inteiro aplica_operador (inteiro x | inteiro y | inteiro op(inteiro | inteiro) ) :
+(op(x, y) # this part shoulde be op(x | y)  and eiter not open or close the paranthesis 
+)

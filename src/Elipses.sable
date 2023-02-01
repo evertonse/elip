@@ -66,6 +66,7 @@ Tokens
   kw_not  = 'nao';
   kw_or   = 'ou';
 
+  kw_lambda = 'lambda';
 
 	/* punctuators */
   plus    = '+';
@@ -76,6 +77,8 @@ Tokens
   comma   = ',';
   l_paren = '(';
   r_paren = ')';
+  l_brack = '[';
+  r_brack = ']';
   pipe = '|';
   colon = ':';
   //excl_mark	=	'!';
