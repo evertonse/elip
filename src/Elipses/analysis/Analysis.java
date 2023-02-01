@@ -25,6 +25,7 @@ public interface Analysis extends Switch
     void caseTKwAnd(TKwAnd node);
     void caseTKwNot(TKwNot node);
     void caseTKwOr(TKwOr node);
+    void caseTKwLambda(TKwLambda node);
     void caseTPlus(TPlus node);
     void caseTMinus(TMinus node);
     void caseTMult(TMult node);
@@ -33,6 +34,8 @@ public interface Analysis extends Switch
     void caseTComma(TComma node);
     void caseTLParen(TLParen node);
     void caseTRParen(TRParen node);
+    void caseTLBrack(TLBrack node);
+    void caseTRBrack(TRBrack node);
     void caseTPipe(TPipe node);
     void caseTColon(TColon node);
     void caseTEq(TEq node);

@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 from subprocess import run
 from os import mkdir
 from pathlib import Path

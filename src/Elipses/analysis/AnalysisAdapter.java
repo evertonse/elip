@@ -153,6 +153,12 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
+    public void caseTKwLambda(TKwLambda node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
     public void caseTPlus(TPlus node)
     {
         defaultCase(node);
@@ -196,6 +202,18 @@ public class AnalysisAdapter implements Analysis
 
     @Override
     public void caseTRParen(TRParen node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseTLBrack(TLBrack node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseTRBrack(TRBrack node)
     {
         defaultCase(node);
     }
