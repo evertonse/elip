@@ -19,9 +19,9 @@ sablecc_grammar_path    = Path("src/Elipses.sable")
 ####################################################################################################################
 
 
-def refresh_dirs(dirs: Path):
+def refresh_dirs(dirs: list[Path]):
   for dir in dirs:
-    if dir.exists():
+    if dir.exists() and dir.is_dir():
       result = rmdir(dir)
       print(f'INFO deleted dir {dir}, result code {result }')
       result = mkdir(dir)
@@ -41,15 +41,15 @@ def __main__():
   # Method 1 - find the main sablecc manually
   #cmd = f"java -cp {sablecc_jar_path} org.sablecc.sablecc.SableCC src/calculadora.sable"
   # Method 2 - pass the flag -jar and let java find the main
-  cmd = f"java -cp bin -jar {sablecc_jar_path} {sablecc_grammar_path}"
+  cmd = f"java -jar {sablecc_jar_path} {sablecc_grammar_path}"
   print(f'INFO running cmd: \n{cmd}')
 
   result: int = run(cmd)
   check_result(result, project="SableCC")
 
-  #import compile
-  result: int = run("python compile.py")
-  check_result(result)
+  import compile
+  # result: int = run("python compile.py")
+  # check_result(result)
 
 
 if __name__ == '__main__':

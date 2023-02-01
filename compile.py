@@ -33,6 +33,7 @@ javafiles: list[Path] =  allfiles(start=srcpath, extension='.java', ignore=EXCLU
 datfiles:  list[Path] =  allfiles(start=srcpath, extension='.dat', ignore=EXCLUDE_FOLDERS)
 txtfiles:  list[Path] =  allfiles(start=srcpath, extension='.txt', ignore=EXCLUDE_FOLDERS)
 
+os.makedirs(classpath, exist_ok=True)
 ####################################################################################################################
 ####################################################################################################################
 
@@ -43,7 +44,6 @@ txtfiles:  list[Path] =  allfiles(start=srcpath, extension='.txt', ignore=EXCLUD
 with open(argsfilename, "w+") as f:
     for javafile in sorted(javafiles):
         f.write(f"{javafile} \n")
-
 
 cmd_compile: str = (
     f'javac -classpath  "{classpath}" -sourcepath "{srcpath}" -d "{classpath}" -encoding UTF-8 '
@@ -62,7 +62,7 @@ if len(datfiles) > 0:
 
         print(f"\tfrom: {old}\n\tinto: {new}")
 
-        new.touch()
+        new.touch(exist_ok=True)
         copyfile(src=Path(old), dst=Path(new))
 
 
@@ -74,7 +74,7 @@ if len(datfiles) > 0:
 
         print(f"\tfrom: {old}\n\tinto: {new}")
 
-        new.touch()
+        new.touch(exist_ok=True)
         copyfile(src=Path(old), dst=Path(new))
 
 
