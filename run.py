@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # from os import system as run
 from subprocess import run
 from os import mkdir
