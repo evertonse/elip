@@ -1,4 +1,4 @@
-Package Elipses;
+Package elipses;
 
 Helpers
   digit     = ['0' .. '9'];

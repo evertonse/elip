@@ -1,9 +1,9 @@
-package Elipses;
+package elipses;
 
 import java.io.*;
 
-import Elipses.lexer.*;
-import Elipses.node.*;
+import elipses.lexer.*;
+import elipses.node.*;
 
 public class Main
 {
