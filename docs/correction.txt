@@ -1,3 +1,6 @@
 ( inteiro aplica_operador (inteiro x | inteiro y | inteiro op(inteiro | inteiro) ) :
 (op(x, y) # this part shoulde be op(x | y)  and eiter not open or close the paranthesis 
 )
+
+
+# e função de alta ordem na hora do retorno ? a especificação permite retorno do tipo função?°

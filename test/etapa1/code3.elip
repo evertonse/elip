@@ -1,0 +1,44 @@
+{--
+Recursos de Linguagem:
+definição de função
+uso de função recursiva
+entrada do programa
+operadores: %, /, * +, - 
+uso de tipos: real
+uso de identificador: '_'
+operadores booleanos: e, ou, nao
+funcão de alta ordem, passado como parametro, tanto como função padrao, quanto como lambda
+constante binária, decimal
+usado de virgula
+--}
+
+entrada
+(real main():
+  (
+    (dot(
+        10,23 | 0b1100 | lambda(u | v) : (
+          ( (u*u + 2,1 % 10) / 2 )
+        )
+      )
+    )
+    + 
+    (dot( 10,23 | 0b1100 | anotherinner)
+    )
+  )
+)
+
+(real anotherinner(real a | real _))
+  (se (a > 23,1) ou ( a < -1,1))
+    (se (_ = 2,1) e (nao(a = 2,1)) entao
+      (a)
+    senao 
+      (_)
+    )
+  senao
+    ( a * _ )
+  )
+)
+
+(real dot(real u | real v | real inner(real | real)):
+  (inner(u|v))
+)

@@ -11,13 +11,9 @@ public class Main
 	{
 		try
 		{
-			String arquivo = "test/comment.elip";
-			Lexer lexer =   
-					new Lexer(
-							new PushbackReader(  
-									new FileReader(arquivo), 1024)); 
-      Debug.lexer(lexer);
-
+      Debug.debug("test/etapa1/code1.elip");
+      Debug.debug("test/etapa1/code2.elip");
+      Debug.debug("test/etapa1/code3.elip");
 		}
 		catch(Exception e) {
       e.printStackTrace();
@@ -56,5 +52,24 @@ class Debug {
       Debug.lexer(lexer); 
     }
   }
-  
+
+  public static 
+  void debug(String file)
+	{
+    System.out.println("\nChecking Lexer for file: " + file);
+		try
+		{
+			String arquivo = file;
+			Lexer lexer =   
+					new Lexer(
+							new PushbackReader(  
+									new FileReader(arquivo), 1024)); 
+      Debug.lexer(lexer);
+
+		}
+		catch(Exception e) {
+      e.printStackTrace();
+			System.out.println(e.getClass() + e.getMessage());
+		}
+	}
 }
