@@ -1,0 +1,23 @@
+{-- este é um
+comentário de bloco
+em várias linhas
+!*0123 --}
+
+#exemplo de função como parâmetro
+(
+    inteiro exemploAltaOrdem (inteiro digito | real multiplicarPorPi (inteiro | real)):
+    (
+        #bloco_exp
+        (
+            (const real pi (3,1415))
+            multiplicarPorPi(digito | pi)
+        )
+    )
+)
+
+(
+    real modificarDigito (inteiro digito | real pi):
+    (
+        multiplicarPorPi * pi
+    )
+)

@@ -7,17 +7,18 @@ import elipses.node.*;
 
 public class Main
 {
+  String[] test_files = new String[]{""};
 	public static void main(String[] args)
 	{
 		try
 		{
-      Debug.debug("test/etapa1/code1.elip");
-      Debug.debug("test/etapa1/code2.elip");
-      Debug.debug("test/etapa1/code3.elip");
+          Debug.debug("test/etapa1/code1.elip");
+          Debug.debug("test/etapa1/code2.elip");
+          Debug.debug("test/etapa1/code3.elip");
 		}
 		catch(Exception e) {
-      e.printStackTrace();
-			System.out.println(e.getClass() + e.getMessage());
+            e.printStackTrace();
+    	    System.out.println(e.getClass() + e.getMessage());
 		}
 	}
 }
@@ -37,7 +38,6 @@ class Utils {
 }
 
 class Debug {
-  
   public static 
   void lexer(Lexer lexer) throws LexerException, IOException {
     try {

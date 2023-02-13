@@ -1,0 +1,18 @@
+{--
+Algoritmo minimo multiplo comum (mmc), como função lambda, usando mdc
+--} 
+(
+    ( inteiro mdc (inteiro a | inteiro b) :
+	    (se (b = 0) entao a senao mdc(b | a % b))
+    )
+
+    lambda (x | y) : ((x / mdc(x | y)) * y) [15 | 20] # calculo mmc
+)
+
+
+# Cálculo de fibonacci
+(
+    ( inteiro fibonacci (inteiro x) :
+	    (se (x < 1 ou x = 1) entao x senao (fibonacci(x-1) + fibonacci(x-2)))
+    )
+)
