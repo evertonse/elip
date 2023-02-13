@@ -5,7 +5,7 @@ Helpers
   bin_digit     = ('0' | '1');
 
   letter    = [['a' .. 'z'] + ['A' .. 'Z']];
-  nondigit	=	[ '_' + [[ 'a' .. 'z' ] + [ 'A' .. 'Z' ]]];
+  nondigit	=	[ '_' + letter ];
 
   any = [0x0 .. 0xfffff];
   ascii_char = [32 .. 127] ;
@@ -23,7 +23,7 @@ Helpers
 
   hashtag = '#';
 
-  // thingy
+  // Brackets
   l_curly = '{';
   r_curly = '}';  
   l_paren = '(';
@@ -31,7 +31,8 @@ Helpers
 
   l_curly_double_minus = '{--';
   r_curly_double_minus = '--}';
-  // comment
+  
+  // Comments
   comment_line  = '#' not_eol* eol;
   comment_block = l_curly_double_minus  not_minus* '-'+ (not_minus_not_r_curly not_minus*  '-'+)* '-}';  
  
@@ -48,27 +49,30 @@ Tokens
   comment = (comment_line | comment_block);
 
 
-	/* keywords */
+/* keywords */
   // types 
   kw_interger = 'inteiro';
   kw_real = 'real';
   kw_bool =  'booleano';
+
   // type values
   kw_true  =  'verdade';
   kw_false =  'false';
+
   // reserved
   kw_entry = 'entrada';
   kw_if   = 'se';
   kw_then = 'entao';
   kw_else = 'senao';
 
+  // Bool operators
   kw_and  = 'e';
   kw_not  = 'nao';
   kw_or   = 'ou';
 
   kw_lambda = 'lambda';
 
-	/* punctuators */
+/* punctuators */
   plus    = '+';
   minus   = '-';
   mult    =	'*';
@@ -86,8 +90,8 @@ Tokens
   //ellipsis	=	'...';
 
   eq	= '=';
-  lt	=	'<';
-  gt	=	'>';
+  lt	= '<';
+  gt	= '>';
 
 
 
