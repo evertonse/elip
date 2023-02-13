@@ -35,10 +35,12 @@ entrada
       (_)
     )
   senao
-    ( a * _ )
+    ( a * _ + 0b0111)
   )
 )
 
+## Comentario de linda no meio 
 (real dot(real u | real v | real inner(real | real)):
   (inner(u|v))
 )
+## Comentario de linda no final

@@ -24,6 +24,7 @@ Helpers
   hashtag = '#';
 
   // Brackets
+  comma   = ',';
   l_curly = '{';
   r_curly = '}';  
   l_paren = '(';
@@ -34,6 +35,7 @@ Helpers
   
   // Comments
   comment_line  = '#' not_eol* eol;
+  comment_line_eof  = '#' not_eol* eol?;
   comment_block = l_curly_double_minus  not_minus* '-'+ (not_minus_not_r_curly not_minus*  '-'+)* '-}';  
  
 Tokens
@@ -46,7 +48,7 @@ Tokens
  
   //empty shit
   blank	=	( cr | lf | tab | space ) +;
-  comment = (comment_line | comment_block);
+  comment = (comment_line | comment_block | comment_line_eof);
 
 
 /* keywords */
@@ -56,7 +58,7 @@ Tokens
   kw_bool =  'booleano';
 
   // type values
-  kw_true  =  'verdade';
+  kw_true  =  'verdadeiro';
   kw_false =  'false';
 
   // reserved
@@ -71,14 +73,13 @@ Tokens
   kw_or   = 'ou';
 
   kw_lambda = 'lambda';
-
+  
 /* punctuators */
   plus    = '+';
   minus   = '-';
   mult    =	'*';
   div     = '/';
   mod     = '%';
-  comma   = ',';
   l_paren = '(';
   r_paren = ')';
   l_brack = '[';
@@ -105,7 +106,7 @@ Tokens
   frac_number =  digit+ ',' digit+;
 
   bin_number = '0b' bin_digit+; 
-  bin_frac_number = '0b' bin_digit+ ',' bin_digit+;
+  //bin_frac_number = '0b' bin_digit+ ',' bin_digit+;
 
 Ignored Tokens
 

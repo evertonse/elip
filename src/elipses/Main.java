@@ -9,8 +9,10 @@ public class Main
 {
   static String[] test_files = new String[] {
     //"test/grupo10/*",
-    "test/grupo10/codigo1_grupo10.elip",
-    //"test/etapa1/code1.elip", 
+    //"test/grupo10/codigo1_grupo10.elip",
+    //"test/grupo10/codigo2_grupo10.elip",
+    //"test/grupo10/codigo3_grupo10.elip",
+    "test/etapa1/code1.elip", 
     //"test/etapa1/code2.elip", 
     //"test/etapa1/code3.elip", 
   };
@@ -30,6 +32,7 @@ public class Main
 	}
 }
 
+
 class Utils {
 	public static String pretify(Token token) {
 		String token_pos = new String("[" + token.getLine() + "," + token.getPos()+ "]:"); 
@@ -44,6 +47,7 @@ class Utils {
 	}
 }
 
+
 class Debug {
   public static 
   void lexer(Lexer lexer) throws LexerException, IOException {
@@ -55,8 +59,9 @@ class Debug {
           System.out.println(Utils.pretify(token));
       }
     } catch (Exception e) {
-      System.out.println("\nError: " + e.getClass() + e.getMessage() + "\nContinuing with next tokens ...\n");
-      Debug.lexer(lexer); 
+      System.out.println("\nError: " + e.getClass() + e.getMessage() 
+        + "\nWon't continue with next tokens ...\n");
+      //Debug.lexer(lexer); 
     }
   }
 

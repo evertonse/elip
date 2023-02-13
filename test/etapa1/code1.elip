@@ -19,7 +19,7 @@ entrada
 # testa dse é par
 (booleano iseven(inteiro number):
   (se (number % 2 = 0) entao
-      (verdade)
+      (verdadeiro)
     senao
       (falso)
   ) 

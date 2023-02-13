@@ -9,11 +9,9 @@ src\elipses\node\InvalidToken.java
 src\elipses\node\Node.java 
 src\elipses\node\Switch.java 
 src\elipses\node\Switchable.java 
-src\elipses\node\TBinFracNumber.java 
 src\elipses\node\TBinNumber.java 
 src\elipses\node\TBlank.java 
 src\elipses\node\TColon.java 
-src\elipses\node\TComma.java 
 src\elipses\node\TComment.java 
 src\elipses\node\TDiv.java 
 src\elipses\node\TEq.java 

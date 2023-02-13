@@ -31,7 +31,6 @@ public interface Analysis extends Switch
     void caseTMult(TMult node);
     void caseTDiv(TDiv node);
     void caseTMod(TMod node);
-    void caseTComma(TComma node);
     void caseTLParen(TLParen node);
     void caseTRParen(TRParen node);
     void caseTLBrack(TLBrack node);
@@ -45,7 +44,6 @@ public interface Analysis extends Switch
     void caseTNumber(TNumber node);
     void caseTFracNumber(TFracNumber node);
     void caseTBinNumber(TBinNumber node);
-    void caseTBinFracNumber(TBinFracNumber node);
     void caseEOF(EOF node);
     void caseInvalidToken(InvalidToken node);
 }

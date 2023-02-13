@@ -189,12 +189,6 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseTComma(TComma node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
     public void caseTLParen(TLParen node)
     {
         defaultCase(node);
@@ -268,12 +262,6 @@ public class AnalysisAdapter implements Analysis
 
     @Override
     public void caseTBinNumber(TBinNumber node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseTBinFracNumber(TBinFracNumber node)
     {
         defaultCase(node);
     }

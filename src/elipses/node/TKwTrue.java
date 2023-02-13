@@ -9,12 +9,12 @@ public final class TKwTrue extends Token
 {
     public TKwTrue()
     {
-        super.setText("verdade");
+        super.setText("verdadeiro");
     }
 
     public TKwTrue(int line, int pos)
     {
-        super.setText("verdade");
+        super.setText("verdadeiro");
         setLine(line);
         setPos(pos);
     }
