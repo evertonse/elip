@@ -1,3 +1,4 @@
+{-- {-- --}
 #funcao para checar se um inteiro é divisível por outro
 (
     inteiro divisivelPor (inteiro dividendo | inteiro divisor):
@@ -15,3 +16,4 @@
         senao y
     )
 )
+{----}
