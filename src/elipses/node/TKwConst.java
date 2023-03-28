@@ -5,16 +5,16 @@ package elipses.node;
 import elipses.analysis.*;
 
 @SuppressWarnings("nls")
-public final class TKwFalse extends Token
+public final class TKwConst extends Token
 {
-    public TKwFalse()
+    public TKwConst()
     {
-        super.setText("falso");
+        super.setText("const");
     }
 
-    public TKwFalse(int line, int pos)
+    public TKwConst(int line, int pos)
     {
-        super.setText("falso");
+        super.setText("const");
         setLine(line);
         setPos(pos);
     }
@@ -22,18 +22,18 @@ public final class TKwFalse extends Token
     @Override
     public Object clone()
     {
-      return new TKwFalse(getLine(), getPos());
+      return new TKwConst(getLine(), getPos());
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseTKwFalse(this);
+        ((Analysis) sw).caseTKwConst(this);
     }
 
     @Override
     public void setText(@SuppressWarnings("unused") String text)
     {
-        throw new RuntimeException("Cannot change TKwFalse text.");
+        throw new RuntimeException("Cannot change TKwConst text.");
     }
 }

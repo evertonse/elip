@@ -12,9 +12,10 @@ public class Main
     //"test/grupo10/codigo1_grupo10.elip",
     //"test/grupo10/codigo2_grupo10.elip",
     //"test/grupo10/codigo3_grupo10.elip",
-    "test/etapa1/code1.elip", 
+    //"test/etapa1/code1.elip", 
     //"test/etapa1/code2.elip", 
     //"test/etapa1/code3.elip", 
+    "test/comment.elip"
   };
 
 	public static void main(String[] args)
@@ -24,7 +25,6 @@ public class Main
         Debug.debug(elip_file);
       }
 		}
-
 		catch(Exception e) {
             e.printStackTrace();
     	    System.out.println(e.getClass() + e.getMessage());
@@ -54,8 +54,7 @@ class Debug {
     try {
       Token token;
       while(!((token = lexer.next()) instanceof EOF)) {
-          if (token instanceof TBlank) 
-            continue;
+          //if (token instanceof TBlank) continue;
           System.out.println(Utils.pretify(token));
       }
     } catch (Exception e) {

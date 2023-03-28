@@ -69,6 +69,294 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
+    public void caseStart(Start node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAProgram(AProgram node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseADeclFunc(ADeclFunc node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAIntType(AIntType node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseABoolType(ABoolType node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseARealType(ARealType node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAParams(AParams node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseASingleParams(ASingleParams node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAMultipleParams(AMultipleParams node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseATypeParam(ATypeParam node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseASignatureParam(ASignatureParam node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseASignature(ASignature node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseASignatureParams(ASignatureParams node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseASingleSignatureParams(ASingleSignatureParams node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAMultipleSignatureParams(AMultipleSignatureParams node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseATypeSignatureParam(ATypeSignatureParam node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseASignatureSignatureParam(ASignatureSignatureParam node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseABinExp(ABinExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAFracExp(AFracExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAIntExp(AIntExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseATrueExp(ATrueExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAFalseExp(AFalseExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseABlockExp(ABlockExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseACallExp(ACallExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseALambdaExp(ALambdaExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseANegativeExp(ANegativeExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAIfExp(AIfExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAPlusExp(APlusExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAMinusExp(AMinusExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAMultExp(AMultExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseADivExp(ADivExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAModExp(AModExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAEqExp(AEqExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseALtExp(ALtExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAGtExp(AGtExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseANotExp(ANotExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAAndExp(AAndExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAOrExp(AOrExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseABlockBlockExp(ABlockBlockExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseADeclConst(ADeclConst node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAFuncCall(AFuncCall node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAFuncLambda(AFuncLambda node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAListIds(AListIds node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseASingleListIds(ASingleListIds node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAMultipleListIds(AMultipleListIds node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAListExp(AListExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseASingleListExp(ASingleListExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAMultipleListExp(AMultipleListExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
     public void caseTBlank(TBlank node)
     {
         defaultCase(node);
@@ -76,6 +364,12 @@ public class AnalysisAdapter implements Analysis
 
     @Override
     public void caseTComment(TComment node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseTKwConst(TKwConst node)
     {
         defaultCase(node);
     }
@@ -249,19 +543,19 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseTNumber(TNumber node)
+    public void caseTNumberInt(TNumberInt node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseTFracNumber(TFracNumber node)
+    public void caseTNumberFrac(TNumberFrac node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseTBinNumber(TBinNumber node)
+    public void caseTNumberBin(TNumberBin node)
     {
         defaultCase(node);
     }

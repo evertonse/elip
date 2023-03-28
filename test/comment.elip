@@ -1,4 +1,4 @@
-
+# e ou nao > < = % / * - + verdade verdadeiro
 ( inteiro max (inteiro x | inteiro y) : 
 	(se (x>y) entao x senao y)
   # Somo pica
@@ -8,14 +8,14 @@
 Comentario de bloco
 --}
 ( inteiro aplica_operador (inteiro x | inteiro y | inteiro op(inteiro | inteiro) ) : 
-	(op(x, y) # função de alta ordem
+	(op(x | y) # função de alta ordem
 )     
 {--{{{{--}
 # Aqui é a entrada 
 entrada ( inteiro principal () : 
 	(aplica_operador(7 | 5 | max) )
 
-{----}
+{----} w
 
 {--Comentar
 io blocol {-- c --}
@@ -24,11 +24,10 @@ io blocol {-- c --}
 {--{--In C this compiles so should in Elip--}
 (inteiro baskara(real x | real y):
   baskara(2,3 | 3,2) +
-  baskara(0b10001,1 | 3,2)
+  baskara(0b100011 | 3,2)
 )
-
 {-- NESTED {--comment, this should be not be all included in one comment,
- and error should occurr right after here because Elip's comments are like C comments--} --}
+ and error should occurr right after here because Elip's comments are like C comments--}
 
 {-- Next should give a lexical error 
 -}

@@ -1,6 +1,8 @@
 __pycache__/
 bin/
 docs/grammar-examples/
+docs/profa-examples/
 docs/ignore/
 build.xml
 grupo_10.sable
+test*.sable

@@ -5,14 +5,14 @@ package elipses.node;
 import elipses.analysis.*;
 
 @SuppressWarnings("nls")
-public final class TFracNumber extends Token
+public final class TNumberFrac extends Token
 {
-    public TFracNumber(String text)
+    public TNumberFrac(String text)
     {
         setText(text);
     }
 
-    public TFracNumber(String text, int line, int pos)
+    public TNumberFrac(String text, int line, int pos)
     {
         setText(text);
         setLine(line);
@@ -22,12 +22,12 @@ public final class TFracNumber extends Token
     @Override
     public Object clone()
     {
-      return new TFracNumber(getText(), getLine(), getPos());
+      return new TNumberFrac(getText(), getLine(), getPos());
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseTFracNumber(this);
+        ((Analysis) sw).caseTNumberFrac(this);
     }
 }

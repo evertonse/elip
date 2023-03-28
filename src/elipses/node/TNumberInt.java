@@ -5,14 +5,14 @@ package elipses.node;
 import elipses.analysis.*;
 
 @SuppressWarnings("nls")
-public final class TBinNumber extends Token
+public final class TNumberInt extends Token
 {
-    public TBinNumber(String text)
+    public TNumberInt(String text)
     {
         setText(text);
     }
 
-    public TBinNumber(String text, int line, int pos)
+    public TNumberInt(String text, int line, int pos)
     {
         setText(text);
         setLine(line);
@@ -22,12 +22,12 @@ public final class TBinNumber extends Token
     @Override
     public Object clone()
     {
-      return new TBinNumber(getText(), getLine(), getPos());
+      return new TNumberInt(getText(), getLine(), getPos());
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseTBinNumber(this);
+        ((Analysis) sw).caseTNumberInt(this);
     }
 }
