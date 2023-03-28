@@ -123,45 +123,46 @@ Ignored Tokens
 //+-------------------------------------------------------------+
 
 Productions
-  program = decl_func*;
 
-  decl_func =  kw_entry? [lp1]:l_paren type identifier [lp2]:l_paren params [rp2]:r_paren colon [lp3]:l_paren exp [rp3]:r_paren [rp1]:r_paren;
-  type  =  {int} kw_interger | {bool} kw_bool | {real} kw_real;
+//  program = decl_func*;
 
-  params  =  /*Ɛ*/ | {single} param | {multiple} param pipe params;
-  param   =  {type} type identifier | {signature} signature;
+//  decl_func =  kw_entry? [lp1]:l_paren type identifier [lp2]:l_paren params [rp2]:r_paren colon [lp3]:l_paren exp [rp3]:r_paren [rp1]:r_paren;
+//  type  =  {int} kw_interger | {bool} kw_bool | {real} kw_real;
 
-  signature =  type identifier l_paren signature_params r_paren;
+//  params  =  /*Ɛ*/ | {single} param | {multiple} param pipe params;
+//  param   =  {type} type identifier | {signature} signature;
 
-  signature_params  =  | {single} signature_param | {multiple} signature_param pipe signature_params;
-  signature_param = {type} type | {signature} signature;
+//  signature =  type identifier l_paren signature_params r_paren;
 
+//  signature_params  =  | {single} signature_param | {multiple} signature_param pipe signature_params;
+//  signature_param = {type} type | {signature} signature;
 
   // @question is this supposed to be the tokens right, so a binary number should be valid 'exp', correct ?
   exp = {bin} number_bin |  {frac} number_frac | {int} number_int | {true} kw_true | {false} kw_false
-    | {block} block_exp
-    | {call} func_call  
-    | {lambda}func_lambda
+    //| {block} block_exp
+    //| {call} func_call  
+    //| {lambda}func_lambda
     | {negative} minus exp
-    | {if} kw_if l_paren [test]:exp r_paren kw_then [if]:exp kw_else [else]:exp
-    | {plus} [left]:exp plus [right]:exp
-    | {minus} [left]:exp minus [right]:exp
-    | {mult} [left]:exp mult [right]:exp
-    | {div} [left]:exp div [right]:exp
-    | {mod} [left]:exp mod [right]:exp
-    | {eq} [left]:exp eq [right]:exp
-    | {lt} [left]:exp lt [right]:exp
-    | {gt} [left]:exp gt [right]:exp
-    | {not} kw_not [right]:exp
-    | {and} [left]:exp kw_and [right]:exp
-    | {or} [left]:exp kw_or [right]:exp;
+    //| {if} kw_if l_paren [test]:exp r_paren kw_then [if]:exp kw_else [else]:exp
+    //| {plus} [left]:exp plus [right]:exp
+    //| {minus} [left]:exp minus [right]:exp
+    //| {mult} [left]:exp mult [right]:exp
+    //| {div} [left]:exp div [right]:exp
+    //| {mod} [left]:exp mod [right]:exp
+    //| {eq} [left]:exp eq [right]:exp
+    //| {lt} [left]:exp lt [right]:exp
+    //| {gt} [left]:exp gt [right]:exp
+    //| {not} kw_not [right]:exp
+    //| {and} [left]:exp kw_and [right]:exp
+    //| {or} [left]:exp kw_or [right]:exp
+    ;
 
-  block_exp = {block} l_paren  decl_const* [exp1]:exp r_paren;
-  decl_const = [lp1]:l_paren kw_const type identifier [lp2]:l_paren exp [rp2]:r_paren [rp1]:r_paren;
+// block_exp = {block} l_paren  decl_const* [exp1]:exp r_paren;
+//  decl_const = [lp1]:l_paren kw_const type identifier [lp2]:l_paren exp [rp2]:r_paren [rp1]:r_paren;
 
-  func_call = identifier l_paren list_exp r_paren;
-  func_lambda = [lp1]:l_paren kw_lambda  [lp2]:l_paren list_ids  [rp2]:r_paren colon [lp3]:l_paren exp [rp3]:r_paren l_brack list_exp r_brack [rp1]:r_paren;
+//  func_call = identifier l_paren list_exp r_paren;
+//  func_lambda = [lp1]:l_paren kw_lambda  [lp2]:l_paren list_ids  [rp2]:r_paren colon [lp3]:l_paren exp [rp3]:r_paren l_brack list_exp r_brack [rp1]:r_paren;
 
 
-  list_ids  =  | {single} identifier | {multiple} identifier pipe list_ids;
-  list_exp  =  | {single} exp | {multiple} exp pipe list_exp;
+// list_ids  =  | {single} identifier | {multiple} identifier pipe list_ids;
+// list_exp  =  | {single} exp | {multiple} exp pipe list_exp;

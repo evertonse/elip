@@ -4,6 +4,8 @@ import java.io.*;
 
 import elipses.lexer.*;
 import elipses.node.*;
+import elipses.analysis.*;
+import elipses.parser.*;
 
 public class Main
 {
@@ -15,7 +17,8 @@ public class Main
     //"test/etapa1/code1.elip", 
     //"test/etapa1/code2.elip", 
     //"test/etapa1/code3.elip", 
-    "test/comment.elip"
+    //"test/comment.elip"
+    "test/analysis/exp.elip"
   };
 
 	public static void main(String[] args)
@@ -49,6 +52,7 @@ class Utils {
 
 
 class Debug {
+
   public static 
   void lexer(Lexer lexer) throws LexerException, IOException {
     try {
@@ -62,6 +66,15 @@ class Debug {
         + "\nWon't continue with next tokens ...\n");
       //Debug.lexer(lexer); 
     }
+  }
+
+  public static 
+  void parser(Parser p) throws Exception {
+      Start tree = p.parse();
+      //Imprime árvore na saída padrão
+      //tree.apply(new ASTPrinter());
+      //Imprime árvore em interface gráfica
+      tree.apply(new ASTDisplay());
   }
 
   public static 
@@ -79,17 +92,17 @@ class Debug {
       return;
     }
 
-		try
-		{
+		try {
 			String arquivo = file;
 			Lexer lexer =   
 					new Lexer(
 							new PushbackReader(  
 									new FileReader(arquivo), 1024)); 
+      Parser parser = new Parser(lexer);
       Debug.lexer(lexer);
+      Debug.parser(parser);
 
-		}
-		catch(Exception e) {
+		} catch(Exception e) {
       e.printStackTrace();
 			System.out.println(e.getClass() + e.getMessage());
 		}
