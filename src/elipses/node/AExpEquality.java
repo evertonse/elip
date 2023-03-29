@@ -5,46 +5,46 @@ package elipses.node;
 import elipses.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AExp extends PExp
+public final class AExpEquality extends PExpEquality
 {
-    private PExpTernary _expTernary_;
+    private PExpRelational _expRelational_;
 
-    public AExp()
+    public AExpEquality()
     {
         // Constructor
     }
 
-    public AExp(
-        @SuppressWarnings("hiding") PExpTernary _expTernary_)
+    public AExpEquality(
+        @SuppressWarnings("hiding") PExpRelational _expRelational_)
     {
         // Constructor
-        setExpTernary(_expTernary_);
+        setExpRelational(_expRelational_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new AExp(
-            cloneNode(this._expTernary_));
+        return new AExpEquality(
+            cloneNode(this._expRelational_));
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAExp(this);
+        ((Analysis) sw).caseAExpEquality(this);
     }
 
-    public PExpTernary getExpTernary()
+    public PExpRelational getExpRelational()
     {
-        return this._expTernary_;
+        return this._expRelational_;
     }
 
-    public void setExpTernary(PExpTernary node)
+    public void setExpRelational(PExpRelational node)
     {
-        if(this._expTernary_ != null)
+        if(this._expRelational_ != null)
         {
-            this._expTernary_.parent(null);
+            this._expRelational_.parent(null);
         }
 
         if(node != null)
@@ -57,23 +57,23 @@ public final class AExp extends PExp
             node.parent(this);
         }
 
-        this._expTernary_ = node;
+        this._expRelational_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._expTernary_);
+            + toString(this._expRelational_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._expTernary_ == child)
+        if(this._expRelational_ == child)
         {
-            this._expTernary_ = null;
+            this._expRelational_ = null;
             return;
         }
 
@@ -84,9 +84,9 @@ public final class AExp extends PExp
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._expTernary_ == oldChild)
+        if(this._expRelational_ == oldChild)
         {
-            setExpTernary((PExpTernary) newChild);
+            setExpRelational((PExpRelational) newChild);
             return;
         }
 

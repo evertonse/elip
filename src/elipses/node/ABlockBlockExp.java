@@ -10,7 +10,7 @@ public final class ABlockBlockExp extends PBlockExp
 {
     private TLParen _lParen_;
     private final LinkedList<PDeclConst> _declConst_ = new LinkedList<PDeclConst>();
-    private PExp _exp1_;
+    private PExp _exp_;
     private TRParen _rParen_;
 
     public ABlockBlockExp()
@@ -21,7 +21,7 @@ public final class ABlockBlockExp extends PBlockExp
     public ABlockBlockExp(
         @SuppressWarnings("hiding") TLParen _lParen_,
         @SuppressWarnings("hiding") List<?> _declConst_,
-        @SuppressWarnings("hiding") PExp _exp1_,
+        @SuppressWarnings("hiding") PExp _exp_,
         @SuppressWarnings("hiding") TRParen _rParen_)
     {
         // Constructor
@@ -29,7 +29,7 @@ public final class ABlockBlockExp extends PBlockExp
 
         setDeclConst(_declConst_);
 
-        setExp1(_exp1_);
+        setExp(_exp_);
 
         setRParen(_rParen_);
 
@@ -41,7 +41,7 @@ public final class ABlockBlockExp extends PBlockExp
         return new ABlockBlockExp(
             cloneNode(this._lParen_),
             cloneList(this._declConst_),
-            cloneNode(this._exp1_),
+            cloneNode(this._exp_),
             cloneNode(this._rParen_));
     }
 
@@ -102,16 +102,16 @@ public final class ABlockBlockExp extends PBlockExp
         }
     }
 
-    public PExp getExp1()
+    public PExp getExp()
     {
-        return this._exp1_;
+        return this._exp_;
     }
 
-    public void setExp1(PExp node)
+    public void setExp(PExp node)
     {
-        if(this._exp1_ != null)
+        if(this._exp_ != null)
         {
-            this._exp1_.parent(null);
+            this._exp_.parent(null);
         }
 
         if(node != null)
@@ -124,7 +124,7 @@ public final class ABlockBlockExp extends PBlockExp
             node.parent(this);
         }
 
-        this._exp1_ = node;
+        this._exp_ = node;
     }
 
     public TRParen getRParen()
@@ -158,7 +158,7 @@ public final class ABlockBlockExp extends PBlockExp
         return ""
             + toString(this._lParen_)
             + toString(this._declConst_)
-            + toString(this._exp1_)
+            + toString(this._exp_)
             + toString(this._rParen_);
     }
 
@@ -177,9 +177,9 @@ public final class ABlockBlockExp extends PBlockExp
             return;
         }
 
-        if(this._exp1_ == child)
+        if(this._exp_ == child)
         {
-            this._exp1_ = null;
+            this._exp_ = null;
             return;
         }
 
@@ -220,9 +220,9 @@ public final class ABlockBlockExp extends PBlockExp
             }
         }
 
-        if(this._exp1_ == oldChild)
+        if(this._exp_ == oldChild)
         {
-            setExp1((PExp) newChild);
+            setExp((PExp) newChild);
             return;
         }
 

@@ -1,9 +1,21 @@
 
-entrada ( inteiro aplica_operador (inteiro op(inteiro op(booleano|inteiro)) ) : 
-  (op(2))
+
+(inteiro test_predecencia():
+  (
+    se(6) entao 6 senao se (6 ou 5 e 4 = 3 < 3 > 3 + 2) entao 6 senao 6 
+    #- 2 nao 1 * 1 / 1 % 1 -(1 + 0)
+  )
 )
 
-
-(inteiro max (inteiro x | inteiro y) : 
-  (2)
+(inteiro test_se_senao ():
+  (
+    se( se(verdadeiro) entao verdadeiro senao falso ) entao
+      0
+    senao se( a = 1 ) entao
+      1
+    senao se( a = 2 ) entao
+      2
+    senao 
+      5
+  )
 )

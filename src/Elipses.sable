@@ -144,7 +144,7 @@ Productions
   params  =  
     /*Ɛ*/ 
     | {single} param 
-    | {multiple} param pipe params
+    | {multiple} param T.pipe params
   ;
 
   param   =  
@@ -159,7 +159,7 @@ Productions
   signature_params  = 
     /*Ɛ*/ 
     | {single} signature_param 
-    | {multiple} signature_param pipe signature_params
+    | {multiple} signature_param T.pipe signature_params
   ;
   signature_param = 
     {type} type 
@@ -168,47 +168,50 @@ Productions
   // @note smaller number means more priority, note that 'mult' is on priority exp1 whereas 'plus' in on exp2
   // which means add has less priority in evaluation, so 'mult' appear closer to the leafs of the AST
   exp  = 
-    exp6 
-   | {if} T.kw_if T.l_paren [test]:exp T.r_paren T.kw_then [if]:exp T.kw_else [else]:exp
+    exp_ternary 
   ;
 
-  exp6 =
-    exp5
-    | {or} [left]:exp6 T.kw_or [right]:exp5
+  exp_ternary = 
+    exp_or 
+    | {if} T.kw_if T.l_paren [cond]:exp T.r_paren T.kw_then [truthy]:exp T.kw_else [falsy]:exp
+  ;
+  
+  exp_or =
+    exp_and
+    | {or} [left]:exp_or T.kw_or [right]:exp_and 
   ;
 
-  exp5 = 
-    exp4
-    | {and} [left]:exp5 T.kw_and [right]:exp4
+  exp_and = 
+    exp_equality
+    | {and} [left]:exp_and T.kw_and [right]:exp_equality
   ;
 
-  exp4 = 
-    exp3
-    | {eq} [left]:exp4 T.eq [right]:exp3
+  exp_equality = 
+    exp_relational
+    | {eq} [left]:exp_equality T.eq [right]:exp_relational
   ;
 
-  exp3 = 
-    exp2
-    | {lt} [left]:exp3 T.lt [right]:exp2
-    | {gt} [left]:exp3 T.gt [right]:exp2
+  exp_relational  = 
+    exp_additive
+    | {lt} [left]:exp_relational T.lt [right]:exp_additive
+    | {gt} [left]:exp_relational T.gt [right]:exp_additive
   ;
 
-  exp2 =
-    exp1  
-    | {plus}  [left]:exp2 T.plus [right]:exp1
-    | {minus} [left]:exp2 T.minus [right]:exp1
+  exp_additive  =
+    exp_multiplicative  
+    | {plus}  [left]:exp_additive T.plus [right]:exp_multiplicative
+    | {minus} [left]:exp_additive T.minus [right]:exp_multiplicative
   ;
 
-  exp1 = 
-    exp0
-    | {mult}[left]:exp1 T.mult [right]:exp0
-    | {div} [left]:exp1 T.div  [right]:exp0
-    | {mod} [left]:exp1 T.mod  [right]:exp0
-    | {negative} T.minus exp0 
-    | {not} T.kw_not [right]:exp0
-  ;
+  exp_multiplicative = 
+    exp_atomic
+    | {mult}[left]:exp_multiplicative T.mult [right]:exp_atomic
+    | {div} [left]:exp_multiplicative T.div  [right]:exp_atomic
+    | {mod} [left]:exp_multiplicative T.mod  [right]:exp_atomic
+    | {negative} T.minus exp_atomic 
+    | {not} T.kw_not [right]:exp_atomic  ;
 
-  exp0 = 
+  exp_atomic = 
     {id} T.identifier
     | {bin} T.number_bin 
     | {frac} T.number_frac 
@@ -221,10 +224,14 @@ Productions
   ;
 
   block_exp = 
-    {block} T.l_paren  decl_const* [exp1]:exp T.r_paren
+    {block} T.l_paren decl_const* exp T.r_paren
   ;
   
-  decl_const = [lp1]:T.l_paren T.kw_const type T.identifier [lp2]:T.l_paren exp [rp2]:T.r_paren [rp1]:T.r_paren;
+  decl_const = 
+    [lp1]:T.l_paren T.kw_const type T.identifier 
+      [lp2]:T.l_paren exp [rp2]:T.r_paren 
+    [rp1]:T.r_paren
+  ;
 
   func_call = 
     identifier l_paren list_exp r_paren

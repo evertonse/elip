@@ -5,46 +5,46 @@ package elipses.node;
 import elipses.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AExp extends PExp
+public final class AIntExpAtomic extends PExpAtomic
 {
-    private PExpTernary _expTernary_;
+    private TNumberInt _numberInt_;
 
-    public AExp()
+    public AIntExpAtomic()
     {
         // Constructor
     }
 
-    public AExp(
-        @SuppressWarnings("hiding") PExpTernary _expTernary_)
+    public AIntExpAtomic(
+        @SuppressWarnings("hiding") TNumberInt _numberInt_)
     {
         // Constructor
-        setExpTernary(_expTernary_);
+        setNumberInt(_numberInt_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new AExp(
-            cloneNode(this._expTernary_));
+        return new AIntExpAtomic(
+            cloneNode(this._numberInt_));
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAExp(this);
+        ((Analysis) sw).caseAIntExpAtomic(this);
     }
 
-    public PExpTernary getExpTernary()
+    public TNumberInt getNumberInt()
     {
-        return this._expTernary_;
+        return this._numberInt_;
     }
 
-    public void setExpTernary(PExpTernary node)
+    public void setNumberInt(TNumberInt node)
     {
-        if(this._expTernary_ != null)
+        if(this._numberInt_ != null)
         {
-            this._expTernary_.parent(null);
+            this._numberInt_.parent(null);
         }
 
         if(node != null)
@@ -57,23 +57,23 @@ public final class AExp extends PExp
             node.parent(this);
         }
 
-        this._expTernary_ = node;
+        this._numberInt_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._expTernary_);
+            + toString(this._numberInt_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._expTernary_ == child)
+        if(this._numberInt_ == child)
         {
-            this._expTernary_ = null;
+            this._numberInt_ = null;
             return;
         }
 
@@ -84,9 +84,9 @@ public final class AExp extends PExp
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._expTernary_ == oldChild)
+        if(this._numberInt_ == oldChild)
         {
-            setExpTernary((PExpTernary) newChild);
+            setNumberInt((TNumberInt) newChild);
             return;
         }
 

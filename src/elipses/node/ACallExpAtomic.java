@@ -5,46 +5,46 @@ package elipses.node;
 import elipses.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AExp extends PExp
+public final class ACallExpAtomic extends PExpAtomic
 {
-    private PExpTernary _expTernary_;
+    private PFuncCall _funcCall_;
 
-    public AExp()
+    public ACallExpAtomic()
     {
         // Constructor
     }
 
-    public AExp(
-        @SuppressWarnings("hiding") PExpTernary _expTernary_)
+    public ACallExpAtomic(
+        @SuppressWarnings("hiding") PFuncCall _funcCall_)
     {
         // Constructor
-        setExpTernary(_expTernary_);
+        setFuncCall(_funcCall_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new AExp(
-            cloneNode(this._expTernary_));
+        return new ACallExpAtomic(
+            cloneNode(this._funcCall_));
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAExp(this);
+        ((Analysis) sw).caseACallExpAtomic(this);
     }
 
-    public PExpTernary getExpTernary()
+    public PFuncCall getFuncCall()
     {
-        return this._expTernary_;
+        return this._funcCall_;
     }
 
-    public void setExpTernary(PExpTernary node)
+    public void setFuncCall(PFuncCall node)
     {
-        if(this._expTernary_ != null)
+        if(this._funcCall_ != null)
         {
-            this._expTernary_.parent(null);
+            this._funcCall_.parent(null);
         }
 
         if(node != null)
@@ -57,23 +57,23 @@ public final class AExp extends PExp
             node.parent(this);
         }
 
-        this._expTernary_ = node;
+        this._funcCall_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._expTernary_);
+            + toString(this._funcCall_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._expTernary_ == child)
+        if(this._funcCall_ == child)
         {
-            this._expTernary_ = null;
+            this._funcCall_ = null;
             return;
         }
 
@@ -84,9 +84,9 @@ public final class AExp extends PExp
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._expTernary_ == oldChild)
+        if(this._funcCall_ == oldChild)
         {
-            setExpTernary((PExpTernary) newChild);
+            setFuncCall((PFuncCall) newChild);
             return;
         }
 
