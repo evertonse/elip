@@ -7,7 +7,7 @@ import elipses.analysis.*;
 @SuppressWarnings("nls")
 public final class Start extends Node
 {
-    private PExp _pExp_;
+    private PProgram _pProgram_;
     private EOF _eof_;
 
     public Start()
@@ -16,10 +16,10 @@ public final class Start extends Node
     }
 
     public Start(
-        @SuppressWarnings("hiding") PExp _pExp_,
+        @SuppressWarnings("hiding") PProgram _pProgram_,
         @SuppressWarnings("hiding") EOF _eof_)
     {
-        setPExp(_pExp_);
+        setPProgram(_pProgram_);
         setEOF(_eof_);
     }
 
@@ -27,7 +27,7 @@ public final class Start extends Node
     public Object clone()
     {
         return new Start(
-            cloneNode(this._pExp_),
+            cloneNode(this._pProgram_),
             cloneNode(this._eof_));
     }
 
@@ -37,16 +37,16 @@ public final class Start extends Node
         ((Analysis) sw).caseStart(this);
     }
 
-    public PExp getPExp()
+    public PProgram getPProgram()
     {
-        return this._pExp_;
+        return this._pProgram_;
     }
 
-    public void setPExp(PExp node)
+    public void setPProgram(PProgram node)
     {
-        if(this._pExp_ != null)
+        if(this._pProgram_ != null)
         {
-            this._pExp_.parent(null);
+            this._pProgram_.parent(null);
         }
 
         if(node != null)
@@ -59,7 +59,7 @@ public final class Start extends Node
             node.parent(this);
         }
 
-        this._pExp_ = node;
+        this._pProgram_ = node;
     }
 
     public EOF getEOF()
@@ -90,9 +90,9 @@ public final class Start extends Node
     @Override
     void removeChild(Node child)
     {
-        if(this._pExp_ == child)
+        if(this._pProgram_ == child)
         {
-            this._pExp_ = null;
+            this._pProgram_ = null;
             return;
         }
 
@@ -108,9 +108,9 @@ public final class Start extends Node
     @Override
     void replaceChild(Node oldChild, Node newChild)
     {
-        if(this._pExp_ == oldChild)
+        if(this._pProgram_ == oldChild)
         {
-            setPExp((PExp) newChild);
+            setPProgram((PProgram) newChild);
             return;
         }
 
@@ -127,7 +127,7 @@ public final class Start extends Node
     public String toString()
     {
         return "" +
-            toString(this._pExp_) +
+            toString(this._pProgram_) +
             toString(this._eof_);
     }
 }

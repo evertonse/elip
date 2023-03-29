@@ -5,46 +5,46 @@ package elipses.node;
 import elipses.analysis.*;
 
 @SuppressWarnings("nls")
-public final class ATrueExp extends PExp
+public final class ATypeSignatureParam extends PSignatureParam
 {
-    private TKwTrue _kwTrue_;
+    private PType _type_;
 
-    public ATrueExp()
+    public ATypeSignatureParam()
     {
         // Constructor
     }
 
-    public ATrueExp(
-        @SuppressWarnings("hiding") TKwTrue _kwTrue_)
+    public ATypeSignatureParam(
+        @SuppressWarnings("hiding") PType _type_)
     {
         // Constructor
-        setKwTrue(_kwTrue_);
+        setType(_type_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new ATrueExp(
-            cloneNode(this._kwTrue_));
+        return new ATypeSignatureParam(
+            cloneNode(this._type_));
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseATrueExp(this);
+        ((Analysis) sw).caseATypeSignatureParam(this);
     }
 
-    public TKwTrue getKwTrue()
+    public PType getType()
     {
-        return this._kwTrue_;
+        return this._type_;
     }
 
-    public void setKwTrue(TKwTrue node)
+    public void setType(PType node)
     {
-        if(this._kwTrue_ != null)
+        if(this._type_ != null)
         {
-            this._kwTrue_.parent(null);
+            this._type_.parent(null);
         }
 
         if(node != null)
@@ -57,23 +57,23 @@ public final class ATrueExp extends PExp
             node.parent(this);
         }
 
-        this._kwTrue_ = node;
+        this._type_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._kwTrue_);
+            + toString(this._type_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._kwTrue_ == child)
+        if(this._type_ == child)
         {
-            this._kwTrue_ = null;
+            this._type_ = null;
             return;
         }
 
@@ -84,9 +84,9 @@ public final class ATrueExp extends PExp
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._kwTrue_ == oldChild)
+        if(this._type_ == oldChild)
         {
-            setKwTrue((TKwTrue) newChild);
+            setType((PType) newChild);
             return;
         }
 

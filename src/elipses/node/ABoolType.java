@@ -5,46 +5,46 @@ package elipses.node;
 import elipses.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AIntExp extends PExp
+public final class ABoolType extends PType
 {
-    private TNumberInt _numberInt_;
+    private TKwBool _kwBool_;
 
-    public AIntExp()
+    public ABoolType()
     {
         // Constructor
     }
 
-    public AIntExp(
-        @SuppressWarnings("hiding") TNumberInt _numberInt_)
+    public ABoolType(
+        @SuppressWarnings("hiding") TKwBool _kwBool_)
     {
         // Constructor
-        setNumberInt(_numberInt_);
+        setKwBool(_kwBool_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new AIntExp(
-            cloneNode(this._numberInt_));
+        return new ABoolType(
+            cloneNode(this._kwBool_));
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAIntExp(this);
+        ((Analysis) sw).caseABoolType(this);
     }
 
-    public TNumberInt getNumberInt()
+    public TKwBool getKwBool()
     {
-        return this._numberInt_;
+        return this._kwBool_;
     }
 
-    public void setNumberInt(TNumberInt node)
+    public void setKwBool(TKwBool node)
     {
-        if(this._numberInt_ != null)
+        if(this._kwBool_ != null)
         {
-            this._numberInt_.parent(null);
+            this._kwBool_.parent(null);
         }
 
         if(node != null)
@@ -57,23 +57,23 @@ public final class AIntExp extends PExp
             node.parent(this);
         }
 
-        this._numberInt_ = node;
+        this._kwBool_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._numberInt_);
+            + toString(this._kwBool_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._numberInt_ == child)
+        if(this._kwBool_ == child)
         {
-            this._numberInt_ = null;
+            this._kwBool_ = null;
             return;
         }
 
@@ -84,9 +84,9 @@ public final class AIntExp extends PExp
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._numberInt_ == oldChild)
+        if(this._kwBool_ == oldChild)
         {
-            setNumberInt((TNumberInt) newChild);
+            setKwBool((TKwBool) newChild);
             return;
         }
 

@@ -5,46 +5,46 @@ package elipses.node;
 import elipses.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AFalseExp extends PExp
+public final class ASingleListIds extends PListIds
 {
-    private TKwFalse _kwFalse_;
+    private TIdentifier _identifier_;
 
-    public AFalseExp()
+    public ASingleListIds()
     {
         // Constructor
     }
 
-    public AFalseExp(
-        @SuppressWarnings("hiding") TKwFalse _kwFalse_)
+    public ASingleListIds(
+        @SuppressWarnings("hiding") TIdentifier _identifier_)
     {
         // Constructor
-        setKwFalse(_kwFalse_);
+        setIdentifier(_identifier_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new AFalseExp(
-            cloneNode(this._kwFalse_));
+        return new ASingleListIds(
+            cloneNode(this._identifier_));
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAFalseExp(this);
+        ((Analysis) sw).caseASingleListIds(this);
     }
 
-    public TKwFalse getKwFalse()
+    public TIdentifier getIdentifier()
     {
-        return this._kwFalse_;
+        return this._identifier_;
     }
 
-    public void setKwFalse(TKwFalse node)
+    public void setIdentifier(TIdentifier node)
     {
-        if(this._kwFalse_ != null)
+        if(this._identifier_ != null)
         {
-            this._kwFalse_.parent(null);
+            this._identifier_.parent(null);
         }
 
         if(node != null)
@@ -57,23 +57,23 @@ public final class AFalseExp extends PExp
             node.parent(this);
         }
 
-        this._kwFalse_ = node;
+        this._identifier_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._kwFalse_);
+            + toString(this._identifier_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._kwFalse_ == child)
+        if(this._identifier_ == child)
         {
-            this._kwFalse_ = null;
+            this._identifier_ = null;
             return;
         }
 
@@ -84,9 +84,9 @@ public final class AFalseExp extends PExp
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._kwFalse_ == oldChild)
+        if(this._identifier_ == oldChild)
         {
-            setKwFalse((TKwFalse) newChild);
+            setIdentifier((TIdentifier) newChild);
             return;
         }
 

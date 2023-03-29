@@ -1,8 +1,8 @@
 # e ou nao > < = % / * - + verdade verdadeiro
 ( inteiro max (inteiro x | inteiro y) : 
 	(se (x>y) entao x senao y)
-  # Somo pica
 )
+
 {-- --------testing comment with various minus------- -------- -- -- --}
 {--
 Comentario de bloco

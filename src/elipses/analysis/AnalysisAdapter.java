@@ -75,37 +75,331 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseABinExp(ABinExp node)
+    public void caseAProgram(AProgram node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseAFracExp(AFracExp node)
+    public void caseADeclFunc(ADeclFunc node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseAIntExp(AIntExp node)
+    public void caseAIntType(AIntType node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseATrueExp(ATrueExp node)
+    public void caseABoolType(ABoolType node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseAFalseExp(AFalseExp node)
+    public void caseARealType(ARealType node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseANegativeExp(ANegativeExp node)
+    public void caseAParams(AParams node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseASingleParams(ASingleParams node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAMultipleParams(AMultipleParams node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseATypeParam(ATypeParam node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseASignatureParam(ASignatureParam node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseASignature(ASignature node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseASignatureParams(ASignatureParams node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseASingleSignatureParams(ASingleSignatureParams node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAMultipleSignatureParams(AMultipleSignatureParams node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseATypeSignatureParam(ATypeSignatureParam node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseASignatureSignatureParam(ASignatureSignatureParam node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAExp(AExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAIfExp(AIfExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAExp6(AExp6 node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAOrExp6(AOrExp6 node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAExp5(AExp5 node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAAndExp5(AAndExp5 node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAExp4(AExp4 node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAEqExp4(AEqExp4 node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAExp3(AExp3 node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseALtExp3(ALtExp3 node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAGtExp3(AGtExp3 node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAExp2(AExp2 node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAPlusExp2(APlusExp2 node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAMinusExp2(AMinusExp2 node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAExp1(AExp1 node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAMultExp1(AMultExp1 node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseADivExp1(ADivExp1 node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAModExp1(AModExp1 node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseANegativeExp1(ANegativeExp1 node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseANotExp1(ANotExp1 node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAIdExp0(AIdExp0 node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseABinExp0(ABinExp0 node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAFracExp0(AFracExp0 node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAIntExp0(AIntExp0 node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseATrueExp0(ATrueExp0 node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAFalseExp0(AFalseExp0 node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseABlockExp0(ABlockExp0 node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseACallExp0(ACallExp0 node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseALambdaExp0(ALambdaExp0 node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseABlockBlockExp(ABlockBlockExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseADeclConst(ADeclConst node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAFuncCall(AFuncCall node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAFuncLambda(AFuncLambda node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAListIds(AListIds node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseASingleListIds(ASingleListIds node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAMultipleListIds(AMultipleListIds node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAListExp(AListExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseASingleListExp(ASingleListExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAMultipleListExp(AMultipleListExp node)
     {
         defaultCase(node);
     }

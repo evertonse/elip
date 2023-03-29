@@ -1,89 +1,102 @@
 package elipses;
 
-import java.io.*;
-
+import elipses.analysis.*;
 import elipses.lexer.*;
 import elipses.node.*;
-import elipses.analysis.*;
 import elipses.parser.*;
+import java.io.*;
 
-public class Main
-{
+public class Main {
+
   static String[] test_files = new String[] {
     //"test/grupo10/*",
     //"test/grupo10/codigo1_grupo10.elip",
     //"test/grupo10/codigo2_grupo10.elip",
     //"test/grupo10/codigo3_grupo10.elip",
-    //"test/etapa1/code1.elip", 
-    //"test/etapa1/code2.elip", 
-    //"test/etapa1/code3.elip", 
+    //"test/etapa1/code1.elip",
+    //"test/etapa1/code2.elip",
+    //"test/etapa1/code3.elip",
     //"test/comment.elip"
-    "test/analysis/exp.elip"
+    "test/analysis/exp.elip",
   };
 
-	public static void main(String[] args)
-	{
-		try {
+  public static void main(String[] args) {
+    try {
       for (String elip_file : test_files) {
         Debug.debug(elip_file);
       }
-		}
-		catch(Exception e) {
-            e.printStackTrace();
-    	    System.out.println(e.getClass() + e.getMessage());
-		}
-	}
+    } catch (Exception e) {
+      e.printStackTrace();
+      System.out.println(e.getClass() + e.getMessage());
+    }
+  }
 }
-
 
 class Utils {
-	public static String pretify(Token token) {
-		String token_pos = new String("[" + token.getLine() + "," + token.getPos()+ "]:"); 
-		String token_tuple = new String(
-	    	"<"
-	    	+ token.getClass().getSimpleName()
-	    	+ ", "   + token.toString().stripTrailing()
-	    	+ ">"
-	    );
 
-		return String.format("Token %10s %s", token_pos, token_tuple);
-	}
+  public static String pretify(Token token) {
+    String token_pos = new String(
+      "[" + token.getLine() + "," + token.getPos() + "]:"
+    );
+    String token_tuple = new String(
+      "<" +
+      token.getClass().getSimpleName() +
+      ", " +
+      token.toString().stripTrailing() +
+      ">"
+    );
+
+    return String.format("Token %10s %s", token_pos, token_tuple);
+  }
 }
-
 
 class Debug {
 
-  public static 
-  void lexer(Lexer lexer) throws LexerException, IOException {
+  public static void lexer(String file) throws LexerException, IOException {
     try {
+      Lexer lexer = new Lexer(new PushbackReader(new FileReader(file), 1024));
       Token token;
-      while(!((token = lexer.next()) instanceof EOF)) {
-          //if (token instanceof TBlank) continue;
-          System.out.println(Utils.pretify(token));
+      while (!((token = lexer.next()) instanceof EOF)) {
+        //if (token instanceof TBlank) continue;
+        System.out.println(Utils.pretify(token));
       }
     } catch (Exception e) {
-      System.out.println("\nError: " + e.getClass() + e.getMessage() 
-        + "\nWon't continue with next tokens ...\n");
-      //Debug.lexer(lexer); 
+      System.out.println(
+        "\nError: " +
+        e.getClass() +
+        e.getMessage() +
+        "\nWon't continue with next tokens ...\n"
+      );
+      //Debug.lexer(lexer);
     }
   }
 
-  public static 
-  void parser(Parser p) throws Exception {
-      Start tree = p.parse();
-      //Imprime árvore na saída padrão
-      //tree.apply(new ASTPrinter());
-      //Imprime árvore em interface gráfica
-      tree.apply(new ASTDisplay());
+  public static void parser(String file) throws Exception {
+    Lexer lexer = new Lexer(new PushbackReader(new FileReader(file), 1024));
+    Parser p = new Parser(lexer);
+
+    Boolean use_gui = true;
+    Switch adapter;
+
+    if (use_gui) {
+      // on gui
+      adapter = new ASTDisplay();
+    } else {
+      // on console
+      adapter = new ASTPrinter();
+    }
+
+    Start tree = p.parse();
+    tree.apply(adapter);
   }
 
-  public static 
-  void debug(String file)
-	{
+  public static void debug(String file) {
     System.out.println("\nChecking Lexer for file: " + file);
+
     if (file.endsWith("*")) {
       File folder = new File(file.replace("*", ""));
       File[] child_files = folder.listFiles();
+
       for (File cf : child_files) {
         if (cf.isFile()) {
           Debug.debug(cf.getPath());
@@ -92,19 +105,13 @@ class Debug {
       return;
     }
 
-		try {
-			String arquivo = file;
-			Lexer lexer =   
-					new Lexer(
-							new PushbackReader(  
-									new FileReader(arquivo), 1024)); 
-      Parser parser = new Parser(lexer);
-      Debug.lexer(lexer);
-      Debug.parser(parser);
-
-		} catch(Exception e) {
+    try {
+      String f = file;
+      Debug.lexer(f);
+      Debug.parser(f);
+    } catch (Exception e) {
       e.printStackTrace();
-			System.out.println(e.getClass() + e.getMessage());
-		}
-	}
+      System.out.println(e.getClass() + e.getMessage());
+    }
+  }
 }

@@ -5,46 +5,46 @@ package elipses.node;
 import elipses.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AFracExp extends PExp
+public final class ACallExp0 extends PExp0
 {
-    private TNumberFrac _numberFrac_;
+    private PFuncCall _funcCall_;
 
-    public AFracExp()
+    public ACallExp0()
     {
         // Constructor
     }
 
-    public AFracExp(
-        @SuppressWarnings("hiding") TNumberFrac _numberFrac_)
+    public ACallExp0(
+        @SuppressWarnings("hiding") PFuncCall _funcCall_)
     {
         // Constructor
-        setNumberFrac(_numberFrac_);
+        setFuncCall(_funcCall_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new AFracExp(
-            cloneNode(this._numberFrac_));
+        return new ACallExp0(
+            cloneNode(this._funcCall_));
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAFracExp(this);
+        ((Analysis) sw).caseACallExp0(this);
     }
 
-    public TNumberFrac getNumberFrac()
+    public PFuncCall getFuncCall()
     {
-        return this._numberFrac_;
+        return this._funcCall_;
     }
 
-    public void setNumberFrac(TNumberFrac node)
+    public void setFuncCall(PFuncCall node)
     {
-        if(this._numberFrac_ != null)
+        if(this._funcCall_ != null)
         {
-            this._numberFrac_.parent(null);
+            this._funcCall_.parent(null);
         }
 
         if(node != null)
@@ -57,23 +57,23 @@ public final class AFracExp extends PExp
             node.parent(this);
         }
 
-        this._numberFrac_ = node;
+        this._funcCall_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._numberFrac_);
+            + toString(this._funcCall_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._numberFrac_ == child)
+        if(this._funcCall_ == child)
         {
-            this._numberFrac_ = null;
+            this._funcCall_ = null;
             return;
         }
 
@@ -84,9 +84,9 @@ public final class AFracExp extends PExp
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._numberFrac_ == oldChild)
+        if(this._funcCall_ == oldChild)
         {
-            setNumberFrac((TNumberFrac) newChild);
+            setFuncCall((PFuncCall) newChild);
             return;
         }
 

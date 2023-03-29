@@ -1,1 +1,9 @@
-3*(5+8)
+
+entrada ( inteiro aplica_operador (inteiro op(inteiro op(booleano|inteiro)) ) : 
+  (op(2))
+)
+
+
+(inteiro max (inteiro x | inteiro y) : 
+  (2)
+)
