@@ -743,10 +743,10 @@ public class Parser
         PType ptypeNode1;
         {
             // Block
-        TKwInterger tkwintergerNode2;
-        tkwintergerNode2 = (TKwInterger)nodeArrayList1.get(0);
+        TKwInteger tkwintegerNode2;
+        tkwintegerNode2 = (TKwInteger)nodeArrayList1.get(0);
 
-        ptypeNode1 = new AIntType(tkwintergerNode2);
+        ptypeNode1 = new AIntType(tkwintegerNode2);
         }
 	nodeList.add(ptypeNode1);
         return nodeList;
@@ -1098,7 +1098,7 @@ public class Parser
         TKwThen tkwthenNode6;
         PExp pexpNode7;
         TKwElse tkwelseNode8;
-        PExpTernary pexpternaryNode9;
+        PExp pexpNode9;
         tkwifNode2 = (TKwIf)nodeArrayList1.get(0);
         tlparenNode3 = (TLParen)nodeArrayList2.get(0);
         pexpNode4 = (PExp)nodeArrayList3.get(0);
@@ -1106,9 +1106,9 @@ public class Parser
         tkwthenNode6 = (TKwThen)nodeArrayList5.get(0);
         pexpNode7 = (PExp)nodeArrayList6.get(0);
         tkwelseNode8 = (TKwElse)nodeArrayList7.get(0);
-        pexpternaryNode9 = (PExpTernary)nodeArrayList8.get(0);
+        pexpNode9 = (PExp)nodeArrayList8.get(0);
 
-        pexpternaryNode1 = new AIfExpTernary(tkwifNode2, tlparenNode3, pexpNode4, trparenNode5, tkwthenNode6, pexpNode7, tkwelseNode8, pexpternaryNode9);
+        pexpternaryNode1 = new AIfExpTernary(tkwifNode2, tlparenNode3, pexpNode4, trparenNode5, tkwthenNode6, pexpNode7, tkwelseNode8, pexpNode9);
         }
 	nodeList.add(pexpternaryNode1);
         return nodeList;
@@ -2288,8 +2288,8 @@ public class Parser
 			{{-1, 20}, {26, 31}, {38, 31}, },
 			{{-1, 32}, {38, 62}, },
 			{{-1, 33}, },
-			{{-1, 90}, {34, 49}, {35, 61}, {44, 68}, {63, 84}, {67, 68}, {70, 88}, {111, 116}, {119, 122}, {121, 124}, },
-			{{-1, 50}, {120, 123}, },
+			{{-1, 90}, {34, 49}, {35, 61}, {44, 68}, {63, 84}, {67, 68}, {70, 88}, {111, 116}, {119, 122}, {120, 123}, {121, 124}, },
+			{{-1, 50}, },
 			{{-1, 51}, },
 			{{-1, 52}, {73, 93}, },
 			{{-1, 53}, {74, 94}, },

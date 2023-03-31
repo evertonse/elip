@@ -62,7 +62,7 @@ Tokens
 /* keywords */
   // types 
   kw_const = 'const';
-  kw_interger = 'inteiro';
+  kw_integer = 'inteiro';
   kw_real = 'real';
   kw_bool =  'booleano';
 
@@ -136,7 +136,7 @@ Productions
   ;
 
   type  =  
-    {int} T.kw_interger 
+    {int} T.kw_integer 
     | {bool} T.kw_bool 
     | {real} T.kw_real
   ;

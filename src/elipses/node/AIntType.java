@@ -7,7 +7,7 @@ import elipses.analysis.*;
 @SuppressWarnings("nls")
 public final class AIntType extends PType
 {
-    private TKwInterger _kwInterger_;
+    private TKwInteger _kwInteger_;
 
     public AIntType()
     {
@@ -15,10 +15,10 @@ public final class AIntType extends PType
     }
 
     public AIntType(
-        @SuppressWarnings("hiding") TKwInterger _kwInterger_)
+        @SuppressWarnings("hiding") TKwInteger _kwInteger_)
     {
         // Constructor
-        setKwInterger(_kwInterger_);
+        setKwInteger(_kwInteger_);
 
     }
 
@@ -26,7 +26,7 @@ public final class AIntType extends PType
     public Object clone()
     {
         return new AIntType(
-            cloneNode(this._kwInterger_));
+            cloneNode(this._kwInteger_));
     }
 
     @Override
@@ -35,16 +35,16 @@ public final class AIntType extends PType
         ((Analysis) sw).caseAIntType(this);
     }
 
-    public TKwInterger getKwInterger()
+    public TKwInteger getKwInteger()
     {
-        return this._kwInterger_;
+        return this._kwInteger_;
     }
 
-    public void setKwInterger(TKwInterger node)
+    public void setKwInteger(TKwInteger node)
     {
-        if(this._kwInterger_ != null)
+        if(this._kwInteger_ != null)
         {
-            this._kwInterger_.parent(null);
+            this._kwInteger_.parent(null);
         }
 
         if(node != null)
@@ -57,23 +57,23 @@ public final class AIntType extends PType
             node.parent(this);
         }
 
-        this._kwInterger_ = node;
+        this._kwInteger_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._kwInterger_);
+            + toString(this._kwInteger_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._kwInterger_ == child)
+        if(this._kwInteger_ == child)
         {
-            this._kwInterger_ = null;
+            this._kwInteger_ = null;
             return;
         }
 
@@ -84,9 +84,9 @@ public final class AIntType extends PType
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._kwInterger_ == oldChild)
+        if(this._kwInteger_ == oldChild)
         {
-            setKwInterger((TKwInterger) newChild);
+            setKwInteger((TKwInteger) newChild);
             return;
         }
 

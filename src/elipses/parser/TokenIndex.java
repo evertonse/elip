@@ -16,7 +16,7 @@ class TokenIndex extends AnalysisAdapter
     }
 
     @Override
-    public void caseTKwInterger(@SuppressWarnings("unused") TKwInterger node)
+    public void caseTKwInteger(@SuppressWarnings("unused") TKwInteger node)
     {
         this.index = 1;
     }

@@ -139,9 +139,9 @@ public class DepthFirstAdapter extends AnalysisAdapter
     public void caseAIntType(AIntType node)
     {
         inAIntType(node);
-        if(node.getKwInterger() != null)
+        if(node.getKwInteger() != null)
         {
-            node.getKwInterger().apply(this);
+            node.getKwInteger().apply(this);
         }
         outAIntType(node);
     }

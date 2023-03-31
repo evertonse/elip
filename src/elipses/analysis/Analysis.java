@@ -72,7 +72,7 @@ public interface Analysis extends Switch
     void caseTBlank(TBlank node);
     void caseTComment(TComment node);
     void caseTKwConst(TKwConst node);
-    void caseTKwInterger(TKwInterger node);
+    void caseTKwInteger(TKwInteger node);
     void caseTKwReal(TKwReal node);
     void caseTKwBool(TKwBool node);
     void caseTKwTrue(TKwTrue node);

@@ -429,7 +429,7 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseTKwInterger(TKwInterger node)
+    public void caseTKwInteger(TKwInteger node)
     {
         defaultCase(node);
     }

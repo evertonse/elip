@@ -14,7 +14,7 @@ public final class AIfExpTernary extends PExpTernary
     private TKwThen _kwThen_;
     private PExp _truthy_;
     private TKwElse _kwElse_;
-    private PExpTernary _falsy_;
+    private PExp _falsy_;
 
     public AIfExpTernary()
     {
@@ -29,7 +29,7 @@ public final class AIfExpTernary extends PExpTernary
         @SuppressWarnings("hiding") TKwThen _kwThen_,
         @SuppressWarnings("hiding") PExp _truthy_,
         @SuppressWarnings("hiding") TKwElse _kwElse_,
-        @SuppressWarnings("hiding") PExpTernary _falsy_)
+        @SuppressWarnings("hiding") PExp _falsy_)
     {
         // Constructor
         setKwIf(_kwIf_);
@@ -245,12 +245,12 @@ public final class AIfExpTernary extends PExpTernary
         this._kwElse_ = node;
     }
 
-    public PExpTernary getFalsy()
+    public PExp getFalsy()
     {
         return this._falsy_;
     }
 
-    public void setFalsy(PExpTernary node)
+    public void setFalsy(PExp node)
     {
         if(this._falsy_ != null)
         {
@@ -387,7 +387,7 @@ public final class AIfExpTernary extends PExpTernary
 
         if(this._falsy_ == oldChild)
         {
-            setFalsy((PExpTernary) newChild);
+            setFalsy((PExp) newChild);
             return;
         }
 
