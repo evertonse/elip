@@ -1,104 +1,99 @@
 package elipses;
 
+import elipses.analysis.*;
+import elipses.node.*;
+import java.awt.event.*;
 /*
  * NOTES
  * AST Walker which creates graphical tree
  */
 
 import java.util.*;
-import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.tree.*;
-import elipses.analysis.*;
-import elipses.node.*;
 
-public class ASTDisplay extends DepthFirstAdapter
-{
-    
-    private Stack parents = new Stack ();
- 
-    public ASTDisplay()
-    {
-    }
- 
-    public void outStart(Start node)
-    {
-        JFrame frame = new JFrame ("AST Displayer");
-        JTree tree = new JTree ((DefaultMutableTreeNode) parents.pop ());
-        JScrollPane pane = new JScrollPane (tree);
+public class ASTDisplay extends DepthFirstAdapter {
 
-		expandAll (tree);
+  private Stack parents = new Stack();
 
-		/* window listener so the program will die */
-		frame.addWindowListener (new WindowAdapter () {
-			public void windowClosing(WindowEvent e) {
-				System.exit(0);
-			}
-		});
-		frame.setSize (300, 400);
-		frame.getContentPane ().add (pane);
-		frame.setVisible (true);
-    }
+  public ASTDisplay() {}
 
-	/*
-	 * As we come across non terminals, push them onto the stack
-	 */
-    public void defaultIn(Node node)
-    {
-		DefaultMutableTreeNode thisNode = new DefaultMutableTreeNode
-			(node.getClass ().getName ().substring 
-			 (node.getClass().getName().lastIndexOf('.') + 1));
-		parents.push (thisNode);
-    }
+  public void outStart(Start node) {
+    JFrame frame = new JFrame("AST Displayer");
+    JTree tree = new JTree((DefaultMutableTreeNode) parents.pop());
+    JScrollPane pane = new JScrollPane(tree);
 
-	/*
-	 * As we leave a non terminal, it's parent is the node before it
-	 * on the stack, so we pop it off and add it to that node
-	 */
-    public void defaultOut(Node node)
-    {
-		DefaultMutableTreeNode thisNode = (DefaultMutableTreeNode) parents.pop ();
-		((DefaultMutableTreeNode) parents.peek ()).add (thisNode);
-    }
+    expandAll(tree);
 
-	/*
-	 * Terminals - our parent is always on the top of the stack, so we
-	 * add ourselves to it
-	 */
-    public void defaultCase(Node node)
-    {
-		DefaultMutableTreeNode thisNode = new
-			DefaultMutableTreeNode (((Token) node).getText ());
-		((DefaultMutableTreeNode) parents.peek ()).add (thisNode);
-    }
-    
-    public void caseEOF(EOF node)
-    {
-    }
+    /* window listener so the program will die */
+    frame.addWindowListener(
+      new WindowAdapter() {
+        public void windowClosing(WindowEvent e) {
+          System.exit(0);
+        }
+      }
+    );
+    frame.setSize(300, 400);
+    frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    frame.getContentPane().add(pane);
+    frame.setVisible(true);
+  }
 
-	/*
-	 * we want to see the whole tree. These functions expand it for
-	 * us, they are written by Christian Kaufhold and taken from the
-	 * comp.lang.jave.help newsgroup
-	 */
-	public static void expandAll(JTree tree)
-    {
-        Object root = tree.getModel().getRoot();
-		
-        if (root != null)
-            expandAll(tree, new TreePath(root));
-	}
-	
-	
-	public static void expandAll(JTree tree, TreePath path)
-    {
-        for (Iterator i = extremalPaths(tree.getModel(), path,
-										new HashSet()).iterator();
-			 i.hasNext(); )
-            tree.expandPath((TreePath)i.next());
-	}
+  /*
+   * As we come across non terminals, push them onto the stack
+   */
+  public void defaultIn(Node node) {
+    DefaultMutableTreeNode thisNode = new DefaultMutableTreeNode(
+      node
+        .getClass()
+        .getName()
+        .substring(node.getClass().getName().lastIndexOf('.') + 1)
+    );
+    parents.push(thisNode);
+  }
 
-	/** The "extremal paths" of the tree model's subtree starting at
+  /*
+   * As we leave a non terminal, it's parent is the node before it
+   * on the stack, so we pop it off and add it to that node
+   */
+  public void defaultOut(Node node) {
+    DefaultMutableTreeNode thisNode = (DefaultMutableTreeNode) parents.pop();
+    ((DefaultMutableTreeNode) parents.peek()).add(thisNode);
+  }
+
+  /*
+   * Terminals - our parent is always on the top of the stack, so we
+   * add ourselves to it
+   */
+  public void defaultCase(Node node) {
+    DefaultMutableTreeNode thisNode = new DefaultMutableTreeNode(
+      ((Token) node).getText()
+    );
+    ((DefaultMutableTreeNode) parents.peek()).add(thisNode);
+  }
+
+  public void caseEOF(EOF node) {}
+
+  /*
+   * we want to see the whole tree. These functions expand it for
+   * us, they are written by Christian Kaufhold and taken from the
+   * comp.lang.jave.help newsgroup
+   */
+  public static void expandAll(JTree tree) {
+    Object root = tree.getModel().getRoot();
+
+    if (root != null) expandAll(tree, new TreePath(root));
+  }
+
+  public static void expandAll(JTree tree, TreePath path) {
+    for (
+      Iterator i = extremalPaths(tree.getModel(), path, new HashSet())
+        .iterator();
+      i.hasNext();
+    ) tree.expandPath((TreePath) i.next());
+  }
+
+  /** The "extremal paths" of the tree model's subtree starting at
         path. The extremal paths are those paths that a) are non-leaves
         and b) have only leaf children, if any. It suffices to know
         these to know all non-leaf paths in the subtree, and those are
@@ -111,50 +106,47 @@ public class ASTDisplay extends DepthFirstAdapter
         in the order in which they appear in pre-order in the
         tree model.
     */
-    public static Collection extremalPaths(TreeModel data,
-										   TreePath path, 
-										   Collection result)
-    {
-        result.clear();
-		
-        if (data.isLeaf(path.getLastPathComponent()))
-        {
-            return result; // should really be forbidden (?)
-        }
-        
-        extremalPathsImpl(data, path, result);
+  public static Collection extremalPaths(
+    TreeModel data,
+    TreePath path,
+    Collection result
+  ) {
+    result.clear();
 
-        return result;
-	}
-	
-	private static void extremalPathsImpl(TreeModel data, 
-										  TreePath path,
-										  Collection result)
-    {
-        Object node = path.getLastPathComponent();
-        
-        boolean hasNonLeafChildren = false;
+    if (data.isLeaf(path.getLastPathComponent())) {
+      return result; // should really be forbidden (?)
+    }
 
-        int count = data.getChildCount(node);
-        
-        for (int i = 0; i < count; i++)
-            if (!data.isLeaf(data.getChild(node, i)))
-                hasNonLeafChildren = true;
+    extremalPathsImpl(data, path, result);
 
-        if (!hasNonLeafChildren)
-            result.add(path);
-        else
-        {
-            for (int i = 0; i < count; i++)
-            {
-                Object child = data.getChild(node, i);
-                
-                if (!data.isLeaf(child))
-                    extremalPathsImpl(data,
-									  path.pathByAddingChild(child),
-									  result);
-            }
-        }
-	}
+    return result;
+  }
+
+  private static void extremalPathsImpl(
+    TreeModel data,
+    TreePath path,
+    Collection result
+  ) {
+    Object node = path.getLastPathComponent();
+
+    boolean hasNonLeafChildren = false;
+
+    int count = data.getChildCount(node);
+
+    for (int i = 0; i < count; i++) if (
+      !data.isLeaf(data.getChild(node, i))
+    ) hasNonLeafChildren = true;
+
+    if (!hasNonLeafChildren) result.add(path); else {
+      for (int i = 0; i < count; i++) {
+        Object child = data.getChild(node, i);
+
+        if (!data.isLeaf(child)) extremalPathsImpl(
+          data,
+          path.pathByAddingChild(child),
+          result
+        );
+      }
+    }
+  }
 }
-
