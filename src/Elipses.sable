@@ -212,14 +212,14 @@ Productions
     | {not} T.kw_not [right]:exp_atomic  ;
 
   exp_atomic = 
-    {id} T.identifier
-    | {bin} T.number_bin 
-    | {frac} T.number_frac 
-    | {int} T.number_int 
-    | {true} T.kw_true 
+    {id}      T.identifier
+    | {bin}   T.number_bin 
+    | {frac}  T.number_frac 
+    | {int}   T.number_int 
+    | {true}  T.kw_true 
     | {false} T.kw_false
     | {block} block_exp
-    | {call} func_call  
+    | {call}  func_call  
     | {lambda}func_lambda
   ;
 
