@@ -15,25 +15,21 @@ usado de virgula
 entrada
 (real main():
   (
-    (dot(
-        10,23 | 0b1100 | lambda(u | v) : (
-          ( (u*u + 2,1 % 10) / 2 )
-        )
-      )
-    )
+    dot( 10,23 | (lambda():(2)[]) ) 
     + 
-    (dot( 10,23 | 0b1100 | anotherinner)
-    )
+    dot( 10,23 | 0b1100 | anotherinner)
+    % 
+    nao se (nao se (falso) entao 2 senao -3 ou 3) entao nao se (falso) entao 2 senao -3 ou 3 senao -3 ou 3
   )
 )
 
-(real anotherinner(real a | real _))
-  (se (a > 23,1) ou ( a < -1,1))
-    (se (_ = 2,1) e (nao(a = 2,1)) entao
+(real anotherinner(real a | real _):
+  (se ((a > 23,1) ou ( a < -1,1)) entao 1 ou 
+    se (_ e 2,1 = nao a = 2,1) entao
       (a)
     senao 
       (_)
-    )
+    
   senao
     ( a * _ + 0b0111)
   )

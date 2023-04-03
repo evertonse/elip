@@ -9,8 +9,8 @@ public class Main {
 
   static String[] test_files = new String[] {
     //"test/etapa1/code1.elip",
-    "test/etapa1/code2.elip",
-    //"test/etapa1/code3.elip",
+    //"test/etapa1/code2.elip",
+    "test/etapa1/code3.elip",
     //"test/comment.elip",
     //"test/analysis/exp.elip",
   };
