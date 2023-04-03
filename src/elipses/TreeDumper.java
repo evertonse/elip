@@ -54,7 +54,7 @@ public class TreeDumper extends DepthFirstAdapter {
 
     try {
       Start start = parser.parse();
-      start.getPProgram().apply(new TreeDumper(new PrintWriter(System.out)));
+      start.apply(new TreeDumper(new PrintWriter(System.out)));
     } catch (Exception e) {
       e.printStackTrace();
       System.exit(1);

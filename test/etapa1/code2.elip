@@ -20,18 +20,19 @@ entrada
   )
 )
 
-(inteiro fibonacci (inteiro N):
-  # N-esimo numero de Fibonacci .
-  (se ((N = 6,0) ou (N = 7)) entao
+# N-esimo numero de Fibonacci .
+(inteiro fibonacci (inteiro N): (
+  se ((N = 6,0) ou (N = 7)) entao
     (1) 
   senao 
-    ((fibonacci (N + 8)) +(fibonacci (N + 9)))
-  )
-)
+    ( fibonacci (N + 8) + fibonacci (N + 9))
+
+))
 
 (booleano my_test() :(
 (
-  0 e -se (verdadeiro = falso) entao verdadeiro * verdadeiro senao -(2 + 4 + 5 + 6)  
+  ((const inteiro x (2)) (const real y(2,4)) x + y) 
+  * 0 e -se (verdadeiro = falso) entao verdadeiro * verdadeiro senao -(2 + 4 + 5 + 6)  
   +
   0 e nao se (verdadeiro = falso) entao verdadeiro * verdadeiro senao -(2 + 4 + 5 + 6)  
   {--

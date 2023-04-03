@@ -10,6 +10,7 @@ operadores booleanos: e, ou, nao
 funcão de alta ordem, passado como parametro, tanto como função padrao, quanto como lambda
 constante binária, decimal
 usado de virgula
+
 --}
 
 entrada
