@@ -7,7 +7,7 @@ import elipses.analysis.*;
 @SuppressWarnings("nls")
 public final class AExpTernary extends PExpTernary
 {
-    private PExpOr _expOr_;
+    private PExpAtomic _expAtomic_;
 
     public AExpTernary()
     {
@@ -15,10 +15,10 @@ public final class AExpTernary extends PExpTernary
     }
 
     public AExpTernary(
-        @SuppressWarnings("hiding") PExpOr _expOr_)
+        @SuppressWarnings("hiding") PExpAtomic _expAtomic_)
     {
         // Constructor
-        setExpOr(_expOr_);
+        setExpAtomic(_expAtomic_);
 
     }
 
@@ -26,7 +26,7 @@ public final class AExpTernary extends PExpTernary
     public Object clone()
     {
         return new AExpTernary(
-            cloneNode(this._expOr_));
+            cloneNode(this._expAtomic_));
     }
 
     @Override
@@ -35,16 +35,16 @@ public final class AExpTernary extends PExpTernary
         ((Analysis) sw).caseAExpTernary(this);
     }
 
-    public PExpOr getExpOr()
+    public PExpAtomic getExpAtomic()
     {
-        return this._expOr_;
+        return this._expAtomic_;
     }
 
-    public void setExpOr(PExpOr node)
+    public void setExpAtomic(PExpAtomic node)
     {
-        if(this._expOr_ != null)
+        if(this._expAtomic_ != null)
         {
-            this._expOr_.parent(null);
+            this._expAtomic_.parent(null);
         }
 
         if(node != null)
@@ -57,23 +57,23 @@ public final class AExpTernary extends PExpTernary
             node.parent(this);
         }
 
-        this._expOr_ = node;
+        this._expAtomic_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._expOr_);
+            + toString(this._expAtomic_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._expOr_ == child)
+        if(this._expAtomic_ == child)
         {
-            this._expOr_ = null;
+            this._expAtomic_ = null;
             return;
         }
 
@@ -84,9 +84,9 @@ public final class AExpTernary extends PExpTernary
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._expOr_ == oldChild)
+        if(this._expAtomic_ == oldChild)
         {
-            setExpOr((PExpOr) newChild);
+            setExpAtomic((PExpAtomic) newChild);
             return;
         }
 

@@ -9,7 +9,7 @@ public final class AMultExpMultiplicative extends PExpMultiplicative
 {
     private PExpMultiplicative _left_;
     private TMult _mult_;
-    private PExpAtomic _right_;
+    private PExpUnary _right_;
 
     public AMultExpMultiplicative()
     {
@@ -19,7 +19,7 @@ public final class AMultExpMultiplicative extends PExpMultiplicative
     public AMultExpMultiplicative(
         @SuppressWarnings("hiding") PExpMultiplicative _left_,
         @SuppressWarnings("hiding") TMult _mult_,
-        @SuppressWarnings("hiding") PExpAtomic _right_)
+        @SuppressWarnings("hiding") PExpUnary _right_)
     {
         // Constructor
         setLeft(_left_);
@@ -95,12 +95,12 @@ public final class AMultExpMultiplicative extends PExpMultiplicative
         this._mult_ = node;
     }
 
-    public PExpAtomic getRight()
+    public PExpUnary getRight()
     {
         return this._right_;
     }
 
-    public void setRight(PExpAtomic node)
+    public void setRight(PExpUnary node)
     {
         if(this._right_ != null)
         {
@@ -172,7 +172,7 @@ public final class AMultExpMultiplicative extends PExpMultiplicative
 
         if(this._right_ == oldChild)
         {
-            setRight((PExpAtomic) newChild);
+            setRight((PExpUnary) newChild);
             return;
         }
 

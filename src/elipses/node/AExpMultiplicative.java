@@ -7,7 +7,7 @@ import elipses.analysis.*;
 @SuppressWarnings("nls")
 public final class AExpMultiplicative extends PExpMultiplicative
 {
-    private PExpAtomic _expAtomic_;
+    private PExpUnary _expUnary_;
 
     public AExpMultiplicative()
     {
@@ -15,10 +15,10 @@ public final class AExpMultiplicative extends PExpMultiplicative
     }
 
     public AExpMultiplicative(
-        @SuppressWarnings("hiding") PExpAtomic _expAtomic_)
+        @SuppressWarnings("hiding") PExpUnary _expUnary_)
     {
         // Constructor
-        setExpAtomic(_expAtomic_);
+        setExpUnary(_expUnary_);
 
     }
 
@@ -26,7 +26,7 @@ public final class AExpMultiplicative extends PExpMultiplicative
     public Object clone()
     {
         return new AExpMultiplicative(
-            cloneNode(this._expAtomic_));
+            cloneNode(this._expUnary_));
     }
 
     @Override
@@ -35,16 +35,16 @@ public final class AExpMultiplicative extends PExpMultiplicative
         ((Analysis) sw).caseAExpMultiplicative(this);
     }
 
-    public PExpAtomic getExpAtomic()
+    public PExpUnary getExpUnary()
     {
-        return this._expAtomic_;
+        return this._expUnary_;
     }
 
-    public void setExpAtomic(PExpAtomic node)
+    public void setExpUnary(PExpUnary node)
     {
-        if(this._expAtomic_ != null)
+        if(this._expUnary_ != null)
         {
-            this._expAtomic_.parent(null);
+            this._expUnary_.parent(null);
         }
 
         if(node != null)
@@ -57,23 +57,23 @@ public final class AExpMultiplicative extends PExpMultiplicative
             node.parent(this);
         }
 
-        this._expAtomic_ = node;
+        this._expUnary_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._expAtomic_);
+            + toString(this._expUnary_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._expAtomic_ == child)
+        if(this._expUnary_ == child)
         {
-            this._expAtomic_ = null;
+            this._expUnary_ = null;
             return;
         }
 
@@ -84,9 +84,9 @@ public final class AExpMultiplicative extends PExpMultiplicative
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._expAtomic_ == oldChild)
+        if(this._expUnary_ == oldChild)
         {
-            setExpAtomic((PExpAtomic) newChild);
+            setExpUnary((PExpUnary) newChild);
             return;
         }
 

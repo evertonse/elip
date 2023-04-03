@@ -14,18 +14,30 @@ constante binaria e decimal
 entrada
 (inteiro main():
   (
-    (fibonacci(5))
+    (fibonacci(0))
     +
-    (lambda (x | y) : (se (nao (y = 0)) entao (x / y - (1 / y)) senao ((x+y) / y)) [10 | 20])
+    (lambda (x | y) : (se (nao (y = 1)) entao (x / y - (2 - -3 % y)) senao ((x+y) / y)) [4 | 5])
   )
 )
 
 (inteiro fibonacci (inteiro N):
   # N-esimo numero de Fibonacci .
-  (se ((N = 0b0) or (N = 1)) entao
+  (se ((N = 6,0) ou (N = 7)) entao
     (1) 
   senao 
-    ((fibonacci (N + 1)) +(fibonacci (N + 2)))
+    ((fibonacci (N + 8)) +(fibonacci (N + 9)))
   )
 )
 
+(booleano my_test() :(
+(
+  0 e -se (verdadeiro = falso) entao verdadeiro * verdadeiro senao -(2 + 4 + 5 + 6)  
+  +
+  0 e nao se (verdadeiro = falso) entao verdadeiro * verdadeiro senao -(2 + 4 + 5 + 6)  
+  {--
+  *
+  falso % se (verdadeiro) entao verdadeiro ou verdadeiro senao falso < verdadeiro 
+  -
+  - se (verdadeiro = falso) entao verdadeiro * verdadeiro senao -verdadeiro 
+  --}
+)))

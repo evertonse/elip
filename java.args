@@ -26,6 +26,7 @@ src\elipses\node\AExpMultiplicative.java
 src\elipses\node\AExpOr.java 
 src\elipses\node\AExpRelational.java 
 src\elipses\node\AExpTernary.java 
+src\elipses\node\AExpUnary.java 
 src\elipses\node\AFalseExpAtomic.java 
 src\elipses\node\AFracExpAtomic.java 
 src\elipses\node\AFuncCall.java 
@@ -46,8 +47,8 @@ src\elipses\node\AMultipleListExp.java
 src\elipses\node\AMultipleListIds.java 
 src\elipses\node\AMultipleParams.java 
 src\elipses\node\AMultipleSignatureParams.java 
-src\elipses\node\ANegativeExpMultiplicative.java 
-src\elipses\node\ANotExpMultiplicative.java 
+src\elipses\node\ANegativeExpUnary.java 
+src\elipses\node\ANotExpUnary.java 
 src\elipses\node\AOrExpOr.java 
 src\elipses\node\AParams.java 
 src\elipses\node\APlusExpAdditive.java 
@@ -79,6 +80,7 @@ src\elipses\node\PExpMultiplicative.java
 src\elipses\node\PExpOr.java 
 src\elipses\node\PExpRelational.java 
 src\elipses\node\PExpTernary.java 
+src\elipses\node\PExpUnary.java 
 src\elipses\node\PFuncCall.java 
 src\elipses\node\PFuncLambda.java 
 src\elipses\node\PListExp.java 

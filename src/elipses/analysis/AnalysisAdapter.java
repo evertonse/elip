@@ -177,18 +177,6 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseAExpTernary(AExpTernary node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseAIfExpTernary(AIfExpTernary node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
     public void caseAExpOr(AExpOr node)
     {
         defaultCase(node);
@@ -285,13 +273,31 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseANegativeExpMultiplicative(ANegativeExpMultiplicative node)
+    public void caseAExpUnary(AExpUnary node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseANotExpMultiplicative(ANotExpMultiplicative node)
+    public void caseANegativeExpUnary(ANegativeExpUnary node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseANotExpUnary(ANotExpUnary node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAExpTernary(AExpTernary node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAIfExpTernary(AIfExpTernary node)
     {
         defaultCase(node);
     }

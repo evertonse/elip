@@ -462,81 +462,11 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAExp(AExp node)
     {
         inAExp(node);
-        if(node.getExpTernary() != null)
-        {
-            node.getExpTernary().apply(this);
-        }
-        outAExp(node);
-    }
-
-    public void inAExpTernary(AExpTernary node)
-    {
-        defaultIn(node);
-    }
-
-    public void outAExpTernary(AExpTernary node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseAExpTernary(AExpTernary node)
-    {
-        inAExpTernary(node);
         if(node.getExpOr() != null)
         {
             node.getExpOr().apply(this);
         }
-        outAExpTernary(node);
-    }
-
-    public void inAIfExpTernary(AIfExpTernary node)
-    {
-        defaultIn(node);
-    }
-
-    public void outAIfExpTernary(AIfExpTernary node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseAIfExpTernary(AIfExpTernary node)
-    {
-        inAIfExpTernary(node);
-        if(node.getFalsy() != null)
-        {
-            node.getFalsy().apply(this);
-        }
-        if(node.getKwElse() != null)
-        {
-            node.getKwElse().apply(this);
-        }
-        if(node.getTruthy() != null)
-        {
-            node.getTruthy().apply(this);
-        }
-        if(node.getKwThen() != null)
-        {
-            node.getKwThen().apply(this);
-        }
-        if(node.getRParen() != null)
-        {
-            node.getRParen().apply(this);
-        }
-        if(node.getCond() != null)
-        {
-            node.getCond().apply(this);
-        }
-        if(node.getLParen() != null)
-        {
-            node.getLParen().apply(this);
-        }
-        if(node.getKwIf() != null)
-        {
-            node.getKwIf().apply(this);
-        }
-        outAIfExpTernary(node);
+        outAExp(node);
     }
 
     public void inAExpOr(AExpOr node)
@@ -861,9 +791,9 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAExpMultiplicative(AExpMultiplicative node)
     {
         inAExpMultiplicative(node);
-        if(node.getExpAtomic() != null)
+        if(node.getExpUnary() != null)
         {
-            node.getExpAtomic().apply(this);
+            node.getExpUnary().apply(this);
         }
         outAExpMultiplicative(node);
     }
@@ -955,45 +885,66 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
         outAModExpMultiplicative(node);
     }
 
-    public void inANegativeExpMultiplicative(ANegativeExpMultiplicative node)
+    public void inAExpUnary(AExpUnary node)
     {
         defaultIn(node);
     }
 
-    public void outANegativeExpMultiplicative(ANegativeExpMultiplicative node)
+    public void outAExpUnary(AExpUnary node)
     {
         defaultOut(node);
     }
 
     @Override
-    public void caseANegativeExpMultiplicative(ANegativeExpMultiplicative node)
+    public void caseAExpUnary(AExpUnary node)
     {
-        inANegativeExpMultiplicative(node);
-        if(node.getExpAtomic() != null)
+        inAExpUnary(node);
+        if(node.getExpTernary() != null)
         {
-            node.getExpAtomic().apply(this);
+            node.getExpTernary().apply(this);
+        }
+        outAExpUnary(node);
+    }
+
+    public void inANegativeExpUnary(ANegativeExpUnary node)
+    {
+        defaultIn(node);
+    }
+
+    public void outANegativeExpUnary(ANegativeExpUnary node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseANegativeExpUnary(ANegativeExpUnary node)
+    {
+        inANegativeExpUnary(node);
+        if(node.getExpUnary() != null)
+        {
+            node.getExpUnary().apply(this);
         }
         if(node.getMinus() != null)
         {
             node.getMinus().apply(this);
         }
-        outANegativeExpMultiplicative(node);
+        outANegativeExpUnary(node);
     }
 
-    public void inANotExpMultiplicative(ANotExpMultiplicative node)
+    public void inANotExpUnary(ANotExpUnary node)
     {
         defaultIn(node);
     }
 
-    public void outANotExpMultiplicative(ANotExpMultiplicative node)
+    public void outANotExpUnary(ANotExpUnary node)
     {
         defaultOut(node);
     }
 
     @Override
-    public void caseANotExpMultiplicative(ANotExpMultiplicative node)
+    public void caseANotExpUnary(ANotExpUnary node)
     {
-        inANotExpMultiplicative(node);
+        inANotExpUnary(node);
         if(node.getRight() != null)
         {
             node.getRight().apply(this);
@@ -1002,7 +953,77 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
         {
             node.getKwNot().apply(this);
         }
-        outANotExpMultiplicative(node);
+        outANotExpUnary(node);
+    }
+
+    public void inAExpTernary(AExpTernary node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAExpTernary(AExpTernary node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAExpTernary(AExpTernary node)
+    {
+        inAExpTernary(node);
+        if(node.getExpAtomic() != null)
+        {
+            node.getExpAtomic().apply(this);
+        }
+        outAExpTernary(node);
+    }
+
+    public void inAIfExpTernary(AIfExpTernary node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAIfExpTernary(AIfExpTernary node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAIfExpTernary(AIfExpTernary node)
+    {
+        inAIfExpTernary(node);
+        if(node.getFalsy() != null)
+        {
+            node.getFalsy().apply(this);
+        }
+        if(node.getKwElse() != null)
+        {
+            node.getKwElse().apply(this);
+        }
+        if(node.getTruthy() != null)
+        {
+            node.getTruthy().apply(this);
+        }
+        if(node.getKwThen() != null)
+        {
+            node.getKwThen().apply(this);
+        }
+        if(node.getRParen() != null)
+        {
+            node.getRParen().apply(this);
+        }
+        if(node.getCond() != null)
+        {
+            node.getCond().apply(this);
+        }
+        if(node.getLParen() != null)
+        {
+            node.getLParen().apply(this);
+        }
+        if(node.getKwIf() != null)
+        {
+            node.getKwIf().apply(this);
+        }
+        outAIfExpTernary(node);
     }
 
     public void inAIdExpAtomic(AIdExpAtomic node)

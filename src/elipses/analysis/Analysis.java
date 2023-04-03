@@ -29,8 +29,6 @@ public interface Analysis extends Switch
     void caseATypeSignatureParam(ATypeSignatureParam node);
     void caseASignatureSignatureParam(ASignatureSignatureParam node);
     void caseAExp(AExp node);
-    void caseAExpTernary(AExpTernary node);
-    void caseAIfExpTernary(AIfExpTernary node);
     void caseAExpOr(AExpOr node);
     void caseAOrExpOr(AOrExpOr node);
     void caseAExpAnd(AExpAnd node);
@@ -47,8 +45,11 @@ public interface Analysis extends Switch
     void caseAMultExpMultiplicative(AMultExpMultiplicative node);
     void caseADivExpMultiplicative(ADivExpMultiplicative node);
     void caseAModExpMultiplicative(AModExpMultiplicative node);
-    void caseANegativeExpMultiplicative(ANegativeExpMultiplicative node);
-    void caseANotExpMultiplicative(ANotExpMultiplicative node);
+    void caseAExpUnary(AExpUnary node);
+    void caseANegativeExpUnary(ANegativeExpUnary node);
+    void caseANotExpUnary(ANotExpUnary node);
+    void caseAExpTernary(AExpTernary node);
+    void caseAIfExpTernary(AIfExpTernary node);
     void caseAIdExpAtomic(AIdExpAtomic node);
     void caseABinExpAtomic(ABinExpAtomic node);
     void caseAFracExpAtomic(AFracExpAtomic node);

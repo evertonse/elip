@@ -1,0 +1,5 @@
+- [x] Test Precedence
+- [x] Test Precedence With function calls and lambdas
+- [ ] Compare Unary Operation with block and atoms in C and in Elipses
+- [ ] Create automated tests
+- [x] Create Syntax Highlighting for Elipses 

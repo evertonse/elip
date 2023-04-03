@@ -161,20 +161,18 @@ Productions
     | {single} signature_param 
     | {multiple} signature_param T.pipe signature_params
   ;
+
   signature_param = 
     {type} type 
-    | {signature} signature;
+    | {signature} signature
+  ;
 
   // @note smaller number means more priority, note that 'mult' is on priority exp1 whereas 'plus' in on exp2
   // which means add has less priority in evaluation, so 'mult' appear closer to the leafs of the AST
   exp  = 
-    exp_ternary 
+    exp_or 
   ;
 
-  exp_ternary = 
-    exp_or 
-    | {if} T.kw_if T.l_paren [cond]:exp T.r_paren T.kw_then [truthy]:exp T.kw_else [falsy]:exp
-  ;
   
   exp_or =
     exp_and
@@ -204,24 +202,37 @@ Productions
   ;
 
   exp_multiplicative = 
+    exp_unary
+    | {mult}[left]:exp_multiplicative T.mult [right]:exp_unary
+    | {div} [left]:exp_multiplicative T.div  [right]:exp_unary
+    | {mod} [left]:exp_multiplicative T.mod  [right]:exp_unary
+  ;
+
+  exp_unary  = 
+    exp_ternary
+    | {negative} T.minus exp_unary  
+    | {not} T.kw_not [right]:exp_unary
+  ;
+
+  exp_ternary = 
     exp_atomic
-    | {mult}[left]:exp_multiplicative T.mult [right]:exp_atomic
-    | {div} [left]:exp_multiplicative T.div  [right]:exp_atomic
-    | {mod} [left]:exp_multiplicative T.mod  [right]:exp_atomic
-    | {negative} T.minus exp_atomic 
-    | {not} T.kw_not [right]:exp_atomic  ;
+    | {if} T.kw_if T.l_paren [cond]:exp T.r_paren T.kw_then [truthy]:exp T.kw_else [falsy]:exp_unary
+  ;
+
+
 
   exp_atomic = 
-    {id} T.identifier
-    | {bin} T.number_bin 
-    | {frac} T.number_frac 
-    | {int} T.number_int 
-    | {true} T.kw_true 
-    | {false} T.kw_false
-    | {block} block_exp
-    | {call} func_call  
-    | {lambda}func_lambda
+    {id}       T.identifier
+    | {bin}    T.number_bin 
+    | {frac}   T.number_frac 
+    | {int}    T.number_int 
+    | {true}   T.kw_true 
+    | {false}  T.kw_false
+    | {block}  block_exp
+    | {call}   func_call  
+    | {lambda} func_lambda
   ;
+
 
   block_exp = 
     {block} T.l_paren decl_const* exp T.r_paren

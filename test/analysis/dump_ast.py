@@ -16,7 +16,7 @@ sys.path.extend(['.', '..'])
 
 from pycparser import parse_file
 
-FILE_TO_PARSE = 'dump_file.c'
+FILE_TO_PARSE = 'exp.c'
 
 if __name__ == "__main__":
     argparser = argparse.ArgumentParser('Dump AST')

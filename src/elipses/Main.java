@@ -1,6 +1,5 @@
 package elipses;
 
-import elipses.analysis.*;
 import elipses.lexer.*;
 import elipses.node.*;
 import elipses.parser.*;
@@ -9,15 +8,11 @@ import java.io.*;
 public class Main {
 
   static String[] test_files = new String[] {
-    //"test/grupo10/*",
-    //"test/grupo10/codigo1_grupo10.elip",
-    //"test/grupo10/codigo2_grupo10.elip",
-    //"test/grupo10/codigo3_grupo10.elip",
     //"test/etapa1/code1.elip",
-    //"test/etapa1/code2.elip",
+    "test/etapa1/code2.elip",
     //"test/etapa1/code3.elip",
-    //"test/comment.elip"
-    "test/analysis/exp.elip",
+    //"test/comment.elip",
+    //"test/analysis/exp.elip",
   };
 
   public static void main(String[] args) {

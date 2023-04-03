@@ -7,3 +7,5 @@ build.xml
 grupo_10.sable
 test*.sable
 **.exe
+**bigger.sable
+**least.sable

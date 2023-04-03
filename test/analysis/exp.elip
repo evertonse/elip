@@ -1,21 +1,26 @@
 
-
-(inteiro test_predecencia():
-  (
-    se(6) entao 6 senao se (6 ou 5 e 4 = 3 < 3 > 3 + 2) entao 6 senao 6 
-    #- 2 nao 1 * 1 / 1 % 1 -(1 + 0)
-  )
-)
-
-(inteiro test_se_senao ():
-  (
-    se( se(verdadeiro) entao verdadeiro senao falso ) entao
-      0
-    senao se( a = 1 ) entao
-      1
-    senao se( a = 2 ) entao
-      2
-    senao 
-      5
-  )
-)
+entrada (inteiro main():
+(
+  {--
+  1 % (2 * 3) + exp() > se (2) entao 
+        se(3) entao 
+          4 
+        senao 
+          5 
+      senao 
+        se(6) entao 
+          7 
+        senao 
+          8
+  * se (falso) entao 9 senao 10 
+  -
+  --}
+ 1+ se (falso) entao 
+    11 
+  senao se (falso) entao 
+    12 
+  senao se (falso) entao 
+    13 
+  senao 
+    call(2|2|4|4)  
+))

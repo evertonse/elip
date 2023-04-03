@@ -5,19 +5,19 @@ package elipses.node;
 import elipses.analysis.*;
 
 @SuppressWarnings("nls")
-public final class ANotExpMultiplicative extends PExpMultiplicative
+public final class ANotExpUnary extends PExpUnary
 {
     private TKwNot _kwNot_;
-    private PExpAtomic _right_;
+    private PExpUnary _right_;
 
-    public ANotExpMultiplicative()
+    public ANotExpUnary()
     {
         // Constructor
     }
 
-    public ANotExpMultiplicative(
+    public ANotExpUnary(
         @SuppressWarnings("hiding") TKwNot _kwNot_,
-        @SuppressWarnings("hiding") PExpAtomic _right_)
+        @SuppressWarnings("hiding") PExpUnary _right_)
     {
         // Constructor
         setKwNot(_kwNot_);
@@ -29,7 +29,7 @@ public final class ANotExpMultiplicative extends PExpMultiplicative
     @Override
     public Object clone()
     {
-        return new ANotExpMultiplicative(
+        return new ANotExpUnary(
             cloneNode(this._kwNot_),
             cloneNode(this._right_));
     }
@@ -37,7 +37,7 @@ public final class ANotExpMultiplicative extends PExpMultiplicative
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseANotExpMultiplicative(this);
+        ((Analysis) sw).caseANotExpUnary(this);
     }
 
     public TKwNot getKwNot()
@@ -65,12 +65,12 @@ public final class ANotExpMultiplicative extends PExpMultiplicative
         this._kwNot_ = node;
     }
 
-    public PExpAtomic getRight()
+    public PExpUnary getRight()
     {
         return this._right_;
     }
 
-    public void setRight(PExpAtomic node)
+    public void setRight(PExpUnary node)
     {
         if(this._right_ != null)
         {
@@ -129,7 +129,7 @@ public final class ANotExpMultiplicative extends PExpMultiplicative
 
         if(this._right_ == oldChild)
         {
-            setRight((PExpAtomic) newChild);
+            setRight((PExpUnary) newChild);
             return;
         }
 
