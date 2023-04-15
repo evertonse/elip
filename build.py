@@ -11,7 +11,7 @@ sablegrammar = "src/ElipsesC99.sable"
 sablegrammar = "docs\grammar-examples\grace.sable"
 sablegrammar = "src/Elipses.sable"
 
-autorun = False
+autorun = True 
 runargs = [
     r"test/analysis/exp.elip"
 ]
