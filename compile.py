@@ -8,6 +8,12 @@ import build
 ####################################################################################################################
 EXCLUDE_FOLDERS: set = {"bin", "test", "vendor", "__pycache__", "docs"}
 
+def dos2unix(filepath):
+    with open(filepath, "r+b") as file:
+        contents = file.read().replace(b"\r\n", b"\n")
+        file.seek(0)
+        file.write(contents)
+        file.truncate()
 
 def allfiles(start: Path, extension: str, ignore: set) -> list:
     """
@@ -25,7 +31,7 @@ def allfiles(start: Path, extension: str, ignore: set) -> list:
     return files
 
 
-flags = {"run": True}
+flags = {"run": build.autorun or False, "shellbin": True}
 
 classpath = Path(build.bindir or None)
 srcpath = Path(build.srcpath) or None
@@ -92,8 +98,30 @@ if len(datfiles) > 0:
         copyfile(src=Path(old), dst=Path(new))
 
 
+
+if flags['shellbin']:
+    shell_bin = Path(build.bindir, build.bin + '.cmd')
+    print(f"INFO: Creating shellbin at {shell_bin}")
+    shell_bin.touch()
+    shell_bin.write_text(
+          '@echo off\n'
+        + 'setlocal\n'
+        +f'java -classpath "{classpath.absolute()}" {mainclass} %*\n'
+        + 'endlocal'
+    )
+
+    shell_bin = Path(build.bindir, build.bin)
+    shell_bin.touch()
+    shell_bin.write_text(
+        '#!/usr/bin/env bash\n'
+        +'script_path="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"\n'
+        +f'exec java -classpath "{classpath.absolute()}" {mainclass} "$@"\n'
+    )
+    dos2unix(shell_bin)
+
+
 if flags["run"]:
-    cmd_run: str = f'java -classpath "{classpath}" {mainclass}'
+    cmd_run: str = f'java -classpath "{classpath}" {mainclass} {" ".join(build.runargs) or ""}'
     if code == 0:
         print(cmd_run)
         code: int = os.system(cmd_run)

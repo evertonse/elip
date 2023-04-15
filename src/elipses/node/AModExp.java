@@ -5,26 +5,22 @@ package elipses.node;
 import elipses.analysis.*;
 
 @SuppressWarnings("nls")
-public final class ALtExpRelational extends PExpRelational
+public final class AModExp extends PExp
 {
-    private PExpRelational _left_;
-    private TLt _lt_;
-    private PExpAdditive _right_;
+    private PExp _left_;
+    private PExp _right_;
 
-    public ALtExpRelational()
+    public AModExp()
     {
         // Constructor
     }
 
-    public ALtExpRelational(
-        @SuppressWarnings("hiding") PExpRelational _left_,
-        @SuppressWarnings("hiding") TLt _lt_,
-        @SuppressWarnings("hiding") PExpAdditive _right_)
+    public AModExp(
+        @SuppressWarnings("hiding") PExp _left_,
+        @SuppressWarnings("hiding") PExp _right_)
     {
         // Constructor
         setLeft(_left_);
-
-        setLt(_lt_);
 
         setRight(_right_);
 
@@ -33,24 +29,23 @@ public final class ALtExpRelational extends PExpRelational
     @Override
     public Object clone()
     {
-        return new ALtExpRelational(
+        return new AModExp(
             cloneNode(this._left_),
-            cloneNode(this._lt_),
             cloneNode(this._right_));
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseALtExpRelational(this);
+        ((Analysis) sw).caseAModExp(this);
     }
 
-    public PExpRelational getLeft()
+    public PExp getLeft()
     {
         return this._left_;
     }
 
-    public void setLeft(PExpRelational node)
+    public void setLeft(PExp node)
     {
         if(this._left_ != null)
         {
@@ -70,37 +65,12 @@ public final class ALtExpRelational extends PExpRelational
         this._left_ = node;
     }
 
-    public TLt getLt()
-    {
-        return this._lt_;
-    }
-
-    public void setLt(TLt node)
-    {
-        if(this._lt_ != null)
-        {
-            this._lt_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._lt_ = node;
-    }
-
-    public PExpAdditive getRight()
+    public PExp getRight()
     {
         return this._right_;
     }
 
-    public void setRight(PExpAdditive node)
+    public void setRight(PExp node)
     {
         if(this._right_ != null)
         {
@@ -125,7 +95,6 @@ public final class ALtExpRelational extends PExpRelational
     {
         return ""
             + toString(this._left_)
-            + toString(this._lt_)
             + toString(this._right_);
     }
 
@@ -136,12 +105,6 @@ public final class ALtExpRelational extends PExpRelational
         if(this._left_ == child)
         {
             this._left_ = null;
-            return;
-        }
-
-        if(this._lt_ == child)
-        {
-            this._lt_ = null;
             return;
         }
 
@@ -160,19 +123,13 @@ public final class ALtExpRelational extends PExpRelational
         // Replace child
         if(this._left_ == oldChild)
         {
-            setLeft((PExpRelational) newChild);
-            return;
-        }
-
-        if(this._lt_ == oldChild)
-        {
-            setLt((TLt) newChild);
+            setLeft((PExp) newChild);
             return;
         }
 
         if(this._right_ == oldChild)
         {
-            setRight((PExpAdditive) newChild);
+            setRight((PExp) newChild);
             return;
         }
 

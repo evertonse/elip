@@ -5,46 +5,46 @@ package elipses.node;
 import elipses.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AExpAdditive extends PExpAdditive
+public final class ARealExp extends PExp
 {
-    private PExpMultiplicative _expMultiplicative_;
+    private TNumberFrac _numberFrac_;
 
-    public AExpAdditive()
+    public ARealExp()
     {
         // Constructor
     }
 
-    public AExpAdditive(
-        @SuppressWarnings("hiding") PExpMultiplicative _expMultiplicative_)
+    public ARealExp(
+        @SuppressWarnings("hiding") TNumberFrac _numberFrac_)
     {
         // Constructor
-        setExpMultiplicative(_expMultiplicative_);
+        setNumberFrac(_numberFrac_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new AExpAdditive(
-            cloneNode(this._expMultiplicative_));
+        return new ARealExp(
+            cloneNode(this._numberFrac_));
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAExpAdditive(this);
+        ((Analysis) sw).caseARealExp(this);
     }
 
-    public PExpMultiplicative getExpMultiplicative()
+    public TNumberFrac getNumberFrac()
     {
-        return this._expMultiplicative_;
+        return this._numberFrac_;
     }
 
-    public void setExpMultiplicative(PExpMultiplicative node)
+    public void setNumberFrac(TNumberFrac node)
     {
-        if(this._expMultiplicative_ != null)
+        if(this._numberFrac_ != null)
         {
-            this._expMultiplicative_.parent(null);
+            this._numberFrac_.parent(null);
         }
 
         if(node != null)
@@ -57,23 +57,23 @@ public final class AExpAdditive extends PExpAdditive
             node.parent(this);
         }
 
-        this._expMultiplicative_ = node;
+        this._numberFrac_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._expMultiplicative_);
+            + toString(this._numberFrac_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._expMultiplicative_ == child)
+        if(this._numberFrac_ == child)
         {
-            this._expMultiplicative_ = null;
+            this._numberFrac_ = null;
             return;
         }
 
@@ -84,9 +84,9 @@ public final class AExpAdditive extends PExpAdditive
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._expMultiplicative_ == oldChild)
+        if(this._numberFrac_ == oldChild)
         {
-            setExpMultiplicative((PExpMultiplicative) newChild);
+            setNumberFrac((TNumberFrac) newChild);
             return;
         }
 

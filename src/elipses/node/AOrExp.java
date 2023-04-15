@@ -5,26 +5,22 @@ package elipses.node;
 import elipses.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AAndExpAnd extends PExpAnd
+public final class AOrExp extends PExp
 {
-    private PExpAnd _left_;
-    private TKwAnd _kwAnd_;
-    private PExpEquality _right_;
+    private PExp _left_;
+    private PExp _right_;
 
-    public AAndExpAnd()
+    public AOrExp()
     {
         // Constructor
     }
 
-    public AAndExpAnd(
-        @SuppressWarnings("hiding") PExpAnd _left_,
-        @SuppressWarnings("hiding") TKwAnd _kwAnd_,
-        @SuppressWarnings("hiding") PExpEquality _right_)
+    public AOrExp(
+        @SuppressWarnings("hiding") PExp _left_,
+        @SuppressWarnings("hiding") PExp _right_)
     {
         // Constructor
         setLeft(_left_);
-
-        setKwAnd(_kwAnd_);
 
         setRight(_right_);
 
@@ -33,24 +29,23 @@ public final class AAndExpAnd extends PExpAnd
     @Override
     public Object clone()
     {
-        return new AAndExpAnd(
+        return new AOrExp(
             cloneNode(this._left_),
-            cloneNode(this._kwAnd_),
             cloneNode(this._right_));
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAAndExpAnd(this);
+        ((Analysis) sw).caseAOrExp(this);
     }
 
-    public PExpAnd getLeft()
+    public PExp getLeft()
     {
         return this._left_;
     }
 
-    public void setLeft(PExpAnd node)
+    public void setLeft(PExp node)
     {
         if(this._left_ != null)
         {
@@ -70,37 +65,12 @@ public final class AAndExpAnd extends PExpAnd
         this._left_ = node;
     }
 
-    public TKwAnd getKwAnd()
-    {
-        return this._kwAnd_;
-    }
-
-    public void setKwAnd(TKwAnd node)
-    {
-        if(this._kwAnd_ != null)
-        {
-            this._kwAnd_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._kwAnd_ = node;
-    }
-
-    public PExpEquality getRight()
+    public PExp getRight()
     {
         return this._right_;
     }
 
-    public void setRight(PExpEquality node)
+    public void setRight(PExp node)
     {
         if(this._right_ != null)
         {
@@ -125,7 +95,6 @@ public final class AAndExpAnd extends PExpAnd
     {
         return ""
             + toString(this._left_)
-            + toString(this._kwAnd_)
             + toString(this._right_);
     }
 
@@ -136,12 +105,6 @@ public final class AAndExpAnd extends PExpAnd
         if(this._left_ == child)
         {
             this._left_ = null;
-            return;
-        }
-
-        if(this._kwAnd_ == child)
-        {
-            this._kwAnd_ = null;
             return;
         }
 
@@ -160,19 +123,13 @@ public final class AAndExpAnd extends PExpAnd
         // Replace child
         if(this._left_ == oldChild)
         {
-            setLeft((PExpAnd) newChild);
-            return;
-        }
-
-        if(this._kwAnd_ == oldChild)
-        {
-            setKwAnd((TKwAnd) newChild);
+            setLeft((PExp) newChild);
             return;
         }
 
         if(this._right_ == oldChild)
         {
-            setRight((PExpEquality) newChild);
+            setRight((PExp) newChild);
             return;
         }
 

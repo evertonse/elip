@@ -4,25 +4,40 @@ import elipses.lexer.*;
 import elipses.node.*;
 import elipses.parser.*;
 import java.io.*;
-
+import java.util.Arrays;
 public class Main {
 
   static String[] test_files = new String[] {
     //"test/etapa1/code1.elip",
-    "test/etapa1/code2.elip",
+    //"test/etapa1/code2.elip",
     //"test/etapa1/code3.elip",
     //"test/comment.elip",
-    //"test/analysis/exp.elip",
+    "test/analysis/exp.elip",
+    //"test/analysis/exp.c",
+    //"test/analysis/test.calc",
   };
 
   public static void main(String[] args) {
     try {
-      for (String elip_file : test_files) {
-        Debug.debug(elip_file);
-      }
+        for (String arg: args) {
+            System.out.println(arg);
+            System.out.println(args.length);
+        }
+        if (args.length >= 1){
+            for (int i = 0; i < args.length; i++) {
+                String elip_file = args[i];
+                System.out.println("INFO: about to compile elipses file: " + elip_file); 
+                Debug.debug(elip_file);
+            }
+            return;
+        }
+
+        for (String elip_file : test_files) {
+            Debug.debug(elip_file);
+        }
     } catch (Exception e) {
-      e.printStackTrace();
-      System.out.println(e.getClass() + e.getMessage());
+        e.printStackTrace();
+        System.out.println(e.getClass() + e.getMessage());
     }
   }
 }

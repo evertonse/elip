@@ -5,26 +5,22 @@ package elipses.node;
 import elipses.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AMinusExpAdditive extends PExpAdditive
+public final class AGtExp extends PExp
 {
-    private PExpAdditive _left_;
-    private TMinus _minus_;
-    private PExpMultiplicative _right_;
+    private PExp _left_;
+    private PExp _right_;
 
-    public AMinusExpAdditive()
+    public AGtExp()
     {
         // Constructor
     }
 
-    public AMinusExpAdditive(
-        @SuppressWarnings("hiding") PExpAdditive _left_,
-        @SuppressWarnings("hiding") TMinus _minus_,
-        @SuppressWarnings("hiding") PExpMultiplicative _right_)
+    public AGtExp(
+        @SuppressWarnings("hiding") PExp _left_,
+        @SuppressWarnings("hiding") PExp _right_)
     {
         // Constructor
         setLeft(_left_);
-
-        setMinus(_minus_);
 
         setRight(_right_);
 
@@ -33,24 +29,23 @@ public final class AMinusExpAdditive extends PExpAdditive
     @Override
     public Object clone()
     {
-        return new AMinusExpAdditive(
+        return new AGtExp(
             cloneNode(this._left_),
-            cloneNode(this._minus_),
             cloneNode(this._right_));
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAMinusExpAdditive(this);
+        ((Analysis) sw).caseAGtExp(this);
     }
 
-    public PExpAdditive getLeft()
+    public PExp getLeft()
     {
         return this._left_;
     }
 
-    public void setLeft(PExpAdditive node)
+    public void setLeft(PExp node)
     {
         if(this._left_ != null)
         {
@@ -70,37 +65,12 @@ public final class AMinusExpAdditive extends PExpAdditive
         this._left_ = node;
     }
 
-    public TMinus getMinus()
-    {
-        return this._minus_;
-    }
-
-    public void setMinus(TMinus node)
-    {
-        if(this._minus_ != null)
-        {
-            this._minus_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._minus_ = node;
-    }
-
-    public PExpMultiplicative getRight()
+    public PExp getRight()
     {
         return this._right_;
     }
 
-    public void setRight(PExpMultiplicative node)
+    public void setRight(PExp node)
     {
         if(this._right_ != null)
         {
@@ -125,7 +95,6 @@ public final class AMinusExpAdditive extends PExpAdditive
     {
         return ""
             + toString(this._left_)
-            + toString(this._minus_)
             + toString(this._right_);
     }
 
@@ -136,12 +105,6 @@ public final class AMinusExpAdditive extends PExpAdditive
         if(this._left_ == child)
         {
             this._left_ = null;
-            return;
-        }
-
-        if(this._minus_ == child)
-        {
-            this._minus_ = null;
             return;
         }
 
@@ -160,19 +123,13 @@ public final class AMinusExpAdditive extends PExpAdditive
         // Replace child
         if(this._left_ == oldChild)
         {
-            setLeft((PExpAdditive) newChild);
-            return;
-        }
-
-        if(this._minus_ == oldChild)
-        {
-            setMinus((TMinus) newChild);
+            setLeft((PExp) newChild);
             return;
         }
 
         if(this._right_ == oldChild)
         {
-            setRight((PExpMultiplicative) newChild);
+            setRight((PExp) newChild);
             return;
         }
 

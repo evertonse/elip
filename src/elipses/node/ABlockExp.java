@@ -5,46 +5,46 @@ package elipses.node;
 import elipses.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AExp extends PExp
+public final class ABlockExp extends PExp
 {
-    private PExpOr _expOr_;
+    private PBlockExp _blockExp_;
 
-    public AExp()
+    public ABlockExp()
     {
         // Constructor
     }
 
-    public AExp(
-        @SuppressWarnings("hiding") PExpOr _expOr_)
+    public ABlockExp(
+        @SuppressWarnings("hiding") PBlockExp _blockExp_)
     {
         // Constructor
-        setExpOr(_expOr_);
+        setBlockExp(_blockExp_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new AExp(
-            cloneNode(this._expOr_));
+        return new ABlockExp(
+            cloneNode(this._blockExp_));
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAExp(this);
+        ((Analysis) sw).caseABlockExp(this);
     }
 
-    public PExpOr getExpOr()
+    public PBlockExp getBlockExp()
     {
-        return this._expOr_;
+        return this._blockExp_;
     }
 
-    public void setExpOr(PExpOr node)
+    public void setBlockExp(PBlockExp node)
     {
-        if(this._expOr_ != null)
+        if(this._blockExp_ != null)
         {
-            this._expOr_.parent(null);
+            this._blockExp_.parent(null);
         }
 
         if(node != null)
@@ -57,23 +57,23 @@ public final class AExp extends PExp
             node.parent(this);
         }
 
-        this._expOr_ = node;
+        this._blockExp_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._expOr_);
+            + toString(this._blockExp_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._expOr_ == child)
+        if(this._blockExp_ == child)
         {
-            this._expOr_ = null;
+            this._blockExp_ = null;
             return;
         }
 
@@ -84,9 +84,9 @@ public final class AExp extends PExp
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._expOr_ == oldChild)
+        if(this._blockExp_ == oldChild)
         {
-            setExpOr((PExpOr) newChild);
+            setBlockExp((PBlockExp) newChild);
             return;
         }
 

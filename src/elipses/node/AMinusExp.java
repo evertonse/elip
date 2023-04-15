@@ -5,22 +5,22 @@ package elipses.node;
 import elipses.analysis.*;
 
 @SuppressWarnings("nls")
-public final class ANotExpUnary extends PExpUnary
+public final class AMinusExp extends PExp
 {
-    private TKwNot _kwNot_;
-    private PExpUnary _right_;
+    private PExp _left_;
+    private PExp _right_;
 
-    public ANotExpUnary()
+    public AMinusExp()
     {
         // Constructor
     }
 
-    public ANotExpUnary(
-        @SuppressWarnings("hiding") TKwNot _kwNot_,
-        @SuppressWarnings("hiding") PExpUnary _right_)
+    public AMinusExp(
+        @SuppressWarnings("hiding") PExp _left_,
+        @SuppressWarnings("hiding") PExp _right_)
     {
         // Constructor
-        setKwNot(_kwNot_);
+        setLeft(_left_);
 
         setRight(_right_);
 
@@ -29,27 +29,27 @@ public final class ANotExpUnary extends PExpUnary
     @Override
     public Object clone()
     {
-        return new ANotExpUnary(
-            cloneNode(this._kwNot_),
+        return new AMinusExp(
+            cloneNode(this._left_),
             cloneNode(this._right_));
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseANotExpUnary(this);
+        ((Analysis) sw).caseAMinusExp(this);
     }
 
-    public TKwNot getKwNot()
+    public PExp getLeft()
     {
-        return this._kwNot_;
+        return this._left_;
     }
 
-    public void setKwNot(TKwNot node)
+    public void setLeft(PExp node)
     {
-        if(this._kwNot_ != null)
+        if(this._left_ != null)
         {
-            this._kwNot_.parent(null);
+            this._left_.parent(null);
         }
 
         if(node != null)
@@ -62,15 +62,15 @@ public final class ANotExpUnary extends PExpUnary
             node.parent(this);
         }
 
-        this._kwNot_ = node;
+        this._left_ = node;
     }
 
-    public PExpUnary getRight()
+    public PExp getRight()
     {
         return this._right_;
     }
 
-    public void setRight(PExpUnary node)
+    public void setRight(PExp node)
     {
         if(this._right_ != null)
         {
@@ -94,7 +94,7 @@ public final class ANotExpUnary extends PExpUnary
     public String toString()
     {
         return ""
-            + toString(this._kwNot_)
+            + toString(this._left_)
             + toString(this._right_);
     }
 
@@ -102,9 +102,9 @@ public final class ANotExpUnary extends PExpUnary
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._kwNot_ == child)
+        if(this._left_ == child)
         {
-            this._kwNot_ = null;
+            this._left_ = null;
             return;
         }
 
@@ -121,15 +121,15 @@ public final class ANotExpUnary extends PExpUnary
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._kwNot_ == oldChild)
+        if(this._left_ == oldChild)
         {
-            setKwNot((TKwNot) newChild);
+            setLeft((PExp) newChild);
             return;
         }
 
         if(this._right_ == oldChild)
         {
-            setRight((PExpUnary) newChild);
+            setRight((PExp) newChild);
             return;
         }
 

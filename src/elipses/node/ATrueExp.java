@@ -5,16 +5,16 @@ package elipses.node;
 import elipses.analysis.*;
 
 @SuppressWarnings("nls")
-public final class ATrueExpAtomic extends PExpAtomic
+public final class ATrueExp extends PExp
 {
     private TKwTrue _kwTrue_;
 
-    public ATrueExpAtomic()
+    public ATrueExp()
     {
         // Constructor
     }
 
-    public ATrueExpAtomic(
+    public ATrueExp(
         @SuppressWarnings("hiding") TKwTrue _kwTrue_)
     {
         // Constructor
@@ -25,14 +25,14 @@ public final class ATrueExpAtomic extends PExpAtomic
     @Override
     public Object clone()
     {
-        return new ATrueExpAtomic(
+        return new ATrueExp(
             cloneNode(this._kwTrue_));
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseATrueExpAtomic(this);
+        ((Analysis) sw).caseATrueExp(this);
     }
 
     public TKwTrue getKwTrue()

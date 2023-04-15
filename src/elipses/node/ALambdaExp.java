@@ -5,46 +5,46 @@ package elipses.node;
 import elipses.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AIdExpAtomic extends PExpAtomic
+public final class ALambdaExp extends PExp
 {
-    private TIdentifier _identifier_;
+    private PFuncLambda _funcLambda_;
 
-    public AIdExpAtomic()
+    public ALambdaExp()
     {
         // Constructor
     }
 
-    public AIdExpAtomic(
-        @SuppressWarnings("hiding") TIdentifier _identifier_)
+    public ALambdaExp(
+        @SuppressWarnings("hiding") PFuncLambda _funcLambda_)
     {
         // Constructor
-        setIdentifier(_identifier_);
+        setFuncLambda(_funcLambda_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new AIdExpAtomic(
-            cloneNode(this._identifier_));
+        return new ALambdaExp(
+            cloneNode(this._funcLambda_));
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAIdExpAtomic(this);
+        ((Analysis) sw).caseALambdaExp(this);
     }
 
-    public TIdentifier getIdentifier()
+    public PFuncLambda getFuncLambda()
     {
-        return this._identifier_;
+        return this._funcLambda_;
     }
 
-    public void setIdentifier(TIdentifier node)
+    public void setFuncLambda(PFuncLambda node)
     {
-        if(this._identifier_ != null)
+        if(this._funcLambda_ != null)
         {
-            this._identifier_.parent(null);
+            this._funcLambda_.parent(null);
         }
 
         if(node != null)
@@ -57,23 +57,23 @@ public final class AIdExpAtomic extends PExpAtomic
             node.parent(this);
         }
 
-        this._identifier_ = node;
+        this._funcLambda_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._identifier_);
+            + toString(this._funcLambda_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._identifier_ == child)
+        if(this._funcLambda_ == child)
         {
-            this._identifier_ = null;
+            this._funcLambda_ = null;
             return;
         }
 
@@ -84,9 +84,9 @@ public final class AIdExpAtomic extends PExpAtomic
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._identifier_ == oldChild)
+        if(this._funcLambda_ == oldChild)
         {
-            setIdentifier((TIdentifier) newChild);
+            setFuncLambda((PFuncLambda) newChild);
             return;
         }
 

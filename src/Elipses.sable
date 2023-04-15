@@ -1,5 +1,4 @@
 Package elipses;
-
 Helpers
   digit     = ['0' .. '9'];
   bin_digit = ('0' | '1');
@@ -169,66 +168,68 @@ Productions
 
   // @note smaller number means more priority, note that 'mult' is on priority exp1 whereas 'plus' in on exp2
   // which means add has less priority in evaluation, so 'mult' appear closer to the leafs of the AST
-  exp  = 
-    exp_or 
+  exp  {-> exp} = 
+    exp_or  {-> exp_or.exp} 
   ;
 
-  
-  exp_or =
-    exp_and
-    | {or} [left]:exp_or T.kw_or [right]:exp_and 
+  exp_or {-> exp} =
+    exp_and {->exp_and.exp}
+    | {or} [left]:exp_or T.kw_or [right]:exp_and {-> New exp.or(left.exp, right.exp)} 
   ;
 
-  exp_and = 
-    exp_equality
-    | {and} [left]:exp_and T.kw_and [right]:exp_equality
+  exp_and {->exp} = 
+    exp_equality {->exp_equality.exp}
+    | {and} [left]:exp_and T.kw_and [right]:exp_equality {-> New exp.and(left.exp, right.exp)} 
   ;
 
-  exp_equality = 
-    exp_relational
-    | {eq} [left]:exp_equality T.eq [right]:exp_relational
+  exp_equality {->exp} = 
+    exp_relational {->exp_relational.exp}
+    | {eq} [left]:exp_equality T.eq [right]:exp_relational {-> New exp.eq(left.exp, right.exp)} 
   ;
 
-  exp_relational  = 
-    exp_additive
-    | {lt} [left]:exp_relational T.lt [right]:exp_additive
-    | {gt} [left]:exp_relational T.gt [right]:exp_additive
+  exp_relational  {->exp} = 
+    exp_additive {->exp_additive.exp}
+    | {lt} [left]:exp_relational T.lt [right]:exp_additive {-> New exp.lt(left.exp, right.exp)} 
+    | {gt} [left]:exp_relational T.gt [right]:exp_additive {-> New exp.gt(left.exp, right.exp)} 
   ;
 
-  exp_additive  =
-    exp_multiplicative  
-    | {plus}  [left]:exp_additive T.plus [right]:exp_multiplicative
-    | {minus} [left]:exp_additive T.minus [right]:exp_multiplicative
+  exp_additive  {->exp} =
+    exp_multiplicative   {->exp_multiplicative.exp  }
+    | {plus}  [left]:exp_additive T.plus [right]:exp_multiplicative {-> New exp.plus(left.exp, right.exp)} 
+    | {minus} [left]:exp_additive T.minus [right]:exp_multiplicative {-> New exp.minus(left.exp, right.exp)} 
   ;
 
-  exp_multiplicative = 
-    exp_unary
-    | {mult}[left]:exp_multiplicative T.mult [right]:exp_unary
-    | {div} [left]:exp_multiplicative T.div  [right]:exp_unary
-    | {mod} [left]:exp_multiplicative T.mod  [right]:exp_unary
+  exp_multiplicative {->exp} = 
+    exp_unary {->exp_unary.exp}
+    | {mult}[left]:exp_multiplicative T.mult [right]:exp_unary {-> New exp.mult(left.exp, right.exp)} 
+    | {div} [left]:exp_multiplicative T.div  [right]:exp_unary {-> New exp.div(left.exp, right.exp)} 
+    | {mod} [left]:exp_multiplicative T.mod  [right]:exp_unary {-> New exp.mod(left.exp, right.exp)} 
   ;
 
-  exp_unary  = 
-    exp_ternary
-    | {negative} T.minus exp_unary  
-    | {not} T.kw_not [right]:exp_unary
+  exp_unary  {->exp} = 
+    exp_ternary {->exp_ternary.exp}
+    | {negative} T.minus [single]:exp_unary  {-> New exp.negative(single.exp)} 
+    | {not} T.kw_not [single]:exp_unary {-> New exp.not(single.exp)} 
   ;
 
-  exp_ternary = 
-    exp_atomic
-    | {if} T.kw_if T.l_paren [cond]:exp T.r_paren T.kw_then [truthy]:exp T.kw_else [falsy]:exp_unary
+  exp_ternary {->exp} = 
+    exp_atomic {->exp_atomic.exp}
+    | {if} T.kw_if T.l_paren [cond]:exp T.r_paren T.kw_then 
+        [truthy]:exp T.kw_else 
+        [falsy]:exp_unary 
+        {-> New exp.if(cond.exp,truthy.exp,falsy.exp)}
   ;
 
-  exp_atomic = 
-    {id}       T.identifier
-    | {bin}    T.number_bin 
-    | {frac}   T.number_frac 
-    | {int}    T.number_int 
-    | {true}   T.kw_true 
-    | {false}  T.kw_false
-    | {block}  block_exp
-    | {call}   func_call  
-    | {lambda} func_lambda
+  exp_atomic {->exp} = 
+    {id}       [single]:T.identifier  {-> New exp.id(single)} 
+    | {bin}    [single]:T.number_bin  {-> New exp.bin(single)}  
+    | {real}   [single]:T.number_frac {-> New exp.real(single)}  
+    | {int}    [single]:T.number_int  {-> New exp.int(single)}  
+    | {true}   [single]:T.kw_true     {-> New exp.true(single)}  
+    | {false}  [single]:T.kw_false    {-> New exp.false(single)} 
+    | {block}  [single]:block_exp     {-> New exp.block(single)} 
+    | {call}   [single]:func_call     {-> New exp.call(single)}   
+    | {lambda} [single]:func_lambda   {-> New exp.lambda(single)} 
   ;
 
 
@@ -266,3 +267,107 @@ Productions
     | {multiple} exp pipe list_exp
   ;
 
+Abstract Syntax Tree
+  program = decl_func*;
+  decl_func =  
+    T.kw_entry? 
+    [lp1]:T.l_paren type T.identifier 
+      [lp2]:T.l_paren params [rp2]:T.r_paren T.colon 
+      [lp3]:T.l_paren exp    [rp3]:T.r_paren 
+    [rp1]:T.r_paren
+  ;
+
+  type  =  
+    {int} T.kw_integer 
+    | {bool} T.kw_bool 
+    | {real} T.kw_real
+  ;
+
+  params  =  
+    /*Ɛ*/ 
+    | {single} param 
+    | {multiple} param T.pipe params
+  ;
+
+  param   =  
+    {type} type T.identifier 
+    | {signature} signature
+  ;
+
+  signature =  
+    type T.identifier T.l_paren signature_params T.r_paren
+  ;
+
+  signature_params  = 
+    /*Ɛ*/ 
+    | {single} signature_param 
+    | {multiple} signature_param T.pipe signature_params
+  ;
+
+  signature_param = 
+    {type} type 
+    | {signature} signature
+  ;
+
+  exp  = 
+    {or}         [left]:exp [right]:exp
+    | {and}      [left]:exp [right]:exp
+    | {eq}       [left]:exp [right]:exp
+    | {lt}       [left]:exp [right]:exp
+    | {gt}       [left]:exp [right]:exp
+    | {plus}     [left]:exp [right]:exp
+    | {minus}    [left]:exp [right]:exp
+    | {mult}     [left]:exp [right]:exp
+    | {div}      [left]:exp [right]:exp
+    | {mod}      [left]:exp [right]:exp
+    | {negative} exp  
+    | {not}      exp
+    | {if}       [cond]:exp [truthy]:exp [falsy]:exp
+    | {id}       T.identifier
+
+    | {bin}   T.number_bin 
+    | {real}  T.number_frac 
+    | {int}   T.number_int 
+
+    | {true}     T.kw_true 
+    | {false}     T.kw_false
+
+    | {block}    block_exp
+    | {call}     func_call  
+    | {lambda}   func_lambda
+  ;
+
+
+  block_exp = 
+    {block} T.l_paren decl_const* exp T.r_paren
+  ;
+  
+  decl_const = 
+    [lp1]:T.l_paren T.kw_const type T.identifier 
+      [lp2]:T.l_paren exp [rp2]:T.r_paren 
+    [rp1]:T.r_paren
+  ;
+
+  func_call = 
+    identifier l_paren list_exp r_paren
+  ;
+
+  func_lambda = 
+    [lp1]:l_paren kw_lambda 
+      [lp2]:l_paren list_ids  [rp2]:r_paren colon 
+      [lp3]:l_paren exp       [rp3]:r_paren 
+      l_brack       list_exp  r_brack 
+    [rp1]:r_paren
+  ;
+
+  list_ids  =  
+    /*Ɛ*/ 
+    | {single} identifier 
+    | {multiple} identifier pipe list_ids
+  ;
+
+ list_exp  =  
+    /*Ɛ*/ 
+    | {single} exp 
+    | {multiple} exp pipe list_exp
+  ;

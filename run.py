@@ -9,7 +9,7 @@ import build
 
 ##############################################################################
 ##############################################################################
-base_path = Path(build.srcpath, build.name)
+base_path = Path(build.srcpath, build.package)
 
 refreshdirs = [Path(base_path, i)
                for i in {"analysis", "lexer", "node", "parser"}]
@@ -52,10 +52,11 @@ def __main__():
     check_result(result, project="SableCC")
 
     import compile
-
     # result: int = run("python compile.py")
     # check_result(result)
 
 
 if __name__ == "__main__":
     __main__()
+    from compile import dos2unix
+    dos2unix(__file__)

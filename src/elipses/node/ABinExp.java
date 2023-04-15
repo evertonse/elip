@@ -5,46 +5,46 @@ package elipses.node;
 import elipses.analysis.*;
 
 @SuppressWarnings("nls")
-public final class ACallExpAtomic extends PExpAtomic
+public final class ABinExp extends PExp
 {
-    private PFuncCall _funcCall_;
+    private TNumberBin _numberBin_;
 
-    public ACallExpAtomic()
+    public ABinExp()
     {
         // Constructor
     }
 
-    public ACallExpAtomic(
-        @SuppressWarnings("hiding") PFuncCall _funcCall_)
+    public ABinExp(
+        @SuppressWarnings("hiding") TNumberBin _numberBin_)
     {
         // Constructor
-        setFuncCall(_funcCall_);
+        setNumberBin(_numberBin_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new ACallExpAtomic(
-            cloneNode(this._funcCall_));
+        return new ABinExp(
+            cloneNode(this._numberBin_));
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseACallExpAtomic(this);
+        ((Analysis) sw).caseABinExp(this);
     }
 
-    public PFuncCall getFuncCall()
+    public TNumberBin getNumberBin()
     {
-        return this._funcCall_;
+        return this._numberBin_;
     }
 
-    public void setFuncCall(PFuncCall node)
+    public void setNumberBin(TNumberBin node)
     {
-        if(this._funcCall_ != null)
+        if(this._numberBin_ != null)
         {
-            this._funcCall_.parent(null);
+            this._numberBin_.parent(null);
         }
 
         if(node != null)
@@ -57,23 +57,23 @@ public final class ACallExpAtomic extends PExpAtomic
             node.parent(this);
         }
 
-        this._funcCall_ = node;
+        this._numberBin_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._funcCall_);
+            + toString(this._numberBin_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._funcCall_ == child)
+        if(this._numberBin_ == child)
         {
-            this._funcCall_ = null;
+            this._numberBin_ = null;
             return;
         }
 
@@ -84,9 +84,9 @@ public final class ACallExpAtomic extends PExpAtomic
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._funcCall_ == oldChild)
+        if(this._numberBin_ == oldChild)
         {
-            setFuncCall((PFuncCall) newChild);
+            setNumberBin((TNumberBin) newChild);
             return;
         }
 

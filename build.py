@@ -1,10 +1,16 @@
-name = "elipses"
-
-bindir = "bin/"
-sablegrammar = "src/Elipses.sable"
-sablejar = "vendor/sablecc.jar"
-
-
 srcpath = "src/"
+package = "elipses"
+bin     = 'elip'
+bindir  = "bin/"
 classpath = bindir
-mainclass = name + ".Main"
+sablejar = "vendor/sablecc.jar"
+mainclass = package + ".Main"
+
+sablegrammar = "src/ElipsesCalc.sable"
+sablegrammar = "src/ElipsesC99.sable"
+sablegrammar = "src/Elipses.sable"
+
+autorun = True 
+runargs = [
+    r"test/analysis/exp.elip"
+]

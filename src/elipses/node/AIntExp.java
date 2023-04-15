@@ -5,46 +5,46 @@ package elipses.node;
 import elipses.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AFracExpAtomic extends PExpAtomic
+public final class AIntExp extends PExp
 {
-    private TNumberFrac _numberFrac_;
+    private TNumberInt _numberInt_;
 
-    public AFracExpAtomic()
+    public AIntExp()
     {
         // Constructor
     }
 
-    public AFracExpAtomic(
-        @SuppressWarnings("hiding") TNumberFrac _numberFrac_)
+    public AIntExp(
+        @SuppressWarnings("hiding") TNumberInt _numberInt_)
     {
         // Constructor
-        setNumberFrac(_numberFrac_);
+        setNumberInt(_numberInt_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new AFracExpAtomic(
-            cloneNode(this._numberFrac_));
+        return new AIntExp(
+            cloneNode(this._numberInt_));
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAFracExpAtomic(this);
+        ((Analysis) sw).caseAIntExp(this);
     }
 
-    public TNumberFrac getNumberFrac()
+    public TNumberInt getNumberInt()
     {
-        return this._numberFrac_;
+        return this._numberInt_;
     }
 
-    public void setNumberFrac(TNumberFrac node)
+    public void setNumberInt(TNumberInt node)
     {
-        if(this._numberFrac_ != null)
+        if(this._numberInt_ != null)
         {
-            this._numberFrac_.parent(null);
+            this._numberInt_.parent(null);
         }
 
         if(node != null)
@@ -57,23 +57,23 @@ public final class AFracExpAtomic extends PExpAtomic
             node.parent(this);
         }
 
-        this._numberFrac_ = node;
+        this._numberInt_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._numberFrac_);
+            + toString(this._numberInt_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._numberFrac_ == child)
+        if(this._numberInt_ == child)
         {
-            this._numberFrac_ = null;
+            this._numberInt_ = null;
             return;
         }
 
@@ -84,9 +84,9 @@ public final class AFracExpAtomic extends PExpAtomic
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._numberFrac_ == oldChild)
+        if(this._numberInt_ == oldChild)
         {
-            setNumberFrac((TNumberFrac) newChild);
+            setNumberInt((TNumberInt) newChild);
             return;
         }
 

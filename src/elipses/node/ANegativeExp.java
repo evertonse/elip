@@ -5,46 +5,46 @@ package elipses.node;
 import elipses.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AExpAnd extends PExpAnd
+public final class ANegativeExp extends PExp
 {
-    private PExpEquality _expEquality_;
+    private PExp _exp_;
 
-    public AExpAnd()
+    public ANegativeExp()
     {
         // Constructor
     }
 
-    public AExpAnd(
-        @SuppressWarnings("hiding") PExpEquality _expEquality_)
+    public ANegativeExp(
+        @SuppressWarnings("hiding") PExp _exp_)
     {
         // Constructor
-        setExpEquality(_expEquality_);
+        setExp(_exp_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new AExpAnd(
-            cloneNode(this._expEquality_));
+        return new ANegativeExp(
+            cloneNode(this._exp_));
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAExpAnd(this);
+        ((Analysis) sw).caseANegativeExp(this);
     }
 
-    public PExpEquality getExpEquality()
+    public PExp getExp()
     {
-        return this._expEquality_;
+        return this._exp_;
     }
 
-    public void setExpEquality(PExpEquality node)
+    public void setExp(PExp node)
     {
-        if(this._expEquality_ != null)
+        if(this._exp_ != null)
         {
-            this._expEquality_.parent(null);
+            this._exp_.parent(null);
         }
 
         if(node != null)
@@ -57,23 +57,23 @@ public final class AExpAnd extends PExpAnd
             node.parent(this);
         }
 
-        this._expEquality_ = node;
+        this._exp_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._expEquality_);
+            + toString(this._exp_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._expEquality_ == child)
+        if(this._exp_ == child)
         {
-            this._expEquality_ = null;
+            this._exp_ = null;
             return;
         }
 
@@ -84,9 +84,9 @@ public final class AExpAnd extends PExpAnd
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._expEquality_ == oldChild)
+        if(this._exp_ == oldChild)
         {
-            setExpEquality((PExpEquality) newChild);
+            setExp((PExp) newChild);
             return;
         }
 

@@ -5,46 +5,46 @@ package elipses.node;
 import elipses.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AFalseExpAtomic extends PExpAtomic
+public final class ACallExp extends PExp
 {
-    private TKwFalse _kwFalse_;
+    private PFuncCall _funcCall_;
 
-    public AFalseExpAtomic()
+    public ACallExp()
     {
         // Constructor
     }
 
-    public AFalseExpAtomic(
-        @SuppressWarnings("hiding") TKwFalse _kwFalse_)
+    public ACallExp(
+        @SuppressWarnings("hiding") PFuncCall _funcCall_)
     {
         // Constructor
-        setKwFalse(_kwFalse_);
+        setFuncCall(_funcCall_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new AFalseExpAtomic(
-            cloneNode(this._kwFalse_));
+        return new ACallExp(
+            cloneNode(this._funcCall_));
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAFalseExpAtomic(this);
+        ((Analysis) sw).caseACallExp(this);
     }
 
-    public TKwFalse getKwFalse()
+    public PFuncCall getFuncCall()
     {
-        return this._kwFalse_;
+        return this._funcCall_;
     }
 
-    public void setKwFalse(TKwFalse node)
+    public void setFuncCall(PFuncCall node)
     {
-        if(this._kwFalse_ != null)
+        if(this._funcCall_ != null)
         {
-            this._kwFalse_.parent(null);
+            this._funcCall_.parent(null);
         }
 
         if(node != null)
@@ -57,23 +57,23 @@ public final class AFalseExpAtomic extends PExpAtomic
             node.parent(this);
         }
 
-        this._kwFalse_ = node;
+        this._funcCall_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._kwFalse_);
+            + toString(this._funcCall_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._kwFalse_ == child)
+        if(this._funcCall_ == child)
         {
-            this._kwFalse_ = null;
+            this._funcCall_ = null;
             return;
         }
 
@@ -84,9 +84,9 @@ public final class AFalseExpAtomic extends PExpAtomic
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._kwFalse_ == oldChild)
+        if(this._funcCall_ == oldChild)
         {
-            setKwFalse((TKwFalse) newChild);
+            setFuncCall((PFuncCall) newChild);
             return;
         }
 

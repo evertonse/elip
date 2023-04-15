@@ -5,56 +5,56 @@ package elipses.node;
 import elipses.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AModExpMultiplicative extends PExpMultiplicative
+public final class AIfExp extends PExp
 {
-    private PExpMultiplicative _left_;
-    private TMod _mod_;
-    private PExpUnary _right_;
+    private PExp _cond_;
+    private PExp _truthy_;
+    private PExp _falsy_;
 
-    public AModExpMultiplicative()
+    public AIfExp()
     {
         // Constructor
     }
 
-    public AModExpMultiplicative(
-        @SuppressWarnings("hiding") PExpMultiplicative _left_,
-        @SuppressWarnings("hiding") TMod _mod_,
-        @SuppressWarnings("hiding") PExpUnary _right_)
+    public AIfExp(
+        @SuppressWarnings("hiding") PExp _cond_,
+        @SuppressWarnings("hiding") PExp _truthy_,
+        @SuppressWarnings("hiding") PExp _falsy_)
     {
         // Constructor
-        setLeft(_left_);
+        setCond(_cond_);
 
-        setMod(_mod_);
+        setTruthy(_truthy_);
 
-        setRight(_right_);
+        setFalsy(_falsy_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new AModExpMultiplicative(
-            cloneNode(this._left_),
-            cloneNode(this._mod_),
-            cloneNode(this._right_));
+        return new AIfExp(
+            cloneNode(this._cond_),
+            cloneNode(this._truthy_),
+            cloneNode(this._falsy_));
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAModExpMultiplicative(this);
+        ((Analysis) sw).caseAIfExp(this);
     }
 
-    public PExpMultiplicative getLeft()
+    public PExp getCond()
     {
-        return this._left_;
+        return this._cond_;
     }
 
-    public void setLeft(PExpMultiplicative node)
+    public void setCond(PExp node)
     {
-        if(this._left_ != null)
+        if(this._cond_ != null)
         {
-            this._left_.parent(null);
+            this._cond_.parent(null);
         }
 
         if(node != null)
@@ -67,19 +67,19 @@ public final class AModExpMultiplicative extends PExpMultiplicative
             node.parent(this);
         }
 
-        this._left_ = node;
+        this._cond_ = node;
     }
 
-    public TMod getMod()
+    public PExp getTruthy()
     {
-        return this._mod_;
+        return this._truthy_;
     }
 
-    public void setMod(TMod node)
+    public void setTruthy(PExp node)
     {
-        if(this._mod_ != null)
+        if(this._truthy_ != null)
         {
-            this._mod_.parent(null);
+            this._truthy_.parent(null);
         }
 
         if(node != null)
@@ -92,19 +92,19 @@ public final class AModExpMultiplicative extends PExpMultiplicative
             node.parent(this);
         }
 
-        this._mod_ = node;
+        this._truthy_ = node;
     }
 
-    public PExpUnary getRight()
+    public PExp getFalsy()
     {
-        return this._right_;
+        return this._falsy_;
     }
 
-    public void setRight(PExpUnary node)
+    public void setFalsy(PExp node)
     {
-        if(this._right_ != null)
+        if(this._falsy_ != null)
         {
-            this._right_.parent(null);
+            this._falsy_.parent(null);
         }
 
         if(node != null)
@@ -117,37 +117,37 @@ public final class AModExpMultiplicative extends PExpMultiplicative
             node.parent(this);
         }
 
-        this._right_ = node;
+        this._falsy_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._left_)
-            + toString(this._mod_)
-            + toString(this._right_);
+            + toString(this._cond_)
+            + toString(this._truthy_)
+            + toString(this._falsy_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._left_ == child)
+        if(this._cond_ == child)
         {
-            this._left_ = null;
+            this._cond_ = null;
             return;
         }
 
-        if(this._mod_ == child)
+        if(this._truthy_ == child)
         {
-            this._mod_ = null;
+            this._truthy_ = null;
             return;
         }
 
-        if(this._right_ == child)
+        if(this._falsy_ == child)
         {
-            this._right_ = null;
+            this._falsy_ = null;
             return;
         }
 
@@ -158,21 +158,21 @@ public final class AModExpMultiplicative extends PExpMultiplicative
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._left_ == oldChild)
+        if(this._cond_ == oldChild)
         {
-            setLeft((PExpMultiplicative) newChild);
+            setCond((PExp) newChild);
             return;
         }
 
-        if(this._mod_ == oldChild)
+        if(this._truthy_ == oldChild)
         {
-            setMod((TMod) newChild);
+            setTruthy((PExp) newChild);
             return;
         }
 
-        if(this._right_ == oldChild)
+        if(this._falsy_ == oldChild)
         {
-            setRight((PExpUnary) newChild);
+            setFalsy((PExp) newChild);
             return;
         }
 

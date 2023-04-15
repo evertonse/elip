@@ -12,4 +12,6 @@ python run.py
 .\run.py
 ``
 
-
+``
+./run.py
+``

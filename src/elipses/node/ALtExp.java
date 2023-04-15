@@ -5,26 +5,22 @@ package elipses.node;
 import elipses.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AEqExpEquality extends PExpEquality
+public final class ALtExp extends PExp
 {
-    private PExpEquality _left_;
-    private TEq _eq_;
-    private PExpRelational _right_;
+    private PExp _left_;
+    private PExp _right_;
 
-    public AEqExpEquality()
+    public ALtExp()
     {
         // Constructor
     }
 
-    public AEqExpEquality(
-        @SuppressWarnings("hiding") PExpEquality _left_,
-        @SuppressWarnings("hiding") TEq _eq_,
-        @SuppressWarnings("hiding") PExpRelational _right_)
+    public ALtExp(
+        @SuppressWarnings("hiding") PExp _left_,
+        @SuppressWarnings("hiding") PExp _right_)
     {
         // Constructor
         setLeft(_left_);
-
-        setEq(_eq_);
 
         setRight(_right_);
 
@@ -33,24 +29,23 @@ public final class AEqExpEquality extends PExpEquality
     @Override
     public Object clone()
     {
-        return new AEqExpEquality(
+        return new ALtExp(
             cloneNode(this._left_),
-            cloneNode(this._eq_),
             cloneNode(this._right_));
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAEqExpEquality(this);
+        ((Analysis) sw).caseALtExp(this);
     }
 
-    public PExpEquality getLeft()
+    public PExp getLeft()
     {
         return this._left_;
     }
 
-    public void setLeft(PExpEquality node)
+    public void setLeft(PExp node)
     {
         if(this._left_ != null)
         {
@@ -70,37 +65,12 @@ public final class AEqExpEquality extends PExpEquality
         this._left_ = node;
     }
 
-    public TEq getEq()
-    {
-        return this._eq_;
-    }
-
-    public void setEq(TEq node)
-    {
-        if(this._eq_ != null)
-        {
-            this._eq_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._eq_ = node;
-    }
-
-    public PExpRelational getRight()
+    public PExp getRight()
     {
         return this._right_;
     }
 
-    public void setRight(PExpRelational node)
+    public void setRight(PExp node)
     {
         if(this._right_ != null)
         {
@@ -125,7 +95,6 @@ public final class AEqExpEquality extends PExpEquality
     {
         return ""
             + toString(this._left_)
-            + toString(this._eq_)
             + toString(this._right_);
     }
 
@@ -136,12 +105,6 @@ public final class AEqExpEquality extends PExpEquality
         if(this._left_ == child)
         {
             this._left_ = null;
-            return;
-        }
-
-        if(this._eq_ == child)
-        {
-            this._eq_ = null;
             return;
         }
 
@@ -160,19 +123,13 @@ public final class AEqExpEquality extends PExpEquality
         // Replace child
         if(this._left_ == oldChild)
         {
-            setLeft((PExpEquality) newChild);
-            return;
-        }
-
-        if(this._eq_ == oldChild)
-        {
-            setEq((TEq) newChild);
+            setLeft((PExp) newChild);
             return;
         }
 
         if(this._right_ == oldChild)
         {
-            setRight((PExpRelational) newChild);
+            setRight((PExp) newChild);
             return;
         }
 

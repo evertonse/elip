@@ -5,26 +5,22 @@ package elipses.node;
 import elipses.analysis.*;
 
 @SuppressWarnings("nls")
-public final class ADivExpMultiplicative extends PExpMultiplicative
+public final class AEqExp extends PExp
 {
-    private PExpMultiplicative _left_;
-    private TDiv _div_;
-    private PExpUnary _right_;
+    private PExp _left_;
+    private PExp _right_;
 
-    public ADivExpMultiplicative()
+    public AEqExp()
     {
         // Constructor
     }
 
-    public ADivExpMultiplicative(
-        @SuppressWarnings("hiding") PExpMultiplicative _left_,
-        @SuppressWarnings("hiding") TDiv _div_,
-        @SuppressWarnings("hiding") PExpUnary _right_)
+    public AEqExp(
+        @SuppressWarnings("hiding") PExp _left_,
+        @SuppressWarnings("hiding") PExp _right_)
     {
         // Constructor
         setLeft(_left_);
-
-        setDiv(_div_);
 
         setRight(_right_);
 
@@ -33,24 +29,23 @@ public final class ADivExpMultiplicative extends PExpMultiplicative
     @Override
     public Object clone()
     {
-        return new ADivExpMultiplicative(
+        return new AEqExp(
             cloneNode(this._left_),
-            cloneNode(this._div_),
             cloneNode(this._right_));
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseADivExpMultiplicative(this);
+        ((Analysis) sw).caseAEqExp(this);
     }
 
-    public PExpMultiplicative getLeft()
+    public PExp getLeft()
     {
         return this._left_;
     }
 
-    public void setLeft(PExpMultiplicative node)
+    public void setLeft(PExp node)
     {
         if(this._left_ != null)
         {
@@ -70,37 +65,12 @@ public final class ADivExpMultiplicative extends PExpMultiplicative
         this._left_ = node;
     }
 
-    public TDiv getDiv()
-    {
-        return this._div_;
-    }
-
-    public void setDiv(TDiv node)
-    {
-        if(this._div_ != null)
-        {
-            this._div_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._div_ = node;
-    }
-
-    public PExpUnary getRight()
+    public PExp getRight()
     {
         return this._right_;
     }
 
-    public void setRight(PExpUnary node)
+    public void setRight(PExp node)
     {
         if(this._right_ != null)
         {
@@ -125,7 +95,6 @@ public final class ADivExpMultiplicative extends PExpMultiplicative
     {
         return ""
             + toString(this._left_)
-            + toString(this._div_)
             + toString(this._right_);
     }
 
@@ -136,12 +105,6 @@ public final class ADivExpMultiplicative extends PExpMultiplicative
         if(this._left_ == child)
         {
             this._left_ = null;
-            return;
-        }
-
-        if(this._div_ == child)
-        {
-            this._div_ = null;
             return;
         }
 
@@ -160,19 +123,13 @@ public final class ADivExpMultiplicative extends PExpMultiplicative
         // Replace child
         if(this._left_ == oldChild)
         {
-            setLeft((PExpMultiplicative) newChild);
-            return;
-        }
-
-        if(this._div_ == oldChild)
-        {
-            setDiv((TDiv) newChild);
+            setLeft((PExp) newChild);
             return;
         }
 
         if(this._right_ == oldChild)
         {
-            setRight((PExpUnary) newChild);
+            setRight((PExp) newChild);
             return;
         }
 

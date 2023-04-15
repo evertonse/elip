@@ -171,187 +171,133 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseAExp(AExp node)
+    public void caseAOrExp(AOrExp node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseAExpOr(AExpOr node)
+    public void caseAAndExp(AAndExp node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseAOrExpOr(AOrExpOr node)
+    public void caseAEqExp(AEqExp node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseAExpAnd(AExpAnd node)
+    public void caseALtExp(ALtExp node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseAAndExpAnd(AAndExpAnd node)
+    public void caseAGtExp(AGtExp node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseAExpEquality(AExpEquality node)
+    public void caseAPlusExp(APlusExp node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseAEqExpEquality(AEqExpEquality node)
+    public void caseAMinusExp(AMinusExp node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseAExpRelational(AExpRelational node)
+    public void caseAMultExp(AMultExp node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseALtExpRelational(ALtExpRelational node)
+    public void caseADivExp(ADivExp node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseAGtExpRelational(AGtExpRelational node)
+    public void caseAModExp(AModExp node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseAExpAdditive(AExpAdditive node)
+    public void caseANegativeExp(ANegativeExp node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseAPlusExpAdditive(APlusExpAdditive node)
+    public void caseANotExp(ANotExp node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseAMinusExpAdditive(AMinusExpAdditive node)
+    public void caseAIfExp(AIfExp node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseAExpMultiplicative(AExpMultiplicative node)
+    public void caseAIdExp(AIdExp node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseAMultExpMultiplicative(AMultExpMultiplicative node)
+    public void caseABinExp(ABinExp node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseADivExpMultiplicative(ADivExpMultiplicative node)
+    public void caseARealExp(ARealExp node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseAModExpMultiplicative(AModExpMultiplicative node)
+    public void caseAIntExp(AIntExp node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseAExpUnary(AExpUnary node)
+    public void caseATrueExp(ATrueExp node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseANegativeExpUnary(ANegativeExpUnary node)
+    public void caseAFalseExp(AFalseExp node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseANotExpUnary(ANotExpUnary node)
+    public void caseABlockExp(ABlockExp node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseAExpTernary(AExpTernary node)
+    public void caseACallExp(ACallExp node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseAIfExpTernary(AIfExpTernary node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseAIdExpAtomic(AIdExpAtomic node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseABinExpAtomic(ABinExpAtomic node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseAFracExpAtomic(AFracExpAtomic node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseAIntExpAtomic(AIntExpAtomic node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseATrueExpAtomic(ATrueExpAtomic node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseAFalseExpAtomic(AFalseExpAtomic node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseABlockExpAtomic(ABlockExpAtomic node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseACallExpAtomic(ACallExpAtomic node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseALambdaExpAtomic(ALambdaExpAtomic node)
+    public void caseALambdaExp(ALambdaExp node)
     {
         defaultCase(node);
     }

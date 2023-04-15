@@ -5,26 +5,22 @@ package elipses.node;
 import elipses.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AOrExpOr extends PExpOr
+public final class ADivExp extends PExp
 {
-    private PExpOr _left_;
-    private TKwOr _kwOr_;
-    private PExpAnd _right_;
+    private PExp _left_;
+    private PExp _right_;
 
-    public AOrExpOr()
+    public ADivExp()
     {
         // Constructor
     }
 
-    public AOrExpOr(
-        @SuppressWarnings("hiding") PExpOr _left_,
-        @SuppressWarnings("hiding") TKwOr _kwOr_,
-        @SuppressWarnings("hiding") PExpAnd _right_)
+    public ADivExp(
+        @SuppressWarnings("hiding") PExp _left_,
+        @SuppressWarnings("hiding") PExp _right_)
     {
         // Constructor
         setLeft(_left_);
-
-        setKwOr(_kwOr_);
 
         setRight(_right_);
 
@@ -33,24 +29,23 @@ public final class AOrExpOr extends PExpOr
     @Override
     public Object clone()
     {
-        return new AOrExpOr(
+        return new ADivExp(
             cloneNode(this._left_),
-            cloneNode(this._kwOr_),
             cloneNode(this._right_));
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAOrExpOr(this);
+        ((Analysis) sw).caseADivExp(this);
     }
 
-    public PExpOr getLeft()
+    public PExp getLeft()
     {
         return this._left_;
     }
 
-    public void setLeft(PExpOr node)
+    public void setLeft(PExp node)
     {
         if(this._left_ != null)
         {
@@ -70,37 +65,12 @@ public final class AOrExpOr extends PExpOr
         this._left_ = node;
     }
 
-    public TKwOr getKwOr()
-    {
-        return this._kwOr_;
-    }
-
-    public void setKwOr(TKwOr node)
-    {
-        if(this._kwOr_ != null)
-        {
-            this._kwOr_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._kwOr_ = node;
-    }
-
-    public PExpAnd getRight()
+    public PExp getRight()
     {
         return this._right_;
     }
 
-    public void setRight(PExpAnd node)
+    public void setRight(PExp node)
     {
         if(this._right_ != null)
         {
@@ -125,7 +95,6 @@ public final class AOrExpOr extends PExpOr
     {
         return ""
             + toString(this._left_)
-            + toString(this._kwOr_)
             + toString(this._right_);
     }
 
@@ -136,12 +105,6 @@ public final class AOrExpOr extends PExpOr
         if(this._left_ == child)
         {
             this._left_ = null;
-            return;
-        }
-
-        if(this._kwOr_ == child)
-        {
-            this._kwOr_ = null;
             return;
         }
 
@@ -160,19 +123,13 @@ public final class AOrExpOr extends PExpOr
         // Replace child
         if(this._left_ == oldChild)
         {
-            setLeft((PExpOr) newChild);
-            return;
-        }
-
-        if(this._kwOr_ == oldChild)
-        {
-            setKwOr((TKwOr) newChild);
+            setLeft((PExp) newChild);
             return;
         }
 
         if(this._right_ == oldChild)
         {
-            setRight((PExpAnd) newChild);
+            setRight((PExp) newChild);
             return;
         }
 

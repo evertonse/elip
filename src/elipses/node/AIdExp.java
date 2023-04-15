@@ -5,46 +5,46 @@ package elipses.node;
 import elipses.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AExpEquality extends PExpEquality
+public final class AIdExp extends PExp
 {
-    private PExpRelational _expRelational_;
+    private TIdentifier _identifier_;
 
-    public AExpEquality()
+    public AIdExp()
     {
         // Constructor
     }
 
-    public AExpEquality(
-        @SuppressWarnings("hiding") PExpRelational _expRelational_)
+    public AIdExp(
+        @SuppressWarnings("hiding") TIdentifier _identifier_)
     {
         // Constructor
-        setExpRelational(_expRelational_);
+        setIdentifier(_identifier_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new AExpEquality(
-            cloneNode(this._expRelational_));
+        return new AIdExp(
+            cloneNode(this._identifier_));
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAExpEquality(this);
+        ((Analysis) sw).caseAIdExp(this);
     }
 
-    public PExpRelational getExpRelational()
+    public TIdentifier getIdentifier()
     {
-        return this._expRelational_;
+        return this._identifier_;
     }
 
-    public void setExpRelational(PExpRelational node)
+    public void setIdentifier(TIdentifier node)
     {
-        if(this._expRelational_ != null)
+        if(this._identifier_ != null)
         {
-            this._expRelational_.parent(null);
+            this._identifier_.parent(null);
         }
 
         if(node != null)
@@ -57,23 +57,23 @@ public final class AExpEquality extends PExpEquality
             node.parent(this);
         }
 
-        this._expRelational_ = node;
+        this._identifier_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._expRelational_);
+            + toString(this._identifier_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._expRelational_ == child)
+        if(this._identifier_ == child)
         {
-            this._expRelational_ = null;
+            this._identifier_ = null;
             return;
         }
 
@@ -84,9 +84,9 @@ public final class AExpEquality extends PExpEquality
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._expRelational_ == oldChild)
+        if(this._identifier_ == oldChild)
         {
-            setExpRelational((PExpRelational) newChild);
+            setIdentifier((TIdentifier) newChild);
             return;
         }
 

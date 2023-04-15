@@ -5,46 +5,46 @@ package elipses.node;
 import elipses.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AExpOr extends PExpOr
+public final class ANotExp extends PExp
 {
-    private PExpAnd _expAnd_;
+    private PExp _exp_;
 
-    public AExpOr()
+    public ANotExp()
     {
         // Constructor
     }
 
-    public AExpOr(
-        @SuppressWarnings("hiding") PExpAnd _expAnd_)
+    public ANotExp(
+        @SuppressWarnings("hiding") PExp _exp_)
     {
         // Constructor
-        setExpAnd(_expAnd_);
+        setExp(_exp_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new AExpOr(
-            cloneNode(this._expAnd_));
+        return new ANotExp(
+            cloneNode(this._exp_));
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAExpOr(this);
+        ((Analysis) sw).caseANotExp(this);
     }
 
-    public PExpAnd getExpAnd()
+    public PExp getExp()
     {
-        return this._expAnd_;
+        return this._exp_;
     }
 
-    public void setExpAnd(PExpAnd node)
+    public void setExp(PExp node)
     {
-        if(this._expAnd_ != null)
+        if(this._exp_ != null)
         {
-            this._expAnd_.parent(null);
+            this._exp_.parent(null);
         }
 
         if(node != null)
@@ -57,23 +57,23 @@ public final class AExpOr extends PExpOr
             node.parent(this);
         }
 
-        this._expAnd_ = node;
+        this._exp_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._expAnd_);
+            + toString(this._exp_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._expAnd_ == child)
+        if(this._exp_ == child)
         {
-            this._expAnd_ = null;
+            this._exp_ = null;
             return;
         }
 
@@ -84,9 +84,9 @@ public final class AExpOr extends PExpOr
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._expAnd_ == oldChild)
+        if(this._exp_ == oldChild)
         {
-            setExpAnd((PExpAnd) newChild);
+            setExp((PExp) newChild);
             return;
         }
 
