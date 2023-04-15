@@ -87,6 +87,18 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
+    public void caseATypeParam(ATypeParam node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseASignatureParam(ASignatureParam node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
     public void caseAIntType(AIntType node)
     {
         defaultCase(node);
@@ -105,60 +117,6 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseAParams(AParams node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseASingleParams(ASingleParams node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseAMultipleParams(AMultipleParams node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseATypeParam(ATypeParam node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseASignatureParam(ASignatureParam node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseASignature(ASignature node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseASignatureParams(ASignatureParams node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseASingleSignatureParams(ASingleSignatureParams node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseAMultipleSignatureParams(AMultipleSignatureParams node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
     public void caseATypeSignatureParam(ATypeSignatureParam node)
     {
         defaultCase(node);
@@ -166,6 +124,12 @@ public class AnalysisAdapter implements Analysis
 
     @Override
     public void caseASignatureSignatureParam(ASignatureSignatureParam node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseASignature(ASignature node)
     {
         defaultCase(node);
     }
@@ -303,25 +267,7 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseABlockBlockExp(ABlockBlockExp node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
     public void caseADeclConst(ADeclConst node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseAFuncCall(AFuncCall node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseAFuncLambda(AFuncLambda node)
     {
         defaultCase(node);
     }
@@ -340,24 +286,6 @@ public class AnalysisAdapter implements Analysis
 
     @Override
     public void caseAMultipleListIds(AMultipleListIds node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseAListExp(AListExp node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseASingleListExp(ASingleListExp node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseAMultipleListExp(AMultipleListExp node)
     {
         defaultCase(node);
     }

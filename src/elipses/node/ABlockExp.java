@@ -2,12 +2,14 @@
 
 package elipses.node;
 
+import java.util.*;
 import elipses.analysis.*;
 
 @SuppressWarnings("nls")
 public final class ABlockExp extends PExp
 {
-    private PBlockExp _blockExp_;
+    private final LinkedList<PDeclConst> _declConst_ = new LinkedList<PDeclConst>();
+    private PExp _exp_;
 
     public ABlockExp()
     {
@@ -15,10 +17,13 @@ public final class ABlockExp extends PExp
     }
 
     public ABlockExp(
-        @SuppressWarnings("hiding") PBlockExp _blockExp_)
+        @SuppressWarnings("hiding") List<?> _declConst_,
+        @SuppressWarnings("hiding") PExp _exp_)
     {
         // Constructor
-        setBlockExp(_blockExp_);
+        setDeclConst(_declConst_);
+
+        setExp(_exp_);
 
     }
 
@@ -26,7 +31,8 @@ public final class ABlockExp extends PExp
     public Object clone()
     {
         return new ABlockExp(
-            cloneNode(this._blockExp_));
+            cloneList(this._declConst_),
+            cloneNode(this._exp_));
     }
 
     @Override
@@ -35,16 +41,42 @@ public final class ABlockExp extends PExp
         ((Analysis) sw).caseABlockExp(this);
     }
 
-    public PBlockExp getBlockExp()
+    public LinkedList<PDeclConst> getDeclConst()
     {
-        return this._blockExp_;
+        return this._declConst_;
     }
 
-    public void setBlockExp(PBlockExp node)
+    public void setDeclConst(List<?> list)
     {
-        if(this._blockExp_ != null)
+        for(PDeclConst e : this._declConst_)
         {
-            this._blockExp_.parent(null);
+            e.parent(null);
+        }
+        this._declConst_.clear();
+
+        for(Object obj_e : list)
+        {
+            PDeclConst e = (PDeclConst) obj_e;
+            if(e.parent() != null)
+            {
+                e.parent().removeChild(e);
+            }
+
+            e.parent(this);
+            this._declConst_.add(e);
+        }
+    }
+
+    public PExp getExp()
+    {
+        return this._exp_;
+    }
+
+    public void setExp(PExp node)
+    {
+        if(this._exp_ != null)
+        {
+            this._exp_.parent(null);
         }
 
         if(node != null)
@@ -57,23 +89,29 @@ public final class ABlockExp extends PExp
             node.parent(this);
         }
 
-        this._blockExp_ = node;
+        this._exp_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._blockExp_);
+            + toString(this._declConst_)
+            + toString(this._exp_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._blockExp_ == child)
+        if(this._declConst_.remove(child))
         {
-            this._blockExp_ = null;
+            return;
+        }
+
+        if(this._exp_ == child)
+        {
+            this._exp_ = null;
             return;
         }
 
@@ -84,9 +122,27 @@ public final class ABlockExp extends PExp
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._blockExp_ == oldChild)
+        for(ListIterator<PDeclConst> i = this._declConst_.listIterator(); i.hasNext();)
         {
-            setBlockExp((PBlockExp) newChild);
+            if(i.next() == oldChild)
+            {
+                if(newChild != null)
+                {
+                    i.set((PDeclConst) newChild);
+                    newChild.parent(this);
+                    oldChild.parent(null);
+                    return;
+                }
+
+                i.remove();
+                oldChild.parent(null);
+                return;
+            }
+        }
+
+        if(this._exp_ == oldChild)
+        {
+            setExp((PExp) newChild);
             return;
         }
 

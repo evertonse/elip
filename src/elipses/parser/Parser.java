@@ -646,31 +646,22 @@ public class Parser
         PDeclFunc pdeclfuncNode1;
         {
             // Block
-        @SuppressWarnings("unused") Object nullNode2 = null;
-        TLParen tlparenNode3;
-        PType ptypeNode4;
-        TIdentifier tidentifierNode5;
-        TLParen tlparenNode6;
-        PParams pparamsNode7;
-        TRParen trparenNode8;
-        TColon tcolonNode9;
-        TLParen tlparenNode10;
-        PExp pexpNode11;
-        TRParen trparenNode12;
-        TRParen trparenNode13;
-        tlparenNode3 = (TLParen)nodeArrayList1.get(0);
-        ptypeNode4 = (PType)nodeArrayList2.get(0);
-        tidentifierNode5 = (TIdentifier)nodeArrayList3.get(0);
-        tlparenNode6 = (TLParen)nodeArrayList4.get(0);
-        pparamsNode7 = (PParams)nodeArrayList5.get(0);
-        trparenNode8 = (TRParen)nodeArrayList6.get(0);
-        tcolonNode9 = (TColon)nodeArrayList7.get(0);
-        tlparenNode10 = (TLParen)nodeArrayList8.get(0);
-        pexpNode11 = (PExp)nodeArrayList9.get(0);
-        trparenNode12 = (TRParen)nodeArrayList10.get(0);
-        trparenNode13 = (TRParen)nodeArrayList11.get(0);
+        PType ptypeNode2;
+        LinkedList<Object> listNode4 = new LinkedList<Object>();
+        PExp pexpNode5;
+        ptypeNode2 = (PType)nodeArrayList2.get(0);
+        {
+            // Block
+        LinkedList<Object> listNode3 = new LinkedList<Object>();
+        listNode3 = (LinkedList)nodeArrayList5.get(0);
+	if(listNode3 != null)
+	{
+	  listNode4.addAll(listNode3);
+	}
+        }
+        pexpNode5 = (PExp)nodeArrayList9.get(0);
 
-        pdeclfuncNode1 = new ADeclFunc(null, tlparenNode3, ptypeNode4, tidentifierNode5, tlparenNode6, pparamsNode7, trparenNode8, tcolonNode9, tlparenNode10, pexpNode11, trparenNode12, trparenNode13);
+        pdeclfuncNode1 = new ADeclFunc(ptypeNode2, listNode4, pexpNode5);
         }
 	nodeList.add(pdeclfuncNode1);
         return nodeList;
@@ -698,32 +689,22 @@ public class Parser
         PDeclFunc pdeclfuncNode1;
         {
             // Block
-        TKwEntry tkwentryNode2;
-        TLParen tlparenNode3;
-        PType ptypeNode4;
-        TIdentifier tidentifierNode5;
-        TLParen tlparenNode6;
-        PParams pparamsNode7;
-        TRParen trparenNode8;
-        TColon tcolonNode9;
-        TLParen tlparenNode10;
-        PExp pexpNode11;
-        TRParen trparenNode12;
-        TRParen trparenNode13;
-        tkwentryNode2 = (TKwEntry)nodeArrayList1.get(0);
-        tlparenNode3 = (TLParen)nodeArrayList2.get(0);
-        ptypeNode4 = (PType)nodeArrayList3.get(0);
-        tidentifierNode5 = (TIdentifier)nodeArrayList4.get(0);
-        tlparenNode6 = (TLParen)nodeArrayList5.get(0);
-        pparamsNode7 = (PParams)nodeArrayList6.get(0);
-        trparenNode8 = (TRParen)nodeArrayList7.get(0);
-        tcolonNode9 = (TColon)nodeArrayList8.get(0);
-        tlparenNode10 = (TLParen)nodeArrayList9.get(0);
-        pexpNode11 = (PExp)nodeArrayList10.get(0);
-        trparenNode12 = (TRParen)nodeArrayList11.get(0);
-        trparenNode13 = (TRParen)nodeArrayList12.get(0);
+        PType ptypeNode2;
+        LinkedList<Object> listNode4 = new LinkedList<Object>();
+        PExp pexpNode5;
+        ptypeNode2 = (PType)nodeArrayList3.get(0);
+        {
+            // Block
+        LinkedList<Object> listNode3 = new LinkedList<Object>();
+        listNode3 = (LinkedList)nodeArrayList6.get(0);
+	if(listNode3 != null)
+	{
+	  listNode4.addAll(listNode3);
+	}
+        }
+        pexpNode5 = (PExp)nodeArrayList10.get(0);
 
-        pdeclfuncNode1 = new ADeclFunc(tkwentryNode2, tlparenNode3, ptypeNode4, tidentifierNode5, tlparenNode6, pparamsNode7, trparenNode8, tcolonNode9, tlparenNode10, pexpNode11, trparenNode12, trparenNode13);
+        pdeclfuncNode1 = new ADeclFunc(ptypeNode2, listNode4, pexpNode5);
         }
 	nodeList.add(pdeclfuncNode1);
         return nodeList;
@@ -796,13 +777,11 @@ public class Parser
     {
         @SuppressWarnings("hiding") ArrayList<Object> nodeList = new ArrayList<Object>();
 
-        PParams pparamsNode1;
+        LinkedList<Object> listNode1 = new LinkedList<Object>();
         {
             // Block
-
-        pparamsNode1 = new AParams();
         }
-	nodeList.add(pparamsNode1);
+	nodeList.add(listNode1);
         return nodeList;
     }
 
@@ -814,15 +793,17 @@ public class Parser
         @SuppressWarnings("hiding") ArrayList<Object> nodeList = new ArrayList<Object>();
 
         @SuppressWarnings("unused") ArrayList<Object> nodeArrayList1 = pop();
-        PParams pparamsNode1;
+        LinkedList<Object> listNode2 = new LinkedList<Object>();
         {
             // Block
-        PParam pparamNode2;
-        pparamNode2 = (PParam)nodeArrayList1.get(0);
-
-        pparamsNode1 = new ASingleParams(pparamNode2);
+        PParam pparamNode1;
+        pparamNode1 = (PParam)nodeArrayList1.get(0);
+	if(pparamNode1 != null)
+	{
+	  listNode2.add(pparamNode1);
+	}
         }
-	nodeList.add(pparamsNode1);
+	nodeList.add(listNode2);
         return nodeList;
     }
 
@@ -836,19 +817,23 @@ public class Parser
         @SuppressWarnings("unused") ArrayList<Object> nodeArrayList3 = pop();
         @SuppressWarnings("unused") ArrayList<Object> nodeArrayList2 = pop();
         @SuppressWarnings("unused") ArrayList<Object> nodeArrayList1 = pop();
-        PParams pparamsNode1;
+        LinkedList<Object> listNode3 = new LinkedList<Object>();
         {
             // Block
-        PParam pparamNode2;
-        TPipe tpipeNode3;
-        PParams pparamsNode4;
-        pparamNode2 = (PParam)nodeArrayList1.get(0);
-        tpipeNode3 = (TPipe)nodeArrayList2.get(0);
-        pparamsNode4 = (PParams)nodeArrayList3.get(0);
-
-        pparamsNode1 = new AMultipleParams(pparamNode2, tpipeNode3, pparamsNode4);
+        PParam pparamNode1;
+        LinkedList<Object> listNode2 = new LinkedList<Object>();
+        pparamNode1 = (PParam)nodeArrayList1.get(0);
+        listNode2 = (LinkedList)nodeArrayList3.get(0);
+	if(pparamNode1 != null)
+	{
+	  listNode3.add(pparamNode1);
+	}
+	if(listNode2 != null)
+	{
+	  listNode3.addAll(listNode2);
+	}
         }
-	nodeList.add(pparamsNode1);
+	nodeList.add(listNode3);
         return nodeList;
     }
 
@@ -912,16 +897,20 @@ public class Parser
             // Block
         PType ptypeNode2;
         TIdentifier tidentifierNode3;
-        TLParen tlparenNode4;
-        PSignatureParams psignatureparamsNode5;
-        TRParen trparenNode6;
+        LinkedList<Object> listNode5 = new LinkedList<Object>();
         ptypeNode2 = (PType)nodeArrayList1.get(0);
         tidentifierNode3 = (TIdentifier)nodeArrayList2.get(0);
-        tlparenNode4 = (TLParen)nodeArrayList3.get(0);
-        psignatureparamsNode5 = (PSignatureParams)nodeArrayList4.get(0);
-        trparenNode6 = (TRParen)nodeArrayList5.get(0);
+        {
+            // Block
+        LinkedList<Object> listNode4 = new LinkedList<Object>();
+        listNode4 = (LinkedList)nodeArrayList4.get(0);
+	if(listNode4 != null)
+	{
+	  listNode5.addAll(listNode4);
+	}
+        }
 
-        psignatureNode1 = new ASignature(ptypeNode2, tidentifierNode3, tlparenNode4, psignatureparamsNode5, trparenNode6);
+        psignatureNode1 = new ASignature(ptypeNode2, tidentifierNode3, listNode5);
         }
 	nodeList.add(psignatureNode1);
         return nodeList;
@@ -934,13 +923,11 @@ public class Parser
     {
         @SuppressWarnings("hiding") ArrayList<Object> nodeList = new ArrayList<Object>();
 
-        PSignatureParams psignatureparamsNode1;
+        LinkedList<Object> listNode1 = new LinkedList<Object>();
         {
             // Block
-
-        psignatureparamsNode1 = new ASignatureParams();
         }
-	nodeList.add(psignatureparamsNode1);
+	nodeList.add(listNode1);
         return nodeList;
     }
 
@@ -952,15 +939,17 @@ public class Parser
         @SuppressWarnings("hiding") ArrayList<Object> nodeList = new ArrayList<Object>();
 
         @SuppressWarnings("unused") ArrayList<Object> nodeArrayList1 = pop();
-        PSignatureParams psignatureparamsNode1;
+        LinkedList<Object> listNode2 = new LinkedList<Object>();
         {
             // Block
-        PSignatureParam psignatureparamNode2;
-        psignatureparamNode2 = (PSignatureParam)nodeArrayList1.get(0);
-
-        psignatureparamsNode1 = new ASingleSignatureParams(psignatureparamNode2);
+        PSignatureParam psignatureparamNode1;
+        psignatureparamNode1 = (PSignatureParam)nodeArrayList1.get(0);
+	if(psignatureparamNode1 != null)
+	{
+	  listNode2.add(psignatureparamNode1);
+	}
         }
-	nodeList.add(psignatureparamsNode1);
+	nodeList.add(listNode2);
         return nodeList;
     }
 
@@ -974,19 +963,23 @@ public class Parser
         @SuppressWarnings("unused") ArrayList<Object> nodeArrayList3 = pop();
         @SuppressWarnings("unused") ArrayList<Object> nodeArrayList2 = pop();
         @SuppressWarnings("unused") ArrayList<Object> nodeArrayList1 = pop();
-        PSignatureParams psignatureparamsNode1;
+        LinkedList<Object> listNode3 = new LinkedList<Object>();
         {
             // Block
-        PSignatureParam psignatureparamNode2;
-        TPipe tpipeNode3;
-        PSignatureParams psignatureparamsNode4;
-        psignatureparamNode2 = (PSignatureParam)nodeArrayList1.get(0);
-        tpipeNode3 = (TPipe)nodeArrayList2.get(0);
-        psignatureparamsNode4 = (PSignatureParams)nodeArrayList3.get(0);
-
-        psignatureparamsNode1 = new AMultipleSignatureParams(psignatureparamNode2, tpipeNode3, psignatureparamsNode4);
+        PSignatureParam psignatureparamNode1;
+        LinkedList<Object> listNode2 = new LinkedList<Object>();
+        psignatureparamNode1 = (PSignatureParam)nodeArrayList1.get(0);
+        listNode2 = (LinkedList)nodeArrayList3.get(0);
+	if(psignatureparamNode1 != null)
+	{
+	  listNode3.add(psignatureparamNode1);
+	}
+	if(listNode2 != null)
+	{
+	  listNode3.addAll(listNode2);
+	}
         }
-	nodeList.add(psignatureparamsNode1);
+	nodeList.add(listNode3);
         return nodeList;
     }
 
@@ -1598,13 +1591,7 @@ public class Parser
 
         @SuppressWarnings("unused") ArrayList<Object> nodeArrayList1 = pop();
         PExp pexpNode1;
-        {
-            // Block
-        PBlockExp pblockexpNode2;
-        pblockexpNode2 = (PBlockExp)nodeArrayList1.get(0);
-
-        pexpNode1 = new ABlockExp(pblockexpNode2);
-        }
+        pexpNode1 = (PExp)nodeArrayList1.get(0);
 	nodeList.add(pexpNode1);
         return nodeList;
     }
@@ -1618,13 +1605,7 @@ public class Parser
 
         @SuppressWarnings("unused") ArrayList<Object> nodeArrayList1 = pop();
         PExp pexpNode1;
-        {
-            // Block
-        PFuncCall pfunccallNode2;
-        pfunccallNode2 = (PFuncCall)nodeArrayList1.get(0);
-
-        pexpNode1 = new ACallExp(pfunccallNode2);
-        }
+        pexpNode1 = (PExp)nodeArrayList1.get(0);
 	nodeList.add(pexpNode1);
         return nodeList;
     }
@@ -1638,13 +1619,7 @@ public class Parser
 
         @SuppressWarnings("unused") ArrayList<Object> nodeArrayList1 = pop();
         PExp pexpNode1;
-        {
-            // Block
-        PFuncLambda pfunclambdaNode2;
-        pfunclambdaNode2 = (PFuncLambda)nodeArrayList1.get(0);
-
-        pexpNode1 = new ALambdaExp(pfunclambdaNode2);
-        }
+        pexpNode1 = (PExp)nodeArrayList1.get(0);
 	nodeList.add(pexpNode1);
         return nodeList;
     }
@@ -1659,23 +1634,19 @@ public class Parser
         @SuppressWarnings("unused") ArrayList<Object> nodeArrayList3 = pop();
         @SuppressWarnings("unused") ArrayList<Object> nodeArrayList2 = pop();
         @SuppressWarnings("unused") ArrayList<Object> nodeArrayList1 = pop();
-        PBlockExp pblockexpNode1;
+        PExp pexpNode1;
         {
             // Block
-        TLParen tlparenNode2;
-        LinkedList<Object> listNode3 = new LinkedList<Object>();
-        PExp pexpNode4;
-        TRParen trparenNode5;
-        tlparenNode2 = (TLParen)nodeArrayList1.get(0);
+        LinkedList<Object> listNode2 = new LinkedList<Object>();
+        PExp pexpNode3;
         {
             // Block
         }
-        pexpNode4 = (PExp)nodeArrayList2.get(0);
-        trparenNode5 = (TRParen)nodeArrayList3.get(0);
+        pexpNode3 = (PExp)nodeArrayList2.get(0);
 
-        pblockexpNode1 = new ABlockBlockExp(tlparenNode2, listNode3, pexpNode4, trparenNode5);
+        pexpNode1 = new ABlockExp(listNode2, pexpNode3);
         }
-	nodeList.add(pblockexpNode1);
+	nodeList.add(pexpNode1);
         return nodeList;
     }
 
@@ -1690,29 +1661,25 @@ public class Parser
         @SuppressWarnings("unused") ArrayList<Object> nodeArrayList3 = pop();
         @SuppressWarnings("unused") ArrayList<Object> nodeArrayList2 = pop();
         @SuppressWarnings("unused") ArrayList<Object> nodeArrayList1 = pop();
-        PBlockExp pblockexpNode1;
-        {
-            // Block
-        TLParen tlparenNode2;
-        LinkedList<Object> listNode4 = new LinkedList<Object>();
-        PExp pexpNode5;
-        TRParen trparenNode6;
-        tlparenNode2 = (TLParen)nodeArrayList1.get(0);
+        PExp pexpNode1;
         {
             // Block
         LinkedList<Object> listNode3 = new LinkedList<Object>();
-        listNode3 = (LinkedList)nodeArrayList2.get(0);
-	if(listNode3 != null)
+        PExp pexpNode4;
+        {
+            // Block
+        LinkedList<Object> listNode2 = new LinkedList<Object>();
+        listNode2 = (LinkedList)nodeArrayList2.get(0);
+	if(listNode2 != null)
 	{
-	  listNode4.addAll(listNode3);
+	  listNode3.addAll(listNode2);
 	}
         }
-        pexpNode5 = (PExp)nodeArrayList3.get(0);
-        trparenNode6 = (TRParen)nodeArrayList4.get(0);
+        pexpNode4 = (PExp)nodeArrayList3.get(0);
 
-        pblockexpNode1 = new ABlockBlockExp(tlparenNode2, listNode4, pexpNode5, trparenNode6);
+        pexpNode1 = new ABlockExp(listNode3, pexpNode4);
         }
-	nodeList.add(pblockexpNode1);
+	nodeList.add(pexpNode1);
         return nodeList;
     }
 
@@ -1734,24 +1701,14 @@ public class Parser
         PDeclConst pdeclconstNode1;
         {
             // Block
-        TLParen tlparenNode2;
-        TKwConst tkwconstNode3;
-        PType ptypeNode4;
-        TIdentifier tidentifierNode5;
-        TLParen tlparenNode6;
-        PExp pexpNode7;
-        TRParen trparenNode8;
-        TRParen trparenNode9;
-        tlparenNode2 = (TLParen)nodeArrayList1.get(0);
-        tkwconstNode3 = (TKwConst)nodeArrayList2.get(0);
-        ptypeNode4 = (PType)nodeArrayList3.get(0);
-        tidentifierNode5 = (TIdentifier)nodeArrayList4.get(0);
-        tlparenNode6 = (TLParen)nodeArrayList5.get(0);
-        pexpNode7 = (PExp)nodeArrayList6.get(0);
-        trparenNode8 = (TRParen)nodeArrayList7.get(0);
-        trparenNode9 = (TRParen)nodeArrayList8.get(0);
+        PType ptypeNode2;
+        TIdentifier tidentifierNode3;
+        PExp pexpNode4;
+        ptypeNode2 = (PType)nodeArrayList3.get(0);
+        tidentifierNode3 = (TIdentifier)nodeArrayList4.get(0);
+        pexpNode4 = (PExp)nodeArrayList6.get(0);
 
-        pdeclconstNode1 = new ADeclConst(tlparenNode2, tkwconstNode3, ptypeNode4, tidentifierNode5, tlparenNode6, pexpNode7, trparenNode8, trparenNode9);
+        pdeclconstNode1 = new ADeclConst(ptypeNode2, tidentifierNode3, pexpNode4);
         }
 	nodeList.add(pdeclconstNode1);
         return nodeList;
@@ -1768,21 +1725,25 @@ public class Parser
         @SuppressWarnings("unused") ArrayList<Object> nodeArrayList3 = pop();
         @SuppressWarnings("unused") ArrayList<Object> nodeArrayList2 = pop();
         @SuppressWarnings("unused") ArrayList<Object> nodeArrayList1 = pop();
-        PFuncCall pfunccallNode1;
+        PExp pexpNode1;
         {
             // Block
         TIdentifier tidentifierNode2;
-        TLParen tlparenNode3;
-        PListExp plistexpNode4;
-        TRParen trparenNode5;
+        LinkedList<Object> listNode4 = new LinkedList<Object>();
         tidentifierNode2 = (TIdentifier)nodeArrayList1.get(0);
-        tlparenNode3 = (TLParen)nodeArrayList2.get(0);
-        plistexpNode4 = (PListExp)nodeArrayList3.get(0);
-        trparenNode5 = (TRParen)nodeArrayList4.get(0);
-
-        pfunccallNode1 = new AFuncCall(tidentifierNode2, tlparenNode3, plistexpNode4, trparenNode5);
+        {
+            // Block
+        LinkedList<Object> listNode3 = new LinkedList<Object>();
+        listNode3 = (LinkedList)nodeArrayList3.get(0);
+	if(listNode3 != null)
+	{
+	  listNode4.addAll(listNode3);
+	}
         }
-	nodeList.add(pfunccallNode1);
+
+        pexpNode1 = new ACallExp(tidentifierNode2, listNode4);
+        }
+	nodeList.add(pexpNode1);
         return nodeList;
     }
 
@@ -1806,39 +1767,35 @@ public class Parser
         @SuppressWarnings("unused") ArrayList<Object> nodeArrayList3 = pop();
         @SuppressWarnings("unused") ArrayList<Object> nodeArrayList2 = pop();
         @SuppressWarnings("unused") ArrayList<Object> nodeArrayList1 = pop();
-        PFuncLambda pfunclambdaNode1;
+        PExp pexpNode1;
         {
             // Block
-        TLParen tlparenNode2;
-        TKwLambda tkwlambdaNode3;
-        TLParen tlparenNode4;
-        PListIds plistidsNode5;
-        TRParen trparenNode6;
-        TColon tcolonNode7;
-        TLParen tlparenNode8;
-        PExp pexpNode9;
-        TRParen trparenNode10;
-        TLBrack tlbrackNode11;
-        PListExp plistexpNode12;
-        TRBrack trbrackNode13;
-        TRParen trparenNode14;
-        tlparenNode2 = (TLParen)nodeArrayList1.get(0);
-        tkwlambdaNode3 = (TKwLambda)nodeArrayList2.get(0);
-        tlparenNode4 = (TLParen)nodeArrayList3.get(0);
-        plistidsNode5 = (PListIds)nodeArrayList4.get(0);
-        trparenNode6 = (TRParen)nodeArrayList5.get(0);
-        tcolonNode7 = (TColon)nodeArrayList6.get(0);
-        tlparenNode8 = (TLParen)nodeArrayList7.get(0);
-        pexpNode9 = (PExp)nodeArrayList8.get(0);
-        trparenNode10 = (TRParen)nodeArrayList9.get(0);
-        tlbrackNode11 = (TLBrack)nodeArrayList10.get(0);
-        plistexpNode12 = (PListExp)nodeArrayList11.get(0);
-        trbrackNode13 = (TRBrack)nodeArrayList12.get(0);
-        trparenNode14 = (TRParen)nodeArrayList13.get(0);
-
-        pfunclambdaNode1 = new AFuncLambda(tlparenNode2, tkwlambdaNode3, tlparenNode4, plistidsNode5, trparenNode6, tcolonNode7, tlparenNode8, pexpNode9, trparenNode10, tlbrackNode11, plistexpNode12, trbrackNode13, trparenNode14);
+        LinkedList<Object> listNode3 = new LinkedList<Object>();
+        PExp pexpNode4;
+        LinkedList<Object> listNode6 = new LinkedList<Object>();
+        {
+            // Block
+        LinkedList<Object> listNode2 = new LinkedList<Object>();
+        listNode2 = (LinkedList)nodeArrayList4.get(0);
+	if(listNode2 != null)
+	{
+	  listNode3.addAll(listNode2);
+	}
         }
-	nodeList.add(pfunclambdaNode1);
+        pexpNode4 = (PExp)nodeArrayList8.get(0);
+        {
+            // Block
+        LinkedList<Object> listNode5 = new LinkedList<Object>();
+        listNode5 = (LinkedList)nodeArrayList11.get(0);
+	if(listNode5 != null)
+	{
+	  listNode6.addAll(listNode5);
+	}
+        }
+
+        pexpNode1 = new ALambdaExp(listNode3, pexpNode4, listNode6);
+        }
+	nodeList.add(pexpNode1);
         return nodeList;
     }
 
@@ -1849,13 +1806,11 @@ public class Parser
     {
         @SuppressWarnings("hiding") ArrayList<Object> nodeList = new ArrayList<Object>();
 
-        PListIds plistidsNode1;
+        LinkedList<Object> listNode1 = new LinkedList<Object>();
         {
             // Block
-
-        plistidsNode1 = new AListIds();
         }
-	nodeList.add(plistidsNode1);
+	nodeList.add(listNode1);
         return nodeList;
     }
 
@@ -1867,15 +1822,17 @@ public class Parser
         @SuppressWarnings("hiding") ArrayList<Object> nodeList = new ArrayList<Object>();
 
         @SuppressWarnings("unused") ArrayList<Object> nodeArrayList1 = pop();
-        PListIds plistidsNode1;
+        LinkedList<Object> listNode2 = new LinkedList<Object>();
         {
             // Block
-        TIdentifier tidentifierNode2;
-        tidentifierNode2 = (TIdentifier)nodeArrayList1.get(0);
-
-        plistidsNode1 = new ASingleListIds(tidentifierNode2);
+        TIdentifier tidentifierNode1;
+        tidentifierNode1 = (TIdentifier)nodeArrayList1.get(0);
+	if(tidentifierNode1 != null)
+	{
+	  listNode2.add(tidentifierNode1);
+	}
         }
-	nodeList.add(plistidsNode1);
+	nodeList.add(listNode2);
         return nodeList;
     }
 
@@ -1889,19 +1846,23 @@ public class Parser
         @SuppressWarnings("unused") ArrayList<Object> nodeArrayList3 = pop();
         @SuppressWarnings("unused") ArrayList<Object> nodeArrayList2 = pop();
         @SuppressWarnings("unused") ArrayList<Object> nodeArrayList1 = pop();
-        PListIds plistidsNode1;
+        LinkedList<Object> listNode3 = new LinkedList<Object>();
         {
             // Block
-        TIdentifier tidentifierNode2;
-        TPipe tpipeNode3;
-        PListIds plistidsNode4;
-        tidentifierNode2 = (TIdentifier)nodeArrayList1.get(0);
-        tpipeNode3 = (TPipe)nodeArrayList2.get(0);
-        plistidsNode4 = (PListIds)nodeArrayList3.get(0);
-
-        plistidsNode1 = new AMultipleListIds(tidentifierNode2, tpipeNode3, plistidsNode4);
+        TIdentifier tidentifierNode1;
+        LinkedList<Object> listNode2 = new LinkedList<Object>();
+        tidentifierNode1 = (TIdentifier)nodeArrayList1.get(0);
+        listNode2 = (LinkedList)nodeArrayList3.get(0);
+	if(tidentifierNode1 != null)
+	{
+	  listNode3.add(tidentifierNode1);
+	}
+	if(listNode2 != null)
+	{
+	  listNode3.addAll(listNode2);
+	}
         }
-	nodeList.add(plistidsNode1);
+	nodeList.add(listNode3);
         return nodeList;
     }
 
@@ -1912,13 +1873,11 @@ public class Parser
     {
         @SuppressWarnings("hiding") ArrayList<Object> nodeList = new ArrayList<Object>();
 
-        PListExp plistexpNode1;
+        LinkedList<Object> listNode1 = new LinkedList<Object>();
         {
             // Block
-
-        plistexpNode1 = new AListExp();
         }
-	nodeList.add(plistexpNode1);
+	nodeList.add(listNode1);
         return nodeList;
     }
 
@@ -1930,15 +1889,17 @@ public class Parser
         @SuppressWarnings("hiding") ArrayList<Object> nodeList = new ArrayList<Object>();
 
         @SuppressWarnings("unused") ArrayList<Object> nodeArrayList1 = pop();
-        PListExp plistexpNode1;
+        LinkedList<Object> listNode2 = new LinkedList<Object>();
         {
             // Block
-        PExp pexpNode2;
-        pexpNode2 = (PExp)nodeArrayList1.get(0);
-
-        plistexpNode1 = new ASingleListExp(pexpNode2);
+        PExp pexpNode1;
+        pexpNode1 = (PExp)nodeArrayList1.get(0);
+	if(pexpNode1 != null)
+	{
+	  listNode2.add(pexpNode1);
+	}
         }
-	nodeList.add(plistexpNode1);
+	nodeList.add(listNode2);
         return nodeList;
     }
 
@@ -1952,19 +1913,23 @@ public class Parser
         @SuppressWarnings("unused") ArrayList<Object> nodeArrayList3 = pop();
         @SuppressWarnings("unused") ArrayList<Object> nodeArrayList2 = pop();
         @SuppressWarnings("unused") ArrayList<Object> nodeArrayList1 = pop();
-        PListExp plistexpNode1;
+        LinkedList<Object> listNode3 = new LinkedList<Object>();
         {
             // Block
-        PExp pexpNode2;
-        TPipe tpipeNode3;
-        PListExp plistexpNode4;
-        pexpNode2 = (PExp)nodeArrayList1.get(0);
-        tpipeNode3 = (TPipe)nodeArrayList2.get(0);
-        plistexpNode4 = (PListExp)nodeArrayList3.get(0);
-
-        plistexpNode1 = new AMultipleListExp(pexpNode2, tpipeNode3, plistexpNode4);
+        PExp pexpNode1;
+        LinkedList<Object> listNode2 = new LinkedList<Object>();
+        pexpNode1 = (PExp)nodeArrayList1.get(0);
+        listNode2 = (LinkedList)nodeArrayList3.get(0);
+	if(pexpNode1 != null)
+	{
+	  listNode3.add(pexpNode1);
+	}
+	if(listNode2 != null)
+	{
+	  listNode3.addAll(listNode2);
+	}
         }
-	nodeList.add(plistexpNode1);
+	nodeList.add(listNode3);
         return nodeList;
     }
 

@@ -2,12 +2,14 @@
 
 package elipses.node;
 
+import java.util.*;
 import elipses.analysis.*;
 
 @SuppressWarnings("nls")
 public final class ACallExp extends PExp
 {
-    private PFuncCall _funcCall_;
+    private TIdentifier _id_;
+    private final LinkedList<PExp> _args_ = new LinkedList<PExp>();
 
     public ACallExp()
     {
@@ -15,10 +17,13 @@ public final class ACallExp extends PExp
     }
 
     public ACallExp(
-        @SuppressWarnings("hiding") PFuncCall _funcCall_)
+        @SuppressWarnings("hiding") TIdentifier _id_,
+        @SuppressWarnings("hiding") List<?> _args_)
     {
         // Constructor
-        setFuncCall(_funcCall_);
+        setId(_id_);
+
+        setArgs(_args_);
 
     }
 
@@ -26,7 +31,8 @@ public final class ACallExp extends PExp
     public Object clone()
     {
         return new ACallExp(
-            cloneNode(this._funcCall_));
+            cloneNode(this._id_),
+            cloneList(this._args_));
     }
 
     @Override
@@ -35,16 +41,16 @@ public final class ACallExp extends PExp
         ((Analysis) sw).caseACallExp(this);
     }
 
-    public PFuncCall getFuncCall()
+    public TIdentifier getId()
     {
-        return this._funcCall_;
+        return this._id_;
     }
 
-    public void setFuncCall(PFuncCall node)
+    public void setId(TIdentifier node)
     {
-        if(this._funcCall_ != null)
+        if(this._id_ != null)
         {
-            this._funcCall_.parent(null);
+            this._id_.parent(null);
         }
 
         if(node != null)
@@ -57,23 +63,55 @@ public final class ACallExp extends PExp
             node.parent(this);
         }
 
-        this._funcCall_ = node;
+        this._id_ = node;
+    }
+
+    public LinkedList<PExp> getArgs()
+    {
+        return this._args_;
+    }
+
+    public void setArgs(List<?> list)
+    {
+        for(PExp e : this._args_)
+        {
+            e.parent(null);
+        }
+        this._args_.clear();
+
+        for(Object obj_e : list)
+        {
+            PExp e = (PExp) obj_e;
+            if(e.parent() != null)
+            {
+                e.parent().removeChild(e);
+            }
+
+            e.parent(this);
+            this._args_.add(e);
+        }
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._funcCall_);
+            + toString(this._id_)
+            + toString(this._args_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._funcCall_ == child)
+        if(this._id_ == child)
         {
-            this._funcCall_ = null;
+            this._id_ = null;
+            return;
+        }
+
+        if(this._args_.remove(child))
+        {
             return;
         }
 
@@ -84,10 +122,28 @@ public final class ACallExp extends PExp
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._funcCall_ == oldChild)
+        if(this._id_ == oldChild)
         {
-            setFuncCall((PFuncCall) newChild);
+            setId((TIdentifier) newChild);
             return;
+        }
+
+        for(ListIterator<PExp> i = this._args_.listIterator(); i.hasNext();)
+        {
+            if(i.next() == oldChild)
+            {
+                if(newChild != null)
+                {
+                    i.set((PExp) newChild);
+                    newChild.parent(this);
+                    oldChild.parent(null);
+                    return;
+                }
+
+                i.remove();
+                oldChild.parent(null);
+                return;
+            }
         }
 
         throw new RuntimeException("Not a child.");

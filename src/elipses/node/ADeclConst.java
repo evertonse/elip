@@ -7,14 +7,9 @@ import elipses.analysis.*;
 @SuppressWarnings("nls")
 public final class ADeclConst extends PDeclConst
 {
-    private TLParen _lp1_;
-    private TKwConst _kwConst_;
     private PType _type_;
     private TIdentifier _identifier_;
-    private TLParen _lp2_;
     private PExp _exp_;
-    private TRParen _rp2_;
-    private TRParen _rp1_;
 
     public ADeclConst()
     {
@@ -22,31 +17,16 @@ public final class ADeclConst extends PDeclConst
     }
 
     public ADeclConst(
-        @SuppressWarnings("hiding") TLParen _lp1_,
-        @SuppressWarnings("hiding") TKwConst _kwConst_,
         @SuppressWarnings("hiding") PType _type_,
         @SuppressWarnings("hiding") TIdentifier _identifier_,
-        @SuppressWarnings("hiding") TLParen _lp2_,
-        @SuppressWarnings("hiding") PExp _exp_,
-        @SuppressWarnings("hiding") TRParen _rp2_,
-        @SuppressWarnings("hiding") TRParen _rp1_)
+        @SuppressWarnings("hiding") PExp _exp_)
     {
         // Constructor
-        setLp1(_lp1_);
-
-        setKwConst(_kwConst_);
-
         setType(_type_);
 
         setIdentifier(_identifier_);
 
-        setLp2(_lp2_);
-
         setExp(_exp_);
-
-        setRp2(_rp2_);
-
-        setRp1(_rp1_);
 
     }
 
@@ -54,70 +34,15 @@ public final class ADeclConst extends PDeclConst
     public Object clone()
     {
         return new ADeclConst(
-            cloneNode(this._lp1_),
-            cloneNode(this._kwConst_),
             cloneNode(this._type_),
             cloneNode(this._identifier_),
-            cloneNode(this._lp2_),
-            cloneNode(this._exp_),
-            cloneNode(this._rp2_),
-            cloneNode(this._rp1_));
+            cloneNode(this._exp_));
     }
 
     @Override
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseADeclConst(this);
-    }
-
-    public TLParen getLp1()
-    {
-        return this._lp1_;
-    }
-
-    public void setLp1(TLParen node)
-    {
-        if(this._lp1_ != null)
-        {
-            this._lp1_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._lp1_ = node;
-    }
-
-    public TKwConst getKwConst()
-    {
-        return this._kwConst_;
-    }
-
-    public void setKwConst(TKwConst node)
-    {
-        if(this._kwConst_ != null)
-        {
-            this._kwConst_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._kwConst_ = node;
     }
 
     public PType getType()
@@ -170,31 +95,6 @@ public final class ADeclConst extends PDeclConst
         this._identifier_ = node;
     }
 
-    public TLParen getLp2()
-    {
-        return this._lp2_;
-    }
-
-    public void setLp2(TLParen node)
-    {
-        if(this._lp2_ != null)
-        {
-            this._lp2_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._lp2_ = node;
-    }
-
     public PExp getExp()
     {
         return this._exp_;
@@ -220,86 +120,19 @@ public final class ADeclConst extends PDeclConst
         this._exp_ = node;
     }
 
-    public TRParen getRp2()
-    {
-        return this._rp2_;
-    }
-
-    public void setRp2(TRParen node)
-    {
-        if(this._rp2_ != null)
-        {
-            this._rp2_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._rp2_ = node;
-    }
-
-    public TRParen getRp1()
-    {
-        return this._rp1_;
-    }
-
-    public void setRp1(TRParen node)
-    {
-        if(this._rp1_ != null)
-        {
-            this._rp1_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._rp1_ = node;
-    }
-
     @Override
     public String toString()
     {
         return ""
-            + toString(this._lp1_)
-            + toString(this._kwConst_)
             + toString(this._type_)
             + toString(this._identifier_)
-            + toString(this._lp2_)
-            + toString(this._exp_)
-            + toString(this._rp2_)
-            + toString(this._rp1_);
+            + toString(this._exp_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._lp1_ == child)
-        {
-            this._lp1_ = null;
-            return;
-        }
-
-        if(this._kwConst_ == child)
-        {
-            this._kwConst_ = null;
-            return;
-        }
-
         if(this._type_ == child)
         {
             this._type_ = null;
@@ -312,27 +145,9 @@ public final class ADeclConst extends PDeclConst
             return;
         }
 
-        if(this._lp2_ == child)
-        {
-            this._lp2_ = null;
-            return;
-        }
-
         if(this._exp_ == child)
         {
             this._exp_ = null;
-            return;
-        }
-
-        if(this._rp2_ == child)
-        {
-            this._rp2_ = null;
-            return;
-        }
-
-        if(this._rp1_ == child)
-        {
-            this._rp1_ = null;
             return;
         }
 
@@ -343,18 +158,6 @@ public final class ADeclConst extends PDeclConst
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._lp1_ == oldChild)
-        {
-            setLp1((TLParen) newChild);
-            return;
-        }
-
-        if(this._kwConst_ == oldChild)
-        {
-            setKwConst((TKwConst) newChild);
-            return;
-        }
-
         if(this._type_ == oldChild)
         {
             setType((PType) newChild);
@@ -367,27 +170,9 @@ public final class ADeclConst extends PDeclConst
             return;
         }
 
-        if(this._lp2_ == oldChild)
-        {
-            setLp2((TLParen) newChild);
-            return;
-        }
-
         if(this._exp_ == oldChild)
         {
             setExp((PExp) newChild);
-            return;
-        }
-
-        if(this._rp2_ == oldChild)
-        {
-            setRp2((TRParen) newChild);
-            return;
-        }
-
-        if(this._rp1_ == oldChild)
-        {
-            setRp1((TRParen) newChild);
             return;
         }
 

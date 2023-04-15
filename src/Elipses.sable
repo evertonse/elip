@@ -123,47 +123,62 @@ Ignored Tokens
 
 Productions
 
-  program = decl_func*;
+  program {->program} = 
+    decl_func*
+        {-> New program([decl_func.decl_func])}
+  ;
 
-
-  decl_func =  
-    T.kw_entry? 
-    [lp1]:T.l_paren type T.identifier 
-      [lp2]:T.l_paren params [rp2]:T.r_paren T.colon 
-      [lp3]:T.l_paren exp    [rp3]:T.r_paren 
+  decl_func {->decl_func} =  
+    [entry]:T.kw_entry? 
+    [lp1]:T.l_paren   [return_type]:type T.identifier 
+      [lp2]:T.l_paren [pars]:params [rp2]:T.r_paren T.colon 
+      [lp3]:T.l_paren [body]:exp    [rp3]:T.r_paren 
     [rp1]:T.r_paren
+        {-> New decl_func(return_type, [pars.param], body.exp) }
   ;
 
-  type  =  
-    {int} T.kw_integer 
-    | {bool} T.kw_bool 
-    | {real} T.kw_real
+  type {->type}  =  
+    {int} [type]:T.kw_integer 
+        {-> New type.int(type)}
+    | {bool} [type]:T.kw_bool    
+        {-> New type.bool(type)} 
+    | {real} [type]:T.kw_real    
+        {-> New type.real(type)}
   ;
 
-  params  =  
-    /*Ɛ*/ 
-    | {single} param 
-    | {multiple} param T.pipe params
+  params{->param*}  =  
+    /*Ɛ*/ {->[]}
+    | {single} [par]:param 
+        {->[par.param]} 
+    | {multiple} [par]:param T.pipe [pars]:params 
+        {->[par.param, pars.param]} 
   ;
 
-  param   =  
-    {type} type T.identifier 
-    | {signature} signature
+  param  {->param} =  
+    {type} type [id]:T.identifier 
+        {->New param.type(type,id)} 
+    | {signature} [sig]:signature 
+        {->New param.signature(sig.signature)}
   ;
 
-  signature =  
-    type T.identifier T.l_paren signature_params T.r_paren
+  signature {->signature} =  
+    [return_type]:type [id]:T.identifier T.l_paren [pars]:signature_params T.r_paren
+        {-> New signature(return_type,id, [pars.signature_param])}
   ;
 
-  signature_params  = 
-    /*Ɛ*/ 
+  signature_params {->signature_param*}  = 
+    /*Ɛ*/ {->[]} 
     | {single} signature_param 
-    | {multiple} signature_param T.pipe signature_params
+        {->[signature_param.signature_param]}  
+    | {multiple} signature_param T.pipe signature_params 
+        {->[signature_param.signature_param, signature_params.signature_param]} 
   ;
 
-  signature_param = 
+  signature_param {->signature_param} = 
     {type} type 
-    | {signature} signature
+        {-> New signature_param.type(type.type)} 
+    | {signature} signature  
+        {->New signature_param.signature(signature.signature)}
   ;
 
   // @note smaller number means more priority, note that 'mult' is on priority exp1 whereas 'plus' in on exp2
@@ -227,54 +242,62 @@ Productions
     | {int}    [single]:T.number_int  {-> New exp.int(single)}  
     | {true}   [single]:T.kw_true     {-> New exp.true(single)}  
     | {false}  [single]:T.kw_false    {-> New exp.false(single)} 
-    | {block}  [single]:block_exp     {-> New exp.block(single)} 
-    | {call}   [single]:func_call     {-> New exp.call(single)}   
-    | {lambda} [single]:func_lambda   {-> New exp.lambda(single)} 
+    | {block}  [single]:block_exp     {-> single.exp}
+    | {call}   [single]:func_call     {-> single.exp}
+    | {lambda} [single]:func_lambda   {-> single.exp}
   ;
 
 
-  block_exp = 
+  block_exp {->exp} = 
     {block} T.l_paren decl_const* exp T.r_paren
+        {-> New exp.block([decl_const.decl_const], exp.exp)}
   ;
   
-  decl_const = 
-    [lp1]:T.l_paren T.kw_const type T.identifier 
+  decl_const {->decl_const} = 
+    [lp1]:T.l_paren T.kw_const type [id]:T.identifier 
       [lp2]:T.l_paren exp [rp2]:T.r_paren 
     [rp1]:T.r_paren
+        {-> New decl_const(type.type, id, exp.exp)}
   ;
 
-  func_call = 
-    identifier l_paren list_exp r_paren
+  func_call {->exp}= 
+    [id]:T.identifier l_paren list_exp r_paren {-> New exp.call(id,[list_exp.exp])}   
   ;
 
-  func_lambda = 
+  func_lambda {->exp} = 
     [lp1]:l_paren kw_lambda 
-      [lp2]:l_paren list_ids  [rp2]:r_paren colon 
-      [lp3]:l_paren exp       [rp3]:r_paren 
-      l_brack       list_exp  r_brack 
+      [lp2]:l_paren [ids]:list_ids  [rp2]:r_paren colon 
+      [lp3]:l_paren [body]:exp       [rp3]:r_paren 
+      l_brack       [args]:list_exp  r_brack 
     [rp1]:r_paren
+    {-> New exp.lambda([ids.identifier],body,[args.exp])}
   ;
 
-  list_ids  =  
-    /*Ɛ*/ 
-    | {single} identifier 
-    | {multiple} identifier pipe list_ids
+  list_ids {->T.identifier*} =  
+    /*Ɛ*/ {-> []}
+    | {single} [id]:T.identifier {->[id]}
+    | {multiple} [id]:T.identifier pipe [ids]:list_ids {->[id, ids.identifier]}
   ;
 
- list_exp  =  
-    /*Ɛ*/ 
-    | {single} exp 
-    | {multiple} exp pipe list_exp
+ list_exp{->exp*}  =  
+    /*Ɛ*/ {-> []}
+    | {single}   [arg]:exp {-> [arg.exp]}
+    | {multiple} [arg]:exp pipe [rest]:list_exp {-> [arg.exp, rest.exp]}
   ;
+
 
 Abstract Syntax Tree
   program = decl_func*;
+  
   decl_func =  
-    T.kw_entry? 
-    [lp1]:T.l_paren type T.identifier 
-      [lp2]:T.l_paren params [rp2]:T.r_paren T.colon 
-      [lp3]:T.l_paren exp    [rp3]:T.r_paren 
-    [rp1]:T.r_paren
+    type
+    param*
+    exp
+  ;
+
+  param   =  
+    {type} type T.identifier 
+    | {signature} signature
   ;
 
   type  =  
@@ -283,30 +306,13 @@ Abstract Syntax Tree
     | {real} T.kw_real
   ;
 
-  params  =  
-    /*Ɛ*/ 
-    | {single} param 
-    | {multiple} param T.pipe params
-  ;
-
-  param   =  
-    {type} type T.identifier 
+  signature_param = 
+    {type} type 
     | {signature} signature
   ;
 
   signature =  
-    type T.identifier T.l_paren signature_params T.r_paren
-  ;
-
-  signature_params  = 
-    /*Ɛ*/ 
-    | {single} signature_param 
-    | {multiple} signature_param T.pipe signature_params
-  ;
-
-  signature_param = 
-    {type} type 
-    | {signature} signature
+    type T.identifier signature_param*
   ;
 
   exp  = 
@@ -322,52 +328,28 @@ Abstract Syntax Tree
     | {mod}      [left]:exp [right]:exp
     | {negative} exp  
     | {not}      exp
-    | {if}       [cond]:exp [truthy]:exp [falsy]:exp
-    | {id}       T.identifier
 
+    | {if}       [cond]:exp [truthy]:exp [falsy]:exp
+
+    | {id}    T.identifier
     | {bin}   T.number_bin 
     | {real}  T.number_frac 
     | {int}   T.number_int 
+    | {true}  T.kw_true 
+    | {false} T.kw_false
 
-    | {true}     T.kw_true 
-    | {false}     T.kw_false
-
-    | {block}    block_exp
-    | {call}     func_call  
-    | {lambda}   func_lambda
+    | {block}    decl_const* exp 
+    | {call}     [id]:T.identifier [args]:exp*   
+    | {lambda}   [id]:T.identifier* [body]:exp [args]:exp*   
   ;
 
-
-  block_exp = 
-    {block} T.l_paren decl_const* exp T.r_paren
-  ;
-  
   decl_const = 
-    [lp1]:T.l_paren T.kw_const type T.identifier 
-      [lp2]:T.l_paren exp [rp2]:T.r_paren 
-    [rp1]:T.r_paren
+    type T.identifier exp 
   ;
 
-  func_call = 
-    identifier l_paren list_exp r_paren
-  ;
-
-  func_lambda = 
-    [lp1]:l_paren kw_lambda 
-      [lp2]:l_paren list_ids  [rp2]:r_paren colon 
-      [lp3]:l_paren exp       [rp3]:r_paren 
-      l_brack       list_exp  r_brack 
-    [rp1]:r_paren
-  ;
 
   list_ids  =  
     /*Ɛ*/ 
-    | {single} identifier 
-    | {multiple} identifier pipe list_ids
-  ;
-
- list_exp  =  
-    /*Ɛ*/ 
-    | {single} exp 
-    | {multiple} exp pipe list_exp
+    | {single} [id]:T.identifier
+    | {multiple} [id]:T.identifier pipe [ids]:list_ids
   ;

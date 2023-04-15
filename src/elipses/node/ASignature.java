@@ -2,6 +2,7 @@
 
 package elipses.node;
 
+import java.util.*;
 import elipses.analysis.*;
 
 @SuppressWarnings("nls")
@@ -9,9 +10,7 @@ public final class ASignature extends PSignature
 {
     private PType _type_;
     private TIdentifier _identifier_;
-    private TLParen _lParen_;
-    private PSignatureParams _signatureParams_;
-    private TRParen _rParen_;
+    private final LinkedList<PSignatureParam> _signatureParam_ = new LinkedList<PSignatureParam>();
 
     public ASignature()
     {
@@ -21,20 +20,14 @@ public final class ASignature extends PSignature
     public ASignature(
         @SuppressWarnings("hiding") PType _type_,
         @SuppressWarnings("hiding") TIdentifier _identifier_,
-        @SuppressWarnings("hiding") TLParen _lParen_,
-        @SuppressWarnings("hiding") PSignatureParams _signatureParams_,
-        @SuppressWarnings("hiding") TRParen _rParen_)
+        @SuppressWarnings("hiding") List<?> _signatureParam_)
     {
         // Constructor
         setType(_type_);
 
         setIdentifier(_identifier_);
 
-        setLParen(_lParen_);
-
-        setSignatureParams(_signatureParams_);
-
-        setRParen(_rParen_);
+        setSignatureParam(_signatureParam_);
 
     }
 
@@ -44,9 +37,7 @@ public final class ASignature extends PSignature
         return new ASignature(
             cloneNode(this._type_),
             cloneNode(this._identifier_),
-            cloneNode(this._lParen_),
-            cloneNode(this._signatureParams_),
-            cloneNode(this._rParen_));
+            cloneList(this._signatureParam_));
     }
 
     @Override
@@ -105,79 +96,30 @@ public final class ASignature extends PSignature
         this._identifier_ = node;
     }
 
-    public TLParen getLParen()
+    public LinkedList<PSignatureParam> getSignatureParam()
     {
-        return this._lParen_;
+        return this._signatureParam_;
     }
 
-    public void setLParen(TLParen node)
+    public void setSignatureParam(List<?> list)
     {
-        if(this._lParen_ != null)
+        for(PSignatureParam e : this._signatureParam_)
         {
-            this._lParen_.parent(null);
+            e.parent(null);
         }
+        this._signatureParam_.clear();
 
-        if(node != null)
+        for(Object obj_e : list)
         {
-            if(node.parent() != null)
+            PSignatureParam e = (PSignatureParam) obj_e;
+            if(e.parent() != null)
             {
-                node.parent().removeChild(node);
+                e.parent().removeChild(e);
             }
 
-            node.parent(this);
+            e.parent(this);
+            this._signatureParam_.add(e);
         }
-
-        this._lParen_ = node;
-    }
-
-    public PSignatureParams getSignatureParams()
-    {
-        return this._signatureParams_;
-    }
-
-    public void setSignatureParams(PSignatureParams node)
-    {
-        if(this._signatureParams_ != null)
-        {
-            this._signatureParams_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._signatureParams_ = node;
-    }
-
-    public TRParen getRParen()
-    {
-        return this._rParen_;
-    }
-
-    public void setRParen(TRParen node)
-    {
-        if(this._rParen_ != null)
-        {
-            this._rParen_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._rParen_ = node;
     }
 
     @Override
@@ -186,9 +128,7 @@ public final class ASignature extends PSignature
         return ""
             + toString(this._type_)
             + toString(this._identifier_)
-            + toString(this._lParen_)
-            + toString(this._signatureParams_)
-            + toString(this._rParen_);
+            + toString(this._signatureParam_);
     }
 
     @Override
@@ -207,21 +147,8 @@ public final class ASignature extends PSignature
             return;
         }
 
-        if(this._lParen_ == child)
+        if(this._signatureParam_.remove(child))
         {
-            this._lParen_ = null;
-            return;
-        }
-
-        if(this._signatureParams_ == child)
-        {
-            this._signatureParams_ = null;
-            return;
-        }
-
-        if(this._rParen_ == child)
-        {
-            this._rParen_ = null;
             return;
         }
 
@@ -244,22 +171,22 @@ public final class ASignature extends PSignature
             return;
         }
 
-        if(this._lParen_ == oldChild)
+        for(ListIterator<PSignatureParam> i = this._signatureParam_.listIterator(); i.hasNext();)
         {
-            setLParen((TLParen) newChild);
-            return;
-        }
+            if(i.next() == oldChild)
+            {
+                if(newChild != null)
+                {
+                    i.set((PSignatureParam) newChild);
+                    newChild.parent(this);
+                    oldChild.parent(null);
+                    return;
+                }
 
-        if(this._signatureParams_ == oldChild)
-        {
-            setSignatureParams((PSignatureParams) newChild);
-            return;
-        }
-
-        if(this._rParen_ == oldChild)
-        {
-            setRParen((TRParen) newChild);
-            return;
+                i.remove();
+                oldChild.parent(null);
+                return;
+            }
         }
 
         throw new RuntimeException("Not a child.");

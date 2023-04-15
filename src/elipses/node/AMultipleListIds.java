@@ -7,9 +7,9 @@ import elipses.analysis.*;
 @SuppressWarnings("nls")
 public final class AMultipleListIds extends PListIds
 {
-    private TIdentifier _identifier_;
+    private TIdentifier _id_;
     private TPipe _pipe_;
-    private PListIds _listIds_;
+    private PListIds _ids_;
 
     public AMultipleListIds()
     {
@@ -17,16 +17,16 @@ public final class AMultipleListIds extends PListIds
     }
 
     public AMultipleListIds(
-        @SuppressWarnings("hiding") TIdentifier _identifier_,
+        @SuppressWarnings("hiding") TIdentifier _id_,
         @SuppressWarnings("hiding") TPipe _pipe_,
-        @SuppressWarnings("hiding") PListIds _listIds_)
+        @SuppressWarnings("hiding") PListIds _ids_)
     {
         // Constructor
-        setIdentifier(_identifier_);
+        setId(_id_);
 
         setPipe(_pipe_);
 
-        setListIds(_listIds_);
+        setIds(_ids_);
 
     }
 
@@ -34,9 +34,9 @@ public final class AMultipleListIds extends PListIds
     public Object clone()
     {
         return new AMultipleListIds(
-            cloneNode(this._identifier_),
+            cloneNode(this._id_),
             cloneNode(this._pipe_),
-            cloneNode(this._listIds_));
+            cloneNode(this._ids_));
     }
 
     @Override
@@ -45,16 +45,16 @@ public final class AMultipleListIds extends PListIds
         ((Analysis) sw).caseAMultipleListIds(this);
     }
 
-    public TIdentifier getIdentifier()
+    public TIdentifier getId()
     {
-        return this._identifier_;
+        return this._id_;
     }
 
-    public void setIdentifier(TIdentifier node)
+    public void setId(TIdentifier node)
     {
-        if(this._identifier_ != null)
+        if(this._id_ != null)
         {
-            this._identifier_.parent(null);
+            this._id_.parent(null);
         }
 
         if(node != null)
@@ -67,7 +67,7 @@ public final class AMultipleListIds extends PListIds
             node.parent(this);
         }
 
-        this._identifier_ = node;
+        this._id_ = node;
     }
 
     public TPipe getPipe()
@@ -95,16 +95,16 @@ public final class AMultipleListIds extends PListIds
         this._pipe_ = node;
     }
 
-    public PListIds getListIds()
+    public PListIds getIds()
     {
-        return this._listIds_;
+        return this._ids_;
     }
 
-    public void setListIds(PListIds node)
+    public void setIds(PListIds node)
     {
-        if(this._listIds_ != null)
+        if(this._ids_ != null)
         {
-            this._listIds_.parent(null);
+            this._ids_.parent(null);
         }
 
         if(node != null)
@@ -117,25 +117,25 @@ public final class AMultipleListIds extends PListIds
             node.parent(this);
         }
 
-        this._listIds_ = node;
+        this._ids_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._identifier_)
+            + toString(this._id_)
             + toString(this._pipe_)
-            + toString(this._listIds_);
+            + toString(this._ids_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._identifier_ == child)
+        if(this._id_ == child)
         {
-            this._identifier_ = null;
+            this._id_ = null;
             return;
         }
 
@@ -145,9 +145,9 @@ public final class AMultipleListIds extends PListIds
             return;
         }
 
-        if(this._listIds_ == child)
+        if(this._ids_ == child)
         {
-            this._listIds_ = null;
+            this._ids_ = null;
             return;
         }
 
@@ -158,9 +158,9 @@ public final class AMultipleListIds extends PListIds
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._identifier_ == oldChild)
+        if(this._id_ == oldChild)
         {
-            setIdentifier((TIdentifier) newChild);
+            setId((TIdentifier) newChild);
             return;
         }
 
@@ -170,9 +170,9 @@ public final class AMultipleListIds extends PListIds
             return;
         }
 
-        if(this._listIds_ == oldChild)
+        if(this._ids_ == oldChild)
         {
-            setListIds((PListIds) newChild);
+            setIds((PListIds) newChild);
             return;
         }
 

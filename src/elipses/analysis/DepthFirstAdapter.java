@@ -74,14 +74,38 @@ public class DepthFirstAdapter extends AnalysisAdapter
     public void caseADeclFunc(ADeclFunc node)
     {
         inADeclFunc(node);
-        if(node.getKwEntry() != null)
+        if(node.getType() != null)
         {
-            node.getKwEntry().apply(this);
+            node.getType().apply(this);
         }
-        if(node.getLp1() != null)
         {
-            node.getLp1().apply(this);
+            List<PParam> copy = new ArrayList<PParam>(node.getParam());
+            for(PParam e : copy)
+            {
+                e.apply(this);
+            }
         }
+        if(node.getExp() != null)
+        {
+            node.getExp().apply(this);
+        }
+        outADeclFunc(node);
+    }
+
+    public void inATypeParam(ATypeParam node)
+    {
+        defaultIn(node);
+    }
+
+    public void outATypeParam(ATypeParam node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseATypeParam(ATypeParam node)
+    {
+        inATypeParam(node);
         if(node.getType() != null)
         {
             node.getType().apply(this);
@@ -90,39 +114,28 @@ public class DepthFirstAdapter extends AnalysisAdapter
         {
             node.getIdentifier().apply(this);
         }
-        if(node.getLp2() != null)
+        outATypeParam(node);
+    }
+
+    public void inASignatureParam(ASignatureParam node)
+    {
+        defaultIn(node);
+    }
+
+    public void outASignatureParam(ASignatureParam node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseASignatureParam(ASignatureParam node)
+    {
+        inASignatureParam(node);
+        if(node.getSignature() != null)
         {
-            node.getLp2().apply(this);
+            node.getSignature().apply(this);
         }
-        if(node.getParams() != null)
-        {
-            node.getParams().apply(this);
-        }
-        if(node.getRp2() != null)
-        {
-            node.getRp2().apply(this);
-        }
-        if(node.getColon() != null)
-        {
-            node.getColon().apply(this);
-        }
-        if(node.getLp3() != null)
-        {
-            node.getLp3().apply(this);
-        }
-        if(node.getExp() != null)
-        {
-            node.getExp().apply(this);
-        }
-        if(node.getRp3() != null)
-        {
-            node.getRp3().apply(this);
-        }
-        if(node.getRp1() != null)
-        {
-            node.getRp1().apply(this);
-        }
-        outADeclFunc(node);
+        outASignatureParam(node);
     }
 
     public void inAIntType(AIntType node)
@@ -188,223 +201,6 @@ public class DepthFirstAdapter extends AnalysisAdapter
         outARealType(node);
     }
 
-    public void inAParams(AParams node)
-    {
-        defaultIn(node);
-    }
-
-    public void outAParams(AParams node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseAParams(AParams node)
-    {
-        inAParams(node);
-        outAParams(node);
-    }
-
-    public void inASingleParams(ASingleParams node)
-    {
-        defaultIn(node);
-    }
-
-    public void outASingleParams(ASingleParams node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseASingleParams(ASingleParams node)
-    {
-        inASingleParams(node);
-        if(node.getParam() != null)
-        {
-            node.getParam().apply(this);
-        }
-        outASingleParams(node);
-    }
-
-    public void inAMultipleParams(AMultipleParams node)
-    {
-        defaultIn(node);
-    }
-
-    public void outAMultipleParams(AMultipleParams node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseAMultipleParams(AMultipleParams node)
-    {
-        inAMultipleParams(node);
-        if(node.getParam() != null)
-        {
-            node.getParam().apply(this);
-        }
-        if(node.getPipe() != null)
-        {
-            node.getPipe().apply(this);
-        }
-        if(node.getParams() != null)
-        {
-            node.getParams().apply(this);
-        }
-        outAMultipleParams(node);
-    }
-
-    public void inATypeParam(ATypeParam node)
-    {
-        defaultIn(node);
-    }
-
-    public void outATypeParam(ATypeParam node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseATypeParam(ATypeParam node)
-    {
-        inATypeParam(node);
-        if(node.getType() != null)
-        {
-            node.getType().apply(this);
-        }
-        if(node.getIdentifier() != null)
-        {
-            node.getIdentifier().apply(this);
-        }
-        outATypeParam(node);
-    }
-
-    public void inASignatureParam(ASignatureParam node)
-    {
-        defaultIn(node);
-    }
-
-    public void outASignatureParam(ASignatureParam node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseASignatureParam(ASignatureParam node)
-    {
-        inASignatureParam(node);
-        if(node.getSignature() != null)
-        {
-            node.getSignature().apply(this);
-        }
-        outASignatureParam(node);
-    }
-
-    public void inASignature(ASignature node)
-    {
-        defaultIn(node);
-    }
-
-    public void outASignature(ASignature node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseASignature(ASignature node)
-    {
-        inASignature(node);
-        if(node.getType() != null)
-        {
-            node.getType().apply(this);
-        }
-        if(node.getIdentifier() != null)
-        {
-            node.getIdentifier().apply(this);
-        }
-        if(node.getLParen() != null)
-        {
-            node.getLParen().apply(this);
-        }
-        if(node.getSignatureParams() != null)
-        {
-            node.getSignatureParams().apply(this);
-        }
-        if(node.getRParen() != null)
-        {
-            node.getRParen().apply(this);
-        }
-        outASignature(node);
-    }
-
-    public void inASignatureParams(ASignatureParams node)
-    {
-        defaultIn(node);
-    }
-
-    public void outASignatureParams(ASignatureParams node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseASignatureParams(ASignatureParams node)
-    {
-        inASignatureParams(node);
-        outASignatureParams(node);
-    }
-
-    public void inASingleSignatureParams(ASingleSignatureParams node)
-    {
-        defaultIn(node);
-    }
-
-    public void outASingleSignatureParams(ASingleSignatureParams node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseASingleSignatureParams(ASingleSignatureParams node)
-    {
-        inASingleSignatureParams(node);
-        if(node.getSignatureParam() != null)
-        {
-            node.getSignatureParam().apply(this);
-        }
-        outASingleSignatureParams(node);
-    }
-
-    public void inAMultipleSignatureParams(AMultipleSignatureParams node)
-    {
-        defaultIn(node);
-    }
-
-    public void outAMultipleSignatureParams(AMultipleSignatureParams node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseAMultipleSignatureParams(AMultipleSignatureParams node)
-    {
-        inAMultipleSignatureParams(node);
-        if(node.getSignatureParam() != null)
-        {
-            node.getSignatureParam().apply(this);
-        }
-        if(node.getPipe() != null)
-        {
-            node.getPipe().apply(this);
-        }
-        if(node.getSignatureParams() != null)
-        {
-            node.getSignatureParams().apply(this);
-        }
-        outAMultipleSignatureParams(node);
-    }
-
     public void inATypeSignatureParam(ATypeSignatureParam node)
     {
         defaultIn(node);
@@ -445,6 +241,38 @@ public class DepthFirstAdapter extends AnalysisAdapter
             node.getSignature().apply(this);
         }
         outASignatureSignatureParam(node);
+    }
+
+    public void inASignature(ASignature node)
+    {
+        defaultIn(node);
+    }
+
+    public void outASignature(ASignature node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseASignature(ASignature node)
+    {
+        inASignature(node);
+        if(node.getType() != null)
+        {
+            node.getType().apply(this);
+        }
+        if(node.getIdentifier() != null)
+        {
+            node.getIdentifier().apply(this);
+        }
+        {
+            List<PSignatureParam> copy = new ArrayList<PSignatureParam>(node.getSignatureParam());
+            for(PSignatureParam e : copy)
+            {
+                e.apply(this);
+            }
+        }
+        outASignature(node);
     }
 
     public void inAOrExp(AOrExp node)
@@ -908,9 +736,16 @@ public class DepthFirstAdapter extends AnalysisAdapter
     public void caseABlockExp(ABlockExp node)
     {
         inABlockExp(node);
-        if(node.getBlockExp() != null)
         {
-            node.getBlockExp().apply(this);
+            List<PDeclConst> copy = new ArrayList<PDeclConst>(node.getDeclConst());
+            for(PDeclConst e : copy)
+            {
+                e.apply(this);
+            }
+        }
+        if(node.getExp() != null)
+        {
+            node.getExp().apply(this);
         }
         outABlockExp(node);
     }
@@ -929,9 +764,16 @@ public class DepthFirstAdapter extends AnalysisAdapter
     public void caseACallExp(ACallExp node)
     {
         inACallExp(node);
-        if(node.getFuncCall() != null)
+        if(node.getId() != null)
         {
-            node.getFuncCall().apply(this);
+            node.getId().apply(this);
+        }
+        {
+            List<PExp> copy = new ArrayList<PExp>(node.getArgs());
+            for(PExp e : copy)
+            {
+                e.apply(this);
+            }
         }
         outACallExp(node);
     }
@@ -950,47 +792,25 @@ public class DepthFirstAdapter extends AnalysisAdapter
     public void caseALambdaExp(ALambdaExp node)
     {
         inALambdaExp(node);
-        if(node.getFuncLambda() != null)
         {
-            node.getFuncLambda().apply(this);
-        }
-        outALambdaExp(node);
-    }
-
-    public void inABlockBlockExp(ABlockBlockExp node)
-    {
-        defaultIn(node);
-    }
-
-    public void outABlockBlockExp(ABlockBlockExp node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseABlockBlockExp(ABlockBlockExp node)
-    {
-        inABlockBlockExp(node);
-        if(node.getLParen() != null)
-        {
-            node.getLParen().apply(this);
-        }
-        {
-            List<PDeclConst> copy = new ArrayList<PDeclConst>(node.getDeclConst());
-            for(PDeclConst e : copy)
+            List<TIdentifier> copy = new ArrayList<TIdentifier>(node.getId());
+            for(TIdentifier e : copy)
             {
                 e.apply(this);
             }
         }
-        if(node.getExp() != null)
+        if(node.getBody() != null)
         {
-            node.getExp().apply(this);
+            node.getBody().apply(this);
         }
-        if(node.getRParen() != null)
         {
-            node.getRParen().apply(this);
+            List<PExp> copy = new ArrayList<PExp>(node.getArgs());
+            for(PExp e : copy)
+            {
+                e.apply(this);
+            }
         }
-        outABlockBlockExp(node);
+        outALambdaExp(node);
     }
 
     public void inADeclConst(ADeclConst node)
@@ -1007,14 +827,6 @@ public class DepthFirstAdapter extends AnalysisAdapter
     public void caseADeclConst(ADeclConst node)
     {
         inADeclConst(node);
-        if(node.getLp1() != null)
-        {
-            node.getLp1().apply(this);
-        }
-        if(node.getKwConst() != null)
-        {
-            node.getKwConst().apply(this);
-        }
         if(node.getType() != null)
         {
             node.getType().apply(this);
@@ -1023,125 +835,11 @@ public class DepthFirstAdapter extends AnalysisAdapter
         {
             node.getIdentifier().apply(this);
         }
-        if(node.getLp2() != null)
-        {
-            node.getLp2().apply(this);
-        }
         if(node.getExp() != null)
         {
             node.getExp().apply(this);
-        }
-        if(node.getRp2() != null)
-        {
-            node.getRp2().apply(this);
-        }
-        if(node.getRp1() != null)
-        {
-            node.getRp1().apply(this);
         }
         outADeclConst(node);
-    }
-
-    public void inAFuncCall(AFuncCall node)
-    {
-        defaultIn(node);
-    }
-
-    public void outAFuncCall(AFuncCall node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseAFuncCall(AFuncCall node)
-    {
-        inAFuncCall(node);
-        if(node.getIdentifier() != null)
-        {
-            node.getIdentifier().apply(this);
-        }
-        if(node.getLParen() != null)
-        {
-            node.getLParen().apply(this);
-        }
-        if(node.getListExp() != null)
-        {
-            node.getListExp().apply(this);
-        }
-        if(node.getRParen() != null)
-        {
-            node.getRParen().apply(this);
-        }
-        outAFuncCall(node);
-    }
-
-    public void inAFuncLambda(AFuncLambda node)
-    {
-        defaultIn(node);
-    }
-
-    public void outAFuncLambda(AFuncLambda node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseAFuncLambda(AFuncLambda node)
-    {
-        inAFuncLambda(node);
-        if(node.getLp1() != null)
-        {
-            node.getLp1().apply(this);
-        }
-        if(node.getKwLambda() != null)
-        {
-            node.getKwLambda().apply(this);
-        }
-        if(node.getLp2() != null)
-        {
-            node.getLp2().apply(this);
-        }
-        if(node.getListIds() != null)
-        {
-            node.getListIds().apply(this);
-        }
-        if(node.getRp2() != null)
-        {
-            node.getRp2().apply(this);
-        }
-        if(node.getColon() != null)
-        {
-            node.getColon().apply(this);
-        }
-        if(node.getLp3() != null)
-        {
-            node.getLp3().apply(this);
-        }
-        if(node.getExp() != null)
-        {
-            node.getExp().apply(this);
-        }
-        if(node.getRp3() != null)
-        {
-            node.getRp3().apply(this);
-        }
-        if(node.getLBrack() != null)
-        {
-            node.getLBrack().apply(this);
-        }
-        if(node.getListExp() != null)
-        {
-            node.getListExp().apply(this);
-        }
-        if(node.getRBrack() != null)
-        {
-            node.getRBrack().apply(this);
-        }
-        if(node.getRp1() != null)
-        {
-            node.getRp1().apply(this);
-        }
-        outAFuncLambda(node);
     }
 
     public void inAListIds(AListIds node)
@@ -1175,9 +873,9 @@ public class DepthFirstAdapter extends AnalysisAdapter
     public void caseASingleListIds(ASingleListIds node)
     {
         inASingleListIds(node);
-        if(node.getIdentifier() != null)
+        if(node.getId() != null)
         {
-            node.getIdentifier().apply(this);
+            node.getId().apply(this);
         }
         outASingleListIds(node);
     }
@@ -1196,85 +894,18 @@ public class DepthFirstAdapter extends AnalysisAdapter
     public void caseAMultipleListIds(AMultipleListIds node)
     {
         inAMultipleListIds(node);
-        if(node.getIdentifier() != null)
+        if(node.getId() != null)
         {
-            node.getIdentifier().apply(this);
+            node.getId().apply(this);
         }
         if(node.getPipe() != null)
         {
             node.getPipe().apply(this);
         }
-        if(node.getListIds() != null)
+        if(node.getIds() != null)
         {
-            node.getListIds().apply(this);
+            node.getIds().apply(this);
         }
         outAMultipleListIds(node);
-    }
-
-    public void inAListExp(AListExp node)
-    {
-        defaultIn(node);
-    }
-
-    public void outAListExp(AListExp node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseAListExp(AListExp node)
-    {
-        inAListExp(node);
-        outAListExp(node);
-    }
-
-    public void inASingleListExp(ASingleListExp node)
-    {
-        defaultIn(node);
-    }
-
-    public void outASingleListExp(ASingleListExp node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseASingleListExp(ASingleListExp node)
-    {
-        inASingleListExp(node);
-        if(node.getExp() != null)
-        {
-            node.getExp().apply(this);
-        }
-        outASingleListExp(node);
-    }
-
-    public void inAMultipleListExp(AMultipleListExp node)
-    {
-        defaultIn(node);
-    }
-
-    public void outAMultipleListExp(AMultipleListExp node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseAMultipleListExp(AMultipleListExp node)
-    {
-        inAMultipleListExp(node);
-        if(node.getExp() != null)
-        {
-            node.getExp().apply(this);
-        }
-        if(node.getPipe() != null)
-        {
-            node.getPipe().apply(this);
-        }
-        if(node.getListExp() != null)
-        {
-            node.getListExp().apply(this);
-        }
-        outAMultipleListExp(node);
     }
 }

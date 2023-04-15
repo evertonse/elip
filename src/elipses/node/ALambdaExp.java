@@ -2,12 +2,15 @@
 
 package elipses.node;
 
+import java.util.*;
 import elipses.analysis.*;
 
 @SuppressWarnings("nls")
 public final class ALambdaExp extends PExp
 {
-    private PFuncLambda _funcLambda_;
+    private final LinkedList<TIdentifier> _id_ = new LinkedList<TIdentifier>();
+    private PExp _body_;
+    private final LinkedList<PExp> _args_ = new LinkedList<PExp>();
 
     public ALambdaExp()
     {
@@ -15,10 +18,16 @@ public final class ALambdaExp extends PExp
     }
 
     public ALambdaExp(
-        @SuppressWarnings("hiding") PFuncLambda _funcLambda_)
+        @SuppressWarnings("hiding") List<?> _id_,
+        @SuppressWarnings("hiding") PExp _body_,
+        @SuppressWarnings("hiding") List<?> _args_)
     {
         // Constructor
-        setFuncLambda(_funcLambda_);
+        setId(_id_);
+
+        setBody(_body_);
+
+        setArgs(_args_);
 
     }
 
@@ -26,7 +35,9 @@ public final class ALambdaExp extends PExp
     public Object clone()
     {
         return new ALambdaExp(
-            cloneNode(this._funcLambda_));
+            cloneList(this._id_),
+            cloneNode(this._body_),
+            cloneList(this._args_));
     }
 
     @Override
@@ -35,16 +46,42 @@ public final class ALambdaExp extends PExp
         ((Analysis) sw).caseALambdaExp(this);
     }
 
-    public PFuncLambda getFuncLambda()
+    public LinkedList<TIdentifier> getId()
     {
-        return this._funcLambda_;
+        return this._id_;
     }
 
-    public void setFuncLambda(PFuncLambda node)
+    public void setId(List<?> list)
     {
-        if(this._funcLambda_ != null)
+        for(TIdentifier e : this._id_)
         {
-            this._funcLambda_.parent(null);
+            e.parent(null);
+        }
+        this._id_.clear();
+
+        for(Object obj_e : list)
+        {
+            TIdentifier e = (TIdentifier) obj_e;
+            if(e.parent() != null)
+            {
+                e.parent().removeChild(e);
+            }
+
+            e.parent(this);
+            this._id_.add(e);
+        }
+    }
+
+    public PExp getBody()
+    {
+        return this._body_;
+    }
+
+    public void setBody(PExp node)
+    {
+        if(this._body_ != null)
+        {
+            this._body_.parent(null);
         }
 
         if(node != null)
@@ -57,23 +94,61 @@ public final class ALambdaExp extends PExp
             node.parent(this);
         }
 
-        this._funcLambda_ = node;
+        this._body_ = node;
+    }
+
+    public LinkedList<PExp> getArgs()
+    {
+        return this._args_;
+    }
+
+    public void setArgs(List<?> list)
+    {
+        for(PExp e : this._args_)
+        {
+            e.parent(null);
+        }
+        this._args_.clear();
+
+        for(Object obj_e : list)
+        {
+            PExp e = (PExp) obj_e;
+            if(e.parent() != null)
+            {
+                e.parent().removeChild(e);
+            }
+
+            e.parent(this);
+            this._args_.add(e);
+        }
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._funcLambda_);
+            + toString(this._id_)
+            + toString(this._body_)
+            + toString(this._args_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._funcLambda_ == child)
+        if(this._id_.remove(child))
         {
-            this._funcLambda_ = null;
+            return;
+        }
+
+        if(this._body_ == child)
+        {
+            this._body_ = null;
+            return;
+        }
+
+        if(this._args_.remove(child))
+        {
             return;
         }
 
@@ -84,10 +159,46 @@ public final class ALambdaExp extends PExp
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._funcLambda_ == oldChild)
+        for(ListIterator<TIdentifier> i = this._id_.listIterator(); i.hasNext();)
         {
-            setFuncLambda((PFuncLambda) newChild);
+            if(i.next() == oldChild)
+            {
+                if(newChild != null)
+                {
+                    i.set((TIdentifier) newChild);
+                    newChild.parent(this);
+                    oldChild.parent(null);
+                    return;
+                }
+
+                i.remove();
+                oldChild.parent(null);
+                return;
+            }
+        }
+
+        if(this._body_ == oldChild)
+        {
+            setBody((PExp) newChild);
             return;
+        }
+
+        for(ListIterator<PExp> i = this._args_.listIterator(); i.hasNext();)
+        {
+            if(i.next() == oldChild)
+            {
+                if(newChild != null)
+                {
+                    i.set((PExp) newChild);
+                    newChild.parent(this);
+                    oldChild.parent(null);
+                    return;
+                }
+
+                i.remove();
+                oldChild.parent(null);
+                return;
+            }
         }
 
         throw new RuntimeException("Not a child.");

@@ -7,7 +7,7 @@ import elipses.analysis.*;
 @SuppressWarnings("nls")
 public final class ASingleListIds extends PListIds
 {
-    private TIdentifier _identifier_;
+    private TIdentifier _id_;
 
     public ASingleListIds()
     {
@@ -15,10 +15,10 @@ public final class ASingleListIds extends PListIds
     }
 
     public ASingleListIds(
-        @SuppressWarnings("hiding") TIdentifier _identifier_)
+        @SuppressWarnings("hiding") TIdentifier _id_)
     {
         // Constructor
-        setIdentifier(_identifier_);
+        setId(_id_);
 
     }
 
@@ -26,7 +26,7 @@ public final class ASingleListIds extends PListIds
     public Object clone()
     {
         return new ASingleListIds(
-            cloneNode(this._identifier_));
+            cloneNode(this._id_));
     }
 
     @Override
@@ -35,16 +35,16 @@ public final class ASingleListIds extends PListIds
         ((Analysis) sw).caseASingleListIds(this);
     }
 
-    public TIdentifier getIdentifier()
+    public TIdentifier getId()
     {
-        return this._identifier_;
+        return this._id_;
     }
 
-    public void setIdentifier(TIdentifier node)
+    public void setId(TIdentifier node)
     {
-        if(this._identifier_ != null)
+        if(this._id_ != null)
         {
-            this._identifier_.parent(null);
+            this._id_.parent(null);
         }
 
         if(node != null)
@@ -57,23 +57,23 @@ public final class ASingleListIds extends PListIds
             node.parent(this);
         }
 
-        this._identifier_ = node;
+        this._id_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._identifier_);
+            + toString(this._id_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._identifier_ == child)
+        if(this._id_ == child)
         {
-            this._identifier_ = null;
+            this._id_ = null;
             return;
         }
 
@@ -84,9 +84,9 @@ public final class ASingleListIds extends PListIds
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._identifier_ == oldChild)
+        if(this._id_ == oldChild)
         {
-            setIdentifier((TIdentifier) newChild);
+            setId((TIdentifier) newChild);
             return;
         }
 
