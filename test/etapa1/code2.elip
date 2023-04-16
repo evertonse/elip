@@ -29,7 +29,7 @@ entrada
 
 ))
 
-(booleano my_test() :(
+(booleano my_test () :(
 (
   ((const inteiro x (2)) (const real y(2,4)) x + y) 
   * 0 e -se (verdadeiro = falso) entao verdadeiro * verdadeiro senao -(2 + 4 + 5 + 6)  

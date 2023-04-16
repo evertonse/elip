@@ -45,9 +45,6 @@ public interface Analysis extends Switch
     void caseACallExp(ACallExp node);
     void caseALambdaExp(ALambdaExp node);
     void caseADeclConst(ADeclConst node);
-    void caseAListIds(AListIds node);
-    void caseASingleListIds(ASingleListIds node);
-    void caseAMultipleListIds(AMultipleListIds node);
 
     void caseTBlank(TBlank node);
     void caseTComment(TComment node);

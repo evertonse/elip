@@ -24,12 +24,10 @@ src\elipses\node\AIfExp.java
 src\elipses\node\AIntExp.java 
 src\elipses\node\AIntType.java 
 src\elipses\node\ALambdaExp.java 
-src\elipses\node\AListIds.java 
 src\elipses\node\ALtExp.java 
 src\elipses\node\AMinusExp.java 
 src\elipses\node\AModExp.java 
 src\elipses\node\AMultExp.java 
-src\elipses\node\AMultipleListIds.java 
 src\elipses\node\ANegativeExp.java 
 src\elipses\node\ANotExp.java 
 src\elipses\node\AOrExp.java 
@@ -40,7 +38,6 @@ src\elipses\node\ARealType.java
 src\elipses\node\ASignature.java 
 src\elipses\node\ASignatureParam.java 
 src\elipses\node\ASignatureSignatureParam.java 
-src\elipses\node\ASingleListIds.java 
 src\elipses\node\ATrueExp.java 
 src\elipses\node\ATypeParam.java 
 src\elipses\node\ATypeSignatureParam.java 
@@ -50,7 +47,6 @@ src\elipses\node\Node.java
 src\elipses\node\PDeclConst.java 
 src\elipses\node\PDeclFunc.java 
 src\elipses\node\PExp.java 
-src\elipses\node\PListIds.java 
 src\elipses\node\PParam.java 
 src\elipses\node\PProgram.java 
 src\elipses\node\PSignature.java 

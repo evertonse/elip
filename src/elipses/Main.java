@@ -90,7 +90,7 @@ class Debug {
 
     if (use_gui) {
       // on gui
-      adapter = new ASTDisplay();
+      adapter = new ASTDisplay(file);
     } else {
       // on console
       adapter = new ASTPrinter();

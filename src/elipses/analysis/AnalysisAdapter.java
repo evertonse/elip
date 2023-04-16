@@ -273,24 +273,6 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseAListIds(AListIds node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseASingleListIds(ASingleListIds node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseAMultipleListIds(AMultipleListIds node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
     public void caseTBlank(TBlank node)
     {
         defaultCase(node);

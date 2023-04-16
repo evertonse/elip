@@ -74,9 +74,17 @@ public class DepthFirstAdapter extends AnalysisAdapter
     public void caseADeclFunc(ADeclFunc node)
     {
         inADeclFunc(node);
+        if(node.getKwEntry() != null)
+        {
+            node.getKwEntry().apply(this);
+        }
         if(node.getType() != null)
         {
             node.getType().apply(this);
+        }
+        if(node.getIdentifier() != null)
+        {
+            node.getIdentifier().apply(this);
         }
         {
             List<PParam> copy = new ArrayList<PParam>(node.getParam());
@@ -840,72 +848,5 @@ public class DepthFirstAdapter extends AnalysisAdapter
             node.getExp().apply(this);
         }
         outADeclConst(node);
-    }
-
-    public void inAListIds(AListIds node)
-    {
-        defaultIn(node);
-    }
-
-    public void outAListIds(AListIds node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseAListIds(AListIds node)
-    {
-        inAListIds(node);
-        outAListIds(node);
-    }
-
-    public void inASingleListIds(ASingleListIds node)
-    {
-        defaultIn(node);
-    }
-
-    public void outASingleListIds(ASingleListIds node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseASingleListIds(ASingleListIds node)
-    {
-        inASingleListIds(node);
-        if(node.getId() != null)
-        {
-            node.getId().apply(this);
-        }
-        outASingleListIds(node);
-    }
-
-    public void inAMultipleListIds(AMultipleListIds node)
-    {
-        defaultIn(node);
-    }
-
-    public void outAMultipleListIds(AMultipleListIds node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseAMultipleListIds(AMultipleListIds node)
-    {
-        inAMultipleListIds(node);
-        if(node.getId() != null)
-        {
-            node.getId().apply(this);
-        }
-        if(node.getPipe() != null)
-        {
-            node.getPipe().apply(this);
-        }
-        if(node.getIds() != null)
-        {
-            node.getIds().apply(this);
-        }
-        outAMultipleListIds(node);
     }
 }

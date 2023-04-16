@@ -87,9 +87,17 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
                 e.apply(this);
             }
         }
+        if(node.getIdentifier() != null)
+        {
+            node.getIdentifier().apply(this);
+        }
         if(node.getType() != null)
         {
             node.getType().apply(this);
+        }
+        if(node.getKwEntry() != null)
+        {
+            node.getKwEntry().apply(this);
         }
         outADeclFunc(node);
     }
@@ -847,72 +855,5 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
             node.getType().apply(this);
         }
         outADeclConst(node);
-    }
-
-    public void inAListIds(AListIds node)
-    {
-        defaultIn(node);
-    }
-
-    public void outAListIds(AListIds node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseAListIds(AListIds node)
-    {
-        inAListIds(node);
-        outAListIds(node);
-    }
-
-    public void inASingleListIds(ASingleListIds node)
-    {
-        defaultIn(node);
-    }
-
-    public void outASingleListIds(ASingleListIds node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseASingleListIds(ASingleListIds node)
-    {
-        inASingleListIds(node);
-        if(node.getId() != null)
-        {
-            node.getId().apply(this);
-        }
-        outASingleListIds(node);
-    }
-
-    public void inAMultipleListIds(AMultipleListIds node)
-    {
-        defaultIn(node);
-    }
-
-    public void outAMultipleListIds(AMultipleListIds node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseAMultipleListIds(AMultipleListIds node)
-    {
-        inAMultipleListIds(node);
-        if(node.getIds() != null)
-        {
-            node.getIds().apply(this);
-        }
-        if(node.getPipe() != null)
-        {
-            node.getPipe().apply(this);
-        }
-        if(node.getId() != null)
-        {
-            node.getId().apply(this);
-        }
-        outAMultipleListIds(node);
     }
 }

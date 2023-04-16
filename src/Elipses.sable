@@ -130,11 +130,11 @@ Productions
 
   decl_func {->decl_func} =  
     [entry]:T.kw_entry? 
-    [lp1]:T.l_paren   [return_type]:type T.identifier 
+    [lp1]:T.l_paren   [return_type]:type [id]:T.identifier 
       [lp2]:T.l_paren [pars]:params [rp2]:T.r_paren T.colon 
       [lp3]:T.l_paren [body]:exp    [rp3]:T.r_paren 
     [rp1]:T.r_paren
-        {-> New decl_func(return_type, [pars.param], body.exp) }
+        {-> New decl_func(entry,return_type,id, [pars.param], body.exp) }
   ;
 
   type {->type}  =  
@@ -288,11 +288,13 @@ Productions
 
 Abstract Syntax Tree
   program = decl_func*;
-  
+ 
   decl_func =  
-    type
-    param*
-    exp
+    kw_entry?
+    type          // return type
+    T.identifier  // Id of the function
+    param*        // List of Parameters
+    exp           // Body of the Function
   ;
 
   param   =  
@@ -345,11 +347,4 @@ Abstract Syntax Tree
 
   decl_const = 
     type T.identifier exp 
-  ;
-
-
-  list_ids  =  
-    /*Ɛ*/ 
-    | {single} [id]:T.identifier
-    | {multiple} [id]:T.identifier pipe [ids]:list_ids
   ;

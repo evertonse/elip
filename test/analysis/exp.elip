@@ -1,7 +1,4 @@
 
 entrada (inteiro main():
-( (
-    (const inteiro x)(
-    se (verdadeiro) entao falso senao -123,312312 ou 3)
- )
+    (((const real x (123))se (verdadeiro) entao falso senao -123,312312 ou 3 + 2 * 4 ))
 )

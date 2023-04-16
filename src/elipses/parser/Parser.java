@@ -646,22 +646,25 @@ public class Parser
         PDeclFunc pdeclfuncNode1;
         {
             // Block
-        PType ptypeNode2;
-        LinkedList<Object> listNode4 = new LinkedList<Object>();
-        PExp pexpNode5;
-        ptypeNode2 = (PType)nodeArrayList2.get(0);
+        @SuppressWarnings("unused") Object nullNode2 = null;
+        PType ptypeNode3;
+        TIdentifier tidentifierNode4;
+        LinkedList<Object> listNode6 = new LinkedList<Object>();
+        PExp pexpNode7;
+        ptypeNode3 = (PType)nodeArrayList2.get(0);
+        tidentifierNode4 = (TIdentifier)nodeArrayList3.get(0);
         {
             // Block
-        LinkedList<Object> listNode3 = new LinkedList<Object>();
-        listNode3 = (LinkedList)nodeArrayList5.get(0);
-	if(listNode3 != null)
+        LinkedList<Object> listNode5 = new LinkedList<Object>();
+        listNode5 = (LinkedList)nodeArrayList5.get(0);
+	if(listNode5 != null)
 	{
-	  listNode4.addAll(listNode3);
+	  listNode6.addAll(listNode5);
 	}
         }
-        pexpNode5 = (PExp)nodeArrayList9.get(0);
+        pexpNode7 = (PExp)nodeArrayList9.get(0);
 
-        pdeclfuncNode1 = new ADeclFunc(ptypeNode2, listNode4, pexpNode5);
+        pdeclfuncNode1 = new ADeclFunc(null, ptypeNode3, tidentifierNode4, listNode6, pexpNode7);
         }
 	nodeList.add(pdeclfuncNode1);
         return nodeList;
@@ -689,22 +692,26 @@ public class Parser
         PDeclFunc pdeclfuncNode1;
         {
             // Block
-        PType ptypeNode2;
-        LinkedList<Object> listNode4 = new LinkedList<Object>();
-        PExp pexpNode5;
-        ptypeNode2 = (PType)nodeArrayList3.get(0);
+        TKwEntry tkwentryNode2;
+        PType ptypeNode3;
+        TIdentifier tidentifierNode4;
+        LinkedList<Object> listNode6 = new LinkedList<Object>();
+        PExp pexpNode7;
+        tkwentryNode2 = (TKwEntry)nodeArrayList1.get(0);
+        ptypeNode3 = (PType)nodeArrayList3.get(0);
+        tidentifierNode4 = (TIdentifier)nodeArrayList4.get(0);
         {
             // Block
-        LinkedList<Object> listNode3 = new LinkedList<Object>();
-        listNode3 = (LinkedList)nodeArrayList6.get(0);
-	if(listNode3 != null)
+        LinkedList<Object> listNode5 = new LinkedList<Object>();
+        listNode5 = (LinkedList)nodeArrayList6.get(0);
+	if(listNode5 != null)
 	{
-	  listNode4.addAll(listNode3);
+	  listNode6.addAll(listNode5);
 	}
         }
-        pexpNode5 = (PExp)nodeArrayList10.get(0);
+        pexpNode7 = (PExp)nodeArrayList10.get(0);
 
-        pdeclfuncNode1 = new ADeclFunc(ptypeNode2, listNode4, pexpNode5);
+        pdeclfuncNode1 = new ADeclFunc(tkwentryNode2, ptypeNode3, tidentifierNode4, listNode6, pexpNode7);
         }
 	nodeList.add(pdeclfuncNode1);
         return nodeList;
