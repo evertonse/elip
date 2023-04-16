@@ -85,10 +85,14 @@ class Debug {
     Lexer lexer = new Lexer(new PushbackReader(new FileReader(file), 1024));
     Parser p = new Parser(lexer);
 
-    Boolean use_gui = true;
+    Boolean use_gui = false;
+    Boolean gerenate_c = true;
     Switch adapter;
 
-    if (use_gui) {
+    if (gerenate_c) {
+        adapter = new CCode();
+    }
+    else if (use_gui) {
       // on gui
       adapter = new ASTDisplay(file);
     } else {

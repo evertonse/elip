@@ -1,0 +1,263 @@
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * This file is part of MiniBasic.                                 *
+ * See the file "MiniBasic-LICENSE" for Copyright information and  *
+ * the terms and conditions for copying, distribution and          *
+ * modification of MiniBasic.                                      *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+package elipses;
+
+
+import elipses.analysis.*;
+import elipses.node.*;
+
+import java.util.*;
+import java.io.*;
+
+public class Interpreter extends DepthFirstAdapter
+{
+    // Hastable to associate integer and boolean values with expression and condition nodes
+    Hashtable values    = new Hashtable(); 
+
+    // Routines to avoid typecasts
+    void setIntValue(Node node, int value) { values.put(node, new Integer(value)); }
+    int getIntValue(Node node) { return ((Integer) values.get(node)).intValue(); }
+    void setBoolValue(Node node, boolean value) { values.put(node, new Boolean(value)); }
+    boolean getBoolValue(Node node) { return ((Boolean) values.get(node)).booleanValue(); }
+
+    // Hastable to hold variables and their values
+    Hashtable variables = new Hashtable();
+
+    // Routines to avoid typecasts
+    void setVariable(String name, int value) { variables.put(name.toUpperCase(), new Integer(value)); }
+    int getVariable(String name)
+    { 
+        Integer variable = (Integer) variables.get(name.toUpperCase());
+
+        // If the variable has already been assigned a value 
+        if(variable != null)
+            return variable.intValue(); // return the stored value
+        else
+            return 0; // else return 0
+    }
+
+    // IF condition THEN statements [ELSE statements] ENDIF
+    public void caseAIfStatement(AIfStatement node)
+    {
+        node.getCondition().apply(this);  // Evaluate the condition
+
+        if(getBoolValue(node.getCondition()))
+        {
+            node.getStatements().apply(this); // Evaluate the <then> statements
+        }
+        else
+        {  
+            node.getOptionalElse().apply(this); // Evaluate the <else> statements
+        }
+    }
+
+    // FOR identifier := from_exp TO to_exp statements NEXT
+    public void caseAForStatement(AForStatement node)
+    {
+        node.getFromExp().apply(this); // Evaluate the <from> expression
+        node.getToExp().apply(this);   // Evaluate the <to> expression
+
+        int from = getIntValue(node.getFromExp());
+        int to   = getIntValue(node.getToExp());
+
+        for(int i = from; i <= to; i++)
+        {
+            setVariable(node.getIdentifier().getText(), i); // Assign the value to the loop variable
+
+            node.getStatements().apply(this); // Evaluate the statements
+        }
+    }
+
+    // INPUT and OUTPUT STREAMS
+    BufferedReader in = new BufferedReader(new InputStreamReader(System.in)); 
+    PrintStream    out = System.out;
+
+    void error(String message)
+    {
+        out.println();
+        out.println(message);
+        System.exit(0);
+    }
+
+    // READ identifier
+    public void caseAReadStatement(AReadStatement node)
+    {
+        System.out.print("? "); // Display a prompt
+        try
+        {
+            String s = in.readLine(); // Read one line of text
+            int value = Integer.parseInt(s); // parse the value
+            setVariable(node.getIdentifier().getText(), value); // Set the variable
+        }
+        catch(IOException e) // I/O ERROR!!!
+        {
+            error("I/O ERROR IN LINE " + node.getRead().getLine());
+        }
+        catch(NumberFormatException e) // NUMBER FORMAT ERROR!!!
+        {
+            error("NUMBER FORMAT ERROR IN LINE " + node.getRead().getLine());
+        }
+    }
+
+    // PRINT expression
+    public void caseAPrintExpStatement(APrintExpStatement node)
+    {
+        node.getExpression().apply(this); // Evaluate the expression
+
+        out.print(getIntValue(node.getExpression())); // print it
+    }
+    // PRINT string
+    public void caseAPrintStrStatement(APrintStrStatement node)
+    {
+        String s = node.getString().getText(); // get the string text
+        out.print(s.substring(1, s.length() - 1)); // Don't print the ""
+    }
+    // PRINTLN
+    public void caseAPrintlnStatement(APrintlnStatement node)
+    {
+        out.println(); // print a new line
+    }
+
+    // identifier := expression
+    public void caseAAssignmentStatement(AAssignmentStatement node)
+    {
+        node.getExpression().apply(this); // Evaluate the expression
+        
+        setVariable( // Assign variable
+            node.getIdentifier().getText(),
+            getIntValue(node.getExpression())); 
+    }
+
+    static final int LT = 0;
+    static final int GT = 1;
+    static final int EQ = 2;
+
+    boolean evalCondition(Node left, Node right, int operator)
+    {
+        left.apply(this);  // Evaluate the left expression
+        right.apply(this); // Evaluate the right expression
+
+        switch(operator)
+        {
+        case LT: return getIntValue(left) < getIntValue(right);
+        case GT: return getIntValue(left) > getIntValue(right);
+        case EQ: return getIntValue(left) == getIntValue(right);
+        default: throw new RuntimeException("Internal Error");
+        }
+    }
+
+    // left < right
+    public void caseALessThanCondition(ALessThanCondition node)
+    { 
+        setBoolValue(node, evalCondition(node.getLeft(), node.getRight(), LT));
+    }
+    // left > right
+    public void caseAGreaterThanCondition(AGreaterThanCondition node)
+    { 
+        setBoolValue(node, evalCondition(node.getLeft(), node.getRight(), GT));
+    }
+    // left = right
+    public void caseAEqualCondition(AEqualCondition node)
+    { 
+        setBoolValue(node, evalCondition(node.getLeft(), node.getRight(), EQ));
+    }
+
+    static final int PLUS  = 0;
+    static final int MINUS = 1;
+    static final int MULT  = 2;
+    static final int DIV   = 3;
+    static final int MOD   = 4;
+
+    int evalExpression(Node left, Node right, int operator)
+    {
+        left.apply(this);  // Evaluate the left expression
+        right.apply(this); // Evaluate the right expression
+
+        switch(operator)
+        {
+        case PLUS:  return getIntValue(left) + getIntValue(right);
+        case MINUS: return getIntValue(left) - getIntValue(right);
+        case MULT:  return getIntValue(left) * getIntValue(right);
+        case DIV:   return getIntValue(left) / getIntValue(right);
+        case MOD:   return getIntValue(left) % getIntValue(right);
+        default: throw new RuntimeException("Internal Error");
+        }
+    }
+
+    // value
+    public void caseAValueExpression(AValueExpression node)
+    {
+        node.getValue().apply(this); // Evaluate the expression
+
+        setIntValue(node, getIntValue(node.getValue()));
+    }
+    // left + right
+    public void caseAPlusExpression(APlusExpression node)
+    {
+        setIntValue(node, evalExpression(node.getLeft(), node.getRight(), PLUS));
+    }
+    // left - right
+    public void caseAMinusExpression(AMinusExpression node)
+    {
+        setIntValue(node, evalExpression(node.getLeft(), node.getRight(), MINUS));
+    }
+    // left * right
+    public void caseAMultExpression(AMultExpression node)
+    {
+        setIntValue(node, evalExpression(node.getLeft(), node.getRight(), MULT));
+    }
+    // left / right
+    public void caseADivExpression(ADivExpression node)
+    {
+        try
+        {
+            setIntValue(node, evalExpression(node.getLeft(), node.getRight(), DIV));
+        }
+        catch(ArithmeticException e) // DIVIDE BY ZERO ERROR
+        {
+            error("DIVIDE BY ZERO ERROR IN LINE " + node.getDiv().getLine());
+        }
+    }
+    // left MOD right
+    public void caseAModExpression(AModExpression node)
+    {
+        try
+        {
+            setIntValue(node, evalExpression(node.getLeft(), node.getRight(), MOD));
+        }
+        catch(ArithmeticException e) // MODULUS ZERO ERROR
+        {
+            error("MODULUS ZERO ERROR IN LINE " + node.getMod().getLine());
+        }
+    }
+
+    public void caseAConstantValue(AConstantValue node)
+    {
+        try
+        {
+            int value = Integer.parseInt(node.getNumber().getText()); // parse the value
+            setIntValue(node, value);
+        }
+        catch(NumberFormatException e) // NUMBER FORMAT ERROR!!!
+        {
+            error("NUMBER FORMAT ERROR IN LINE " + node.getNumber().getLine());
+        }
+    }
+
+    public void caseAIdentifierValue(AIdentifierValue node)
+    {
+        setIntValue(node, getVariable(node.getIdentifier().getText()));
+    }
+
+    public void caseAExpressionValue(AExpressionValue node)
+    {
+        node.getExpression().apply(this); // Evaluate the expression
+
+        setIntValue(node, getIntValue(node.getExpression()));
+    }
+}

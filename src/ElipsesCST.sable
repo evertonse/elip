@@ -1,0 +1,268 @@
+Package elipses;
+
+Helpers
+  digit     = ['0' .. '9'];
+  bin_digit = ('0' | '1');
+
+  letter    = [['a' .. 'z'] + ['A' .. 'Z']];
+  nondigit	=	[ '_' + letter ];
+
+  any = [0x0 .. 0xfffff];
+  ascii_char = [32 .. 127] ;
+
+  // empty
+  cr = 13 ; // carriage return
+  lf = 10 ; // line feed
+  tab = 9 ; // tab char
+  space = ' ';
+  nl = '\n';
+  eol = lf | cr | cr lf;
+  not_eol = [any - [cr + lf]];
+  not_minus = [any - '-'];
+  not_minus_not_r_curly = [not_minus - '}'];
+
+  hashtag = '#';
+
+  // Brackets
+  comma   = ',';
+  l_curly = '{';
+  r_curly = '}';  
+  l_paren = '(';
+  r_paren = ')';
+  l_brack = '[';
+  r_brack = ']';
+
+  l_curly_double_minus = '{--';
+  r_curly_double_minus = '--}';
+  
+  // Comments
+  comment_line  = '#' not_eol* eol;
+  comment_line_eof  = '#' not_eol* eol?;
+  comment_block = l_curly_double_minus  not_minus* '-'+ (not_minus_not_r_curly not_minus*  '-'+)* '-}';  
+ 
+
+
+//+-------------------------------------------------------------+
+//| Tokens (Regex) 
+//+-------------------------------------------------------------+
+ 
+Tokens
+/* These are token definitions. It is allowed to use helper regular *
+ * expressions in the body of a token definition.                   *
+ * On a given input, the longest valid definition is chosen, In     *
+ * case of a match, the definition that appears first is chosen.    *
+ * Example: on input -> 's' <- "char" will have precedence on       *
+ * "string", because it appears first.                              */
+ 
+  // empty 
+  blank	=	( cr | lf | tab | space ) +;
+  comment = (comment_line | comment_block | comment_line_eof);
+
+
+/* keywords */
+  // types 
+  kw_const = 'const';
+  kw_integer = 'inteiro';
+  kw_real = 'real';
+  kw_bool =  'booleano';
+
+  // type values
+  kw_true  =  'verdadeiro';
+  kw_false =  'falso';
+
+  // reserved
+  kw_entry = 'entrada';
+  kw_if   = 'se';
+  kw_then = 'entao';
+  kw_else = 'senao';
+
+  // Bool operators
+  kw_and  = 'e';
+  kw_not  = 'nao';
+  kw_or   = 'ou';
+
+  kw_lambda = 'lambda';
+  
+/* punctuators */
+  plus    = '+';
+  minus   = '-';
+  mult    =	'*';
+  div     = '/';
+  mod     = '%';
+  l_paren = '(';
+  r_paren = ')';
+  l_brack = '[';
+  r_brack = ']';
+  pipe = '|';
+  colon = ':';
+
+  eq	= '=';
+  lt	= '<';
+  gt	= '>';
+
+
+
+  // digits are not allowed in identifier
+  // neither can have accents, weird chars and can't be no keyword
+	identifier	=	nondigit+;
+  
+
+  // arithmetic
+  number_int  = digit+;
+  number_frac =  digit+ ',' digit+;
+  number_bin  = '0b' bin_digit+; 
+
+Ignored Tokens
+
+  comment,
+  blank;
+
+
+//+-------------------------------------------------------------+
+//|  Concrete Syntax Tree
+//+-------------------------------------------------------------+
+
+Productions
+
+  program = decl_func*;
+
+
+  decl_func =  
+    T.kw_entry? 
+    [lp1]:T.l_paren type T.identifier 
+      [lp2]:T.l_paren params [rp2]:T.r_paren T.colon 
+      [lp3]:T.l_paren exp    [rp3]:T.r_paren 
+    [rp1]:T.r_paren
+  ;
+
+  type  =  
+    {int} T.kw_integer 
+    | {bool} T.kw_bool 
+    | {real} T.kw_real
+  ;
+
+  params  =  
+    /*Ɛ*/ 
+    | {single} param 
+    | {multiple} param T.pipe params
+  ;
+
+  param   =  
+    {type} type T.identifier 
+    | {signature} signature
+  ;
+
+  signature =  
+    type T.identifier T.l_paren signature_params T.r_paren
+  ;
+
+  signature_params  = 
+    /*Ɛ*/ 
+    | {single} signature_param 
+    | {multiple} signature_param T.pipe signature_params
+  ;
+
+  signature_param = 
+    {type} type 
+    | {signature} signature
+  ;
+
+  // @note smaller number means more priority, note that 'mult' is on priority exp1 whereas 'plus' in on exp2
+  // which means add has less priority in evaluation, so 'mult' appear closer to the leafs of the AST
+  exp  = 
+    exp_or 
+  ;
+
+  
+  exp_or =
+    exp_and
+    | {or} [left]:exp_or T.kw_or [right]:exp_and 
+  ;
+
+  exp_and = 
+    exp_equality
+    | {and} [left]:exp_and T.kw_and [right]:exp_equality
+  ;
+
+  exp_equality = 
+    exp_relational
+    | {eq} [left]:exp_equality T.eq [right]:exp_relational
+  ;
+
+  exp_relational  = 
+    exp_additive
+    | {lt} [left]:exp_relational T.lt [right]:exp_additive
+    | {gt} [left]:exp_relational T.gt [right]:exp_additive
+  ;
+
+  exp_additive  =
+    exp_multiplicative  
+    | {plus}  [left]:exp_additive T.plus [right]:exp_multiplicative
+    | {minus} [left]:exp_additive T.minus [right]:exp_multiplicative
+  ;
+
+  exp_multiplicative = 
+    exp_unary
+    | {mult}[left]:exp_multiplicative T.mult [right]:exp_unary
+    | {div} [left]:exp_multiplicative T.div  [right]:exp_unary
+    | {mod} [left]:exp_multiplicative T.mod  [right]:exp_unary
+  ;
+
+  exp_unary  = 
+    exp_ternary
+    | {negative} T.minus exp_unary  
+    | {not} T.kw_not [right]:exp_unary
+  ;
+
+  exp_ternary = 
+    exp_atomic
+    | {if} T.kw_if T.l_paren [cond]:exp T.r_paren T.kw_then [truthy]:exp T.kw_else [falsy]:exp_unary
+  ;
+
+  exp_atomic = 
+    {id}       T.identifier
+    | {bin}    T.number_bin 
+    | {frac}   T.number_frac 
+    | {int}    T.number_int 
+    | {true}   T.kw_true 
+    | {false}  T.kw_false
+    | {block}  block_exp
+    | {call}   func_call  
+    | {lambda} func_lambda
+  ;
+
+
+  block_exp = 
+    {block} T.l_paren decl_const* exp T.r_paren
+  ;
+  
+  decl_const = 
+    [lp1]:T.l_paren T.kw_const type T.identifier 
+      [lp2]:T.l_paren exp [rp2]:T.r_paren 
+    [rp1]:T.r_paren
+  ;
+
+  func_call = 
+    identifier l_paren list_exp r_paren
+  ;
+
+  func_lambda = 
+    [lp1]:l_paren kw_lambda 
+      [lp2]:l_paren list_ids  [rp2]:r_paren colon 
+      [lp3]:l_paren exp       [rp3]:r_paren 
+      l_brack       list_exp  r_brack 
+    [rp1]:r_paren
+  ;
+
+  list_ids  =  
+    /*Ɛ*/ 
+    | {single} identifier 
+    | {multiple} identifier pipe list_ids
+  ;
+
+ list_exp  =  
+    /*Ɛ*/ 
+    | {single} exp 
+    | {multiple} exp pipe list_exp
+  ;
+

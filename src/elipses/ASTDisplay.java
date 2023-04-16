@@ -19,6 +19,7 @@ public class ASTDisplay extends DepthFirstAdapter {
  
   public ASTDisplay(String title) { this.title = title;}
   public ASTDisplay() {}
+
   public void outStart(Start node) {
     JFrame frame = new JFrame(this.title);
     JTree tree = new JTree((DefaultMutableTreeNode) parents.pop());

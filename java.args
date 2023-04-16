@@ -4,6 +4,7 @@ src\elipses\analysis\DepthFirstAdapter.java
 src\elipses\analysis\ReversedDepthFirstAdapter.java 
 src\elipses\ASTDisplay.java 
 src\elipses\ASTPrinter.java 
+src\elipses\CCode.java 
 src\elipses\lexer\IPushbackReader.java 
 src\elipses\lexer\Lexer.java 
 src\elipses\lexer\LexerException.java 
