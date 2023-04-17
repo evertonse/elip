@@ -106,7 +106,7 @@ if flags['shellbin']:
     shell_bin.write_text(
           '@echo off\n'
         + 'setlocal\n'
-        +f'java -classpath "{classpath.absolute()}" {mainclass} %*\n'
+        +f'java -classpath %~dp0 {mainclass} %*\n'
         + 'endlocal'
     )
 
