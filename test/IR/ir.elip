@@ -1,0 +1,12 @@
+entrada( real main():(
+    1*2*5*6
+))
+
+( real another(inteiro a | inteiro b):(
+    se (verdadeiro) entao
+        1+2*5*6 
+    senao se (verdadeiro) entao
+       falso 
+    senao
+        (lambda(x|y):( 2 ou x + y * 5 )[1|2]) 
+))

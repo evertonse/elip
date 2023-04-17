@@ -1,4 +1,4 @@
-package elipses;
+package elipses.walker;
 
 import elipses.analysis.*;
 import elipses.lexer.*;

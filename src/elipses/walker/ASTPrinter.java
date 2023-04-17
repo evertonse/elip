@@ -1,4 +1,4 @@
-package elipses;
+package elipses.walker;
 
 import elipses.analysis.*;
 import elipses.node.*;
@@ -7,6 +7,8 @@ public class ASTPrinter extends DepthFirstAdapter {
 
   int indent;
 
+    public ASTPrinter() {}
+    public ASTPrinter(String file) {System.out.println("AST for file: " + file + '\n');}
   public void printIndent() {
     for (int i = 0; i < indent; i++) {
       System.out.print("\u0009");

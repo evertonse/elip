@@ -115,7 +115,7 @@ if flags['shellbin']:
     shell_bin.write_text(
         '#!/usr/bin/env bash\n'
         +'script_path="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"\n'
-        +f'exec java -classpath "{classpath.absolute()}" {mainclass} "$@"\n'
+        +f'exec java -classpath ${{script_path}} {mainclass} "$@"\n'
     )
     dos2unix(shell_bin)
 

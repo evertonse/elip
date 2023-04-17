@@ -1,5 +1,6 @@
 {
   "files.associations": {
     "stdio.h": "c"
-  }
+},
+"java.format.settings.url": "eclipse-formatter.xml"
 }

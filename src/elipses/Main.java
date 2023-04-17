@@ -3,38 +3,76 @@ package elipses;
 import elipses.lexer.*;
 import elipses.node.*;
 import elipses.parser.*;
+import elipses.walker.ASTDisplay;
+import elipses.walker.ASTPrinter;
+import elipses.walker.CCodeGenerator;
+
 import java.io.*;
 import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 public class Main {
 
-  static String[] test_files = new String[] {
-    //"test/etapa1/code1.elip",
-    //"test/etapa1/code2.elip",
-    //"test/etapa1/code3.elip",
-    //"test/comment.elip",
-    "test/analysis/exp.elip",
-    //"test/analysis/exp.c",
-    //"test/analysis/test.calc",
-  };
+  static List<String> input_files = new ArrayList<String>();
+  static Switch adapter = null;
+  static boolean use_gui = false;
+  static boolean ast = false;
 
   public static void main(String[] args) {
-    try {
-        for (String arg: args) {
-            System.out.println(arg);
-            System.out.println(args.length);
-        }
-        if (args.length >= 1){
-            for (int i = 0; i < args.length; i++) {
-                String elip_file = args[i];
-                System.out.println("INFO: about to compile elipses file: " + elip_file); 
-                Debug.debug(elip_file);
-            }
-            return;
+    String usage = "Usage: elip [--gui] [--ast] [--help] [-c] <input_file>"; 
+    try {   
+        if (args.length == 0) {
+            System.out.println(usage);
+            System.exit(1);
         }
 
-        for (String elip_file : test_files) {
-            Debug.debug(elip_file);
+        for (String arg: args) {
+            switch (arg) {
+                case "--help":
+                    System.out.println(usage);
+                    System.exit(1);
+                    break;
+                case "--gui":
+                    use_gui = true;
+                    System.out.println(
+                         "INFO: elip is gonna show you a gui representation of the AST generated from .elip files"
+                    );
+                    break;  
+
+                case "--ast":
+                    ast = true;
+                    System.out.println(
+                         "INFO: elip is gonna show you a representation of the AST generated from .elip files on the console"
+                    );
+                    break;  
+                case "--c":
+                    System.out.println(
+                         "INFO: elip is gonna generate C code as Target Language." 
+                        +" but this is already the default bevahiour :P (for now)"
+                    );
+                    break;
+                    
+                default :
+                    input_files.add(arg);
+                    System.out.println("INFO: input file" + arg);
+                    break;
+                
+            }
         }
+
+        for (String elip_file : input_files) {
+            adapter = new CCodeGenerator(elip_file);
+            Debug.debug(elip_file, adapter);
+            if (use_gui) {
+                adapter = new ASTDisplay(elip_file);
+                Debug.debug(elip_file, adapter);
+            }
+            if (ast) {
+                adapter = new ASTPrinter(elip_file);
+                Debug.debug(elip_file, adapter);
+            }
+        }
+
     } catch (Exception e) {
         e.printStackTrace();
         System.out.println(e.getClass() + e.getMessage());
@@ -43,89 +81,76 @@ public class Main {
 }
 
 class Utils {
+    public static String 
+    pretify(Token token) {
+        String token_pos = new String(
+            "[" + token.getLine() + "," + token.getPos() + "]:"
+        );
 
-  public static String pretify(Token token) {
-    String token_pos = new String(
-      "[" + token.getLine() + "," + token.getPos() + "]:"
-    );
-    String token_tuple = new String(
-      "<" +
-      token.getClass().getSimpleName() +
-      ", " +
-      token.toString().stripTrailing() +
-      ">"
-    );
+        String token_tuple = new String(
+            "<" +
+            token.getClass().getSimpleName() +
+            ", " +
+            token.toString().stripTrailing() +
+            ">"
+        );
 
-    return String.format("Token %10s %s", token_pos, token_tuple);
-  }
+        return String.format("Token %10s %s", token_pos, token_tuple);
+    }
 }
 
 class Debug {
 
-  public static void lexer(String file) throws LexerException, IOException {
-    try {
-      Lexer lexer = new Lexer(new PushbackReader(new FileReader(file), 1024));
-      Token token;
-      while (!((token = lexer.next()) instanceof EOF)) {
-        //if (token instanceof TBlank) continue;
-        System.out.println(Utils.pretify(token));
-      }
-    } catch (Exception e) {
-      System.out.println(
-        "\nError: " +
-        e.getClass() +
-        e.getMessage() +
-        "\nWon't continue with next tokens ...\n"
-      );
-      //Debug.lexer(lexer);
-    }
-  }
+    public static void
+    debug(String file, Switch adapter) {
+        System.out.println("\nChecking Lexer for file: " + file);
+        if (file.endsWith("*")) {
+            File folder = new File(file.replace("*", ""));
+            File[] child_files = folder.listFiles();
 
-  public static void parser(String file) throws Exception {
-    Lexer lexer = new Lexer(new PushbackReader(new FileReader(file), 1024));
-    Parser p = new Parser(lexer);
-
-    Boolean use_gui = false;
-    Boolean gerenate_c = true;
-    Switch adapter;
-
-    if (gerenate_c) {
-        adapter = new CCode();
-    }
-    else if (use_gui) {
-      // on gui
-      adapter = new ASTDisplay(file);
-    } else {
-      // on console
-      adapter = new ASTPrinter();
-    }
-
-    Start tree = p.parse();
-    tree.apply(adapter);
-  }
-
-  public static void debug(String file) {
-    System.out.println("\nChecking Lexer for file: " + file);
-
-    if (file.endsWith("*")) {
-      File folder = new File(file.replace("*", ""));
-      File[] child_files = folder.listFiles();
-
-      for (File cf : child_files) {
-        if (cf.isFile()) {
-          Debug.debug(cf.getPath());
+            for (File cf : child_files) {
+                if (cf.isFile()) {
+                Debug.debug(cf.getPath(),adapter);
+                }
+            }
+            return;
         }
-      }
-      return;
+
+        try {
+            String f = file;
+            Debug.lexer(f);
+            Debug.parser(f, adapter);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e.getClass() + e.getMessage());
+        }
     }
 
-    try {
-      String f = file;
-      Debug.lexer(f);
-      Debug.parser(f);
-    } catch (Exception e) {
-      e.printStackTrace();
-      System.out.println(e.getClass() + e.getMessage());
+    public static void
+    lexer(String file) throws LexerException, IOException {
+        try {
+            Lexer lexer = new Lexer(new PushbackReader(new FileReader(file), 1024));
+            Token token;
+            while (!((token = lexer.next()) instanceof EOF)) {
+                //if (token instanceof TBlank) continue;
+                System.out.println(Utils.pretify(token));
+            }
+        } catch (Exception e) {
+            System.out.println(
+                "\nError: " +
+                e.getClass() +
+                e.getMessage() +
+                "\nWon't continue with next tokens ...\n"
+            );
+        }
     }
-  }
+
+    public static void 
+    parser(String file, Switch adapter) throws Exception {
+        Lexer lexer = new Lexer(new PushbackReader(new FileReader(file), 1024));
+        Parser p = new Parser(lexer);
+        Start tree = p.parse();
+        tree.apply(adapter);
+    }
+
 }
