@@ -1,5 +1,5 @@
-entrada( real main(inteiro a ):(
-    1*2*5*6
+entrada( inteiro main(inteiro a ):(
+   exemploAltaOrdem(2| modificarDigito) 
 ))
 
 ( real another(inteiro a | inteiro b):(
@@ -10,3 +10,46 @@ entrada( real main(inteiro a ):(
     senao
         (lambda(x|y):( 2 ou x + y * 5 )[1|2]) 
 ))
+
+
+( inteiro fibonacci   (inteiro x) :
+    (
+        se (x < 1 ou x = 1) entao x senao (fibonacci(x-1) + fibonacci(x-2))
+    )
+)
+
+
+(
+    inteiro exemploAltaOrdem (inteiro digito | real multiplicarPorPi ( inteiro random() | real)):
+    (
+        #bloco_exp
+        (
+            #(const real pi (3,1415))
+            multiplicarPorPi(number| 3,1415)
+        )
+    )
+)
+
+(inteiro number():(2))
+
+(
+    real modificarDigito (inteiro random() | real pi):
+    (
+        random()* pi
+    )
+)
+{--
+( inteiro shifted_fib(inteiro x) :
+    (
+        se (x < 1 ou x = 1) entao x senao (
+            fibonacci(x-1) + fibonacci(x-2)
+                + 
+            (
+                (const inteiro x (2))
+                (const inteiro y (3))
+                x + y
+            )
+        )
+
+    )
+)--}

@@ -31,17 +31,17 @@ public class ElipLogger {
     }
 
     public static void error(String message) {
-        logger.println( RED + prefix + RESET + "ERROR:" + message );
+        logger.println( RED + prefix + RESET + "error: " + message );
         logger.flush();
     }
 
     public static void warn(String message) {
-        logger.println( YELLOW + prefix + RESET + "ERROR:" + message );
+        logger.println( YELLOW + prefix + RESET + "warn: " + message );
         logger.flush();
     }
 
     public static void success(String message) {
-        logger.println(GREEN + prefix + RESET + "SUCCESS: " + message + RESET);
+        logger.println(GREEN + prefix + RESET + "success: " + message + RESET);
         logger.flush();
     }
 
@@ -50,8 +50,12 @@ public class ElipLogger {
         logger.flush();
     }
 
-    public static void erro_at(String filename, int line, String err_msg) {
+    public static void error(String filename, int line, String err_msg) {
         error(String.format("%s:%d: %s", filename, line, err_msg));
+    }
+
+    public static void error(String filename, int line,int column, String err_msg) {
+        error(String.format("%s:[%d:%d]: %s", filename, line,column, err_msg));
     }
  
 }

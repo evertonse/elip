@@ -99,7 +99,9 @@ public class Main {
         for (String elip_file : input_files) {
             adapter = new CCodeGenerator(elip_file);
             Debug.debug(elip_file, adapter, print_tokens);
-            CCompiler.check(elip_file + ".c"); 
+            boolean ok = CCompiler.check(elip_file + ".c"); 
+            if (ok)
+                CCompiler.compile(elip_file + ".c");
             if (use_gui) {
                 adapter = new ASTDisplay(elip_file);
                 Debug.debug(elip_file, adapter,print_tokens);
@@ -113,6 +115,7 @@ public class Main {
     } catch (Exception e) {
         e.printStackTrace();
         ElipLogger.info(e.getClass() + e.getMessage());
+        System.exit(1);
     }
   }
 }
@@ -156,10 +159,11 @@ class Debug {
         try {
             String f = file;
             Debug.lexer(f, print_tokens);
+            ElipLogger.success(" Tokenized with success.");
             Debug.parser(f, adapter);
         } catch (Exception e) {
-            e.printStackTrace();
             ElipLogger.info(e.getClass() + e.getMessage());
+            System.exit(1);
         }
     }
 
@@ -170,25 +174,26 @@ class Debug {
             Token token;
             while (!((token = lexer.next()) instanceof EOF)) {
                 if (print_tokens) {
-                    //if (token instanceof TBlank) continue;
                     ElipLogger.info(Utils.pretify(token));
                 }
             }
         } catch (Exception e) {
             ElipLogger.info(
                 "\nError: " +
-                e.getClass() +
                 e.getMessage() +
                 "\nWon't continue with next tokens ...\n"
             );
+            System.exit(1);
         }
     }
 
     public static void 
     parser(String file, Switch adapter) throws Exception {
-        Lexer lexer = new Lexer(new PushbackReader(new FileReader(file), 1024));
+        Lexer lexer = new Lexer(new PushbackReader(new FileReader(file), 4024));
         Parser p = new Parser(lexer);
         Start tree = p.parse();
+        ElipLogger.success(" Parsed into AST with success.");
+
         tree.apply(adapter);
     }
 
@@ -198,7 +203,7 @@ class Debug {
 
 class CCompiler {
 
-    public static void check(String filepath) {
+    public static boolean check(String filepath) {
         try {
             String source = filepath;
             String[] command = {"gcc", "-fsyntax-only", source};
@@ -227,12 +232,15 @@ class CCompiler {
             if (code == 0) {
                 ElipLogger.info("C code " + source + " is compilable");
                 // Call the method to compile the C code from Java
-                compile(source);
+                return true;
             } else {
-                ElipLogger.info("C code is not compilable. Exit code: " + code);
+                ElipLogger.error("C code is not compilable. Exit code: " + code);
+                return false;
             }
         } catch (Exception e) {
             e.printStackTrace();
+            System.exit(1);
+            return false;
         }
     }
 
@@ -270,7 +278,9 @@ class CCompiler {
                 ElipLogger.error("Failed to compile C code. Exit code: " + code);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(ElipLogger.stack.peek());
+            ElipLogger.stack.peek().flush();
+            System.exit(1);
         }
     }
 }

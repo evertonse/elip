@@ -46,11 +46,16 @@ public class CCodeGenerator extends DepthFirstAdapter {
     StringBuffer header;
     StringBuffer body;
     StringBuffer footer;
+    String filename;
 
     int lambda_count = 0;
     private Map<String,String> C;
 
     public CCodeGenerator(String out_filename) {
+        filename = new File(out_filename)
+            .getName()
+            .replaceAll("[^a-zA-Z_]", "_");
+
         code = new CCodeData(out_filename);
         header = code.header;
         body = code.body;
@@ -75,12 +80,12 @@ public class CCodeGenerator extends DepthFirstAdapter {
         buffer.append("\n    arg = argv["+ argv_index +"];\n");
         buffer.append("\n    arg_len = strlen(arg);\n");
 
-        if (type == "int") {
+        if (type .equals("int")) {
             buffer.append(
                 "    " + type+ " " + id + " = " + "atoi(arg);\n"
             ); 
         }
-        else if (type == "float") {
+        else if (type .equals("float")) {
             // Replace ',' with '.'
             buffer.append(
                   "    for (int i = 0; arg[i]; i++) {\n"
@@ -94,20 +99,21 @@ public class CCodeGenerator extends DepthFirstAdapter {
                 "    " + type+ " " + id + " = " + "atof(arg);\n"
             );
         }
-        else if (type == "bool") {
+        else if (type .equals("bool")) {
             buffer.append(
                   "    for (int i = 0; arg[i]; i++) {\n"
-                + "        arg[i] = tolower(arg[i]);"
-                + "    \n}"
+                + "        arg[i] = tolower(arg[i]);\n"
+                + "    }\n"
             );
-            buffer.append(type+ " " + id + ";");
+            buffer.append(
+                "\n    " + type+ " " + id + ";\n");
             buffer.append( 
                   "    if (strcmp(arg, \"falso\") == 0) {\n"
                 + "        "+ id + " = false;\n"
                 + "    } else if (strcmp(arg, \"verdadeiro\") == 0) {\n"
                 + "        " + id + "= true;\n"
                 + "    } else {\n"
-                + "        printf(\"Invalid boolean value: %s\n\", arg);\n"
+                + "        printf(\"Invalid boolean value: %s\\n\", arg);\n"
                 + "        return 1;\n"
                 + "    }\n"
             );
@@ -131,6 +137,8 @@ public class CCodeGenerator extends DepthFirstAdapter {
               "#include <string.h>\n"
             + "#include <stdio.h>\n"  
             + "#include <stdlib.h>\n"  
+            + "#include <locale.h>\n"  
+            + "#include <ctype.h>\n"  
 
             +"// Define an enum for boolean values\n"
             +"typedef enum {\n"
@@ -141,6 +149,7 @@ public class CCodeGenerator extends DepthFirstAdapter {
 
         footer.append(
             "int main(int argc, char *argv[]) {\n"
+          + "    setlocale(LC_ALL, \"en_US.UTF-8\");"
           + "    char *arg;\n"
           + "    int arg_len;\n"
         );
@@ -159,8 +168,9 @@ public class CCodeGenerator extends DepthFirstAdapter {
     }
 
     
-    @Override
-    public void caseAOrExp(AOrExp node) {
+    // >>  [Exp]
+    @Override public void 
+    caseAOrExp(AOrExp node) {
         // TODO Auto-generated method stub
         inAOrExp(node);
         body.append("("); 
@@ -323,29 +333,30 @@ public class CCodeGenerator extends DepthFirstAdapter {
         {
             node.getRight().apply(this);
         }
+        body.append("("); 
         outAModExp(node);
     }
 
     @Override
     public void caseANegativeExp(ANegativeExp node) {
             inANegativeExp(node);
-            body.append("-("); 
+            body.append("(-("); 
             if(node.getExp() != null)
             {
                 node.getExp().apply(this);
             }
-            body.append(")"); 
+            body.append("))"); 
             outANegativeExp(node);
     }
     @Override
     public void caseANotExp(ANotExp node) {
         inANotExp(node);
-        body.append("!(");
+        body.append("(!(");
         if(node.getExp() != null)
         {
             node.getExp().apply(this);
         }
-        body.append(")");
+        body.append("))");
         outANotExp(node);
     }
     @Override
@@ -384,7 +395,6 @@ public class CCodeGenerator extends DepthFirstAdapter {
 
     @Override
     public void caseTKwBool(TKwBool node) {
-        super.caseTKwBool(node);
         body.append(C.get(node.getText().strip()));
     }
 
@@ -447,13 +457,16 @@ public class CCodeGenerator extends DepthFirstAdapter {
         body.append("(");
         {
             List<PExp> copy = new ArrayList<PExp>(node.getArgs());
-            int i = 0;
-            for(PExp e : copy)
-            {
+            int len = copy.size();
+
+            for (int i = 0; i <  len; i++) {
+                PExp e = copy.get(i);
+                
                 e.apply(this);
-                i++;
-                if (i != copy.size()-1)
-                    body.append(',');
+
+                if (i != len -1) {
+                    body.append(", ");
+                }
             }
         }
         body.append(")");
@@ -463,7 +476,7 @@ public class CCodeGenerator extends DepthFirstAdapter {
     @Override
     public void caseALambdaExp(ALambdaExp node) {
         flags.lambda_count++;
-        String lambda = "lambda_" + flags.lambda_count;
+        String lambda = "lambda_" + filename + "_" +  flags.lambda_count;
         header.append(
             "\n#define " 
             + lambda
@@ -517,6 +530,10 @@ public class CCodeGenerator extends DepthFirstAdapter {
         outALambdaExp(node);
     }
 
+    // << [Exp]
+    
+
+    // >> [Param]
     @Override
     public void caseATypeParam(ATypeParam node)
     {
@@ -531,6 +548,61 @@ public class CCodeGenerator extends DepthFirstAdapter {
             node.getIdentifier().apply(this);
         }
     }
+
+    @Override
+    public void caseASignatureParam(ASignatureParam node)
+    {
+        inASignatureParam(node);
+        if(node.getSignature() != null)
+        {
+            node.getSignature().apply(this);
+        }
+        outASignatureParam(node);
+    }
+
+    @Override
+    public void caseASignature(ASignature node) {
+        inASignature(node);
+
+        body.append(" ");
+        if(node.getType() != null)
+        {
+            node.getType().apply(this);
+        }
+
+        body.append(" (*");
+        if(node.getIdentifier() != null)
+        {
+            node.getIdentifier().apply(this);
+        }
+        body.append(")(");
+        {
+            List<PSignatureParam> copy = new ArrayList<PSignatureParam>(node.getSignatureParam());
+            int len = copy.size();
+            for (int i = 0; i < len; i++) {
+                PSignatureParam e = copy.get(i);
+                e.apply(this);
+                if (i != len -1)
+                    body.append(", ");
+            }
+        }
+        body.append(")");
+        outASignature(node);
+    }
+
+    @Override
+    public void caseATypeSignatureParam(ATypeSignatureParam node) {
+        // TODO Auto-generated method stub
+        super.caseATypeSignatureParam(node);
+    }
+
+    @Override
+    public void caseASignatureSignatureParam(ASignatureSignatureParam node) {
+        // TODO Auto-generated method stub
+        super.caseASignatureSignatureParam(node);
+    }
+
+    // << [Param]
 
     @Override
     public void caseTKwEntry(TKwEntry node) {
@@ -549,7 +621,8 @@ public class CCodeGenerator extends DepthFirstAdapter {
         boolean is_entry = node.getKwEntry() != null;
         String id =  sanitize(node.getIdentifier());
         PType return_type = node.getType();
-        
+        String type = this.C.get(return_type.toString().strip());
+
         if (is_entry) {
         
             List<PParam> copy = new ArrayList<PParam>(node.getParam());
@@ -574,11 +647,23 @@ public class CCodeGenerator extends DepthFirstAdapter {
                 PParam e = copy.get(i); 
                 setUpArgv(e, footer, i+1);
             }
+            if (type.equals("float")){
+                footer.append(
+                  "\n    printf(\"%f\\n\",((float)" + id + "("
+                );   
+            }
+            else if (type.equals("int")){
+                footer.append(
+                  "\n    printf(\"%d\\n\",((int)" + id + "("
+                );   
+            }
+            else if (type.equalsIgnoreCase("bool")) {
 
-            footer.append(
-                ""
-              + "\n  " + id + "("
-            );   
+                footer.append(
+                  "\n    printf(\"%s\\n\",("+ id + "("
+                );   
+            }
+
             for (int i = 0; i < len; i++) {
                 PParam e = copy.get(i); 
                 String[] data = e.toString().split(" ");
@@ -587,19 +672,56 @@ public class CCodeGenerator extends DepthFirstAdapter {
                 if (i != len -1)
                     footer.append(" ,");
             }
-            footer.append(
-              ");\n"
-              + "}\n"
-            );        
+            if (type .equals("bool")){
+                footer.append(
+                  "))"
+                  +" ? \"verdadeiro\" : \"falso\" );\n"
+                  + "}\n"
+                );        
+            }
+            else {
+                footer.append(
+                  ")));\n"
+                  + "}\n"
+                );        
+            }
         }
 
-        String type = this.C.get(return_type.toString().strip());
         if (type == null) {
             String method_name = new Object(){}.getClass().getEnclosingMethod().getName();
             throw new Error("Type when converted from " + return_type.toString() + " resulted in  null in "+ method_name);
         }
 
+        // Define the function on Header to use functions outta order   
+        header.append('\n');
+        StringBuffer temp = body;
+        body = header;
+        if(node.getType() != null)
+        {
+            node.getType().apply(this);
+        }
+        header.append(" ");
+        if(node.getIdentifier() != null)
+        {
+            node.getIdentifier().apply(this);
+        }
 
+        header.append("(");
+        {
+            List<PParam> copy = new ArrayList<PParam>(node.getParam());
+            int len = copy.size();
+            for (int i = 0; i < len; i++) {
+                PParam e = copy.get(i); 
+                e.apply(this);
+                if (i != len -1)
+                    header.append(", ");
+            }
+        }
+
+        body = temp;
+        header.append(");");
+
+        // Define the function on code body
         if(node.getKwEntry() != null)
         {
             node.getKwEntry().apply(this);
@@ -646,7 +768,7 @@ public class CCodeGenerator extends DepthFirstAdapter {
     
     public void defaultIn(Node node) {
        //code.append(node.toString());
-        System.out.println(node.toString());
+        //System.out.println(node.toString());
     }
 
     /*
