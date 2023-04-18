@@ -4,6 +4,7 @@ import elipses.analysis.*;
 import elipses.node.*;
 import java.util.*;
 import java.io.*;
+import elipses.util.ElipLogger;
 import java.util.HashMap;
 
 class CCodeData {
@@ -49,8 +50,6 @@ public class CCodeGenerator extends DepthFirstAdapter {
     int lambda_count = 0;
     private Map<String,String> C;
 
-    private Stack parents = new Stack();
- 
     public CCodeGenerator(String out_filename) {
         code = new CCodeData(out_filename);
         header = code.header;

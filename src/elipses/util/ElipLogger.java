@@ -1,6 +1,5 @@
 package elipses.util;
 import java.io.PrintWriter;
-import java.time.Year;
 import java.util.Stack;
 
 public class ElipLogger {
@@ -42,7 +41,12 @@ public class ElipLogger {
     }
 
     public static void success(String message) {
-        logger.println(GREEN + prefix+ "SUCCESS: " + message + RESET);
+        logger.println(GREEN + prefix + RESET + "SUCCESS: " + message + RESET);
+        logger.flush();
+    }
+
+    public static void println(String message) {
+        logger.println(message);
         logger.flush();
     }
 

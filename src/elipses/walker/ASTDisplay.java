@@ -14,7 +14,7 @@ import javax.swing.tree.*;
 
 public class ASTDisplay extends DepthFirstAdapter {
 
-  private Stack parents = new Stack();
+  private Stack<Object> parents = new Stack<Object>();
   private String title = "AST Displayer";
  
   public ASTDisplay(String title) { this.title = title;}

@@ -1,4 +1,4 @@
-entrada( real main():(
+entrada( real main(inteiro a ):(
     1*2*5*6
 ))
 
