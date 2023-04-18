@@ -6,7 +6,10 @@ import elipses.parser.*;
 import elipses.walker.ASTDisplay;
 import elipses.walker.ASTPrinter;
 import elipses.walker.CCodeGenerator;
+import elipses.util.ElipLogger;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.*;
 import java.util.Arrays;
 import java.util.ArrayList;
@@ -22,31 +25,31 @@ public class Main {
     String usage = "Usage: elip [--gui] [--ast] [--help] [-c] <input_file>"; 
     try {   
         if (args.length == 0) {
-            System.out.println(usage);
+            ElipLogger.info(usage);
             System.exit(1);
         }
 
         for (String arg: args) {
             switch (arg) {
                 case "--help":
-                    System.out.println(usage);
+                    ElipLogger.info(usage);
                     System.exit(1);
                     break;
                 case "--gui":
                     use_gui = true;
-                    System.out.println(
+                    ElipLogger.info(
                          "INFO: elip is gonna show you a gui representation of the AST generated from .elip files"
                     );
                     break;  
 
                 case "--ast":
                     ast = true;
-                    System.out.println(
+                    ElipLogger.info(
                          "INFO: elip is gonna show you a representation of the AST generated from .elip files on the console"
                     );
                     break;  
                 case "--c":
-                    System.out.println(
+                    ElipLogger.info(
                          "INFO: elip is gonna generate C code as Target Language." 
                         +" but this is already the default bevahiour :P (for now)"
                     );
@@ -54,7 +57,7 @@ public class Main {
                     
                 default :
                     input_files.add(arg);
-                    System.out.println("INFO: input file" + arg);
+                    ElipLogger.info("INFO: input file" + arg);
                     break;
                 
             }
@@ -63,6 +66,7 @@ public class Main {
         for (String elip_file : input_files) {
             adapter = new CCodeGenerator(elip_file);
             Debug.debug(elip_file, adapter);
+            CCompiler.check(elip_file + ".c"); 
             if (use_gui) {
                 adapter = new ASTDisplay(elip_file);
                 Debug.debug(elip_file, adapter);
@@ -75,7 +79,7 @@ public class Main {
 
     } catch (Exception e) {
         e.printStackTrace();
-        System.out.println(e.getClass() + e.getMessage());
+        ElipLogger.info(e.getClass() + e.getMessage());
     }
   }
 }
@@ -103,14 +107,14 @@ class Debug {
 
     public static void
     debug(String file, Switch adapter) {
-        System.out.println("\nChecking Lexer for file: " + file);
+        ElipLogger.info("\nChecking Lexer for file: " + file);
         if (file.endsWith("*")) {
             File folder = new File(file.replace("*", ""));
             File[] child_files = folder.listFiles();
 
             for (File cf : child_files) {
                 if (cf.isFile()) {
-                Debug.debug(cf.getPath(),adapter);
+                    Debug.debug(cf.getPath(),adapter);
                 }
             }
             return;
@@ -122,7 +126,7 @@ class Debug {
             Debug.parser(f, adapter);
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println(e.getClass() + e.getMessage());
+            ElipLogger.info(e.getClass() + e.getMessage());
         }
     }
 
@@ -133,10 +137,10 @@ class Debug {
             Token token;
             while (!((token = lexer.next()) instanceof EOF)) {
                 //if (token instanceof TBlank) continue;
-                System.out.println(Utils.pretify(token));
+                ElipLogger.info(Utils.pretify(token));
             }
         } catch (Exception e) {
-            System.out.println(
+            ElipLogger.info(
                 "\nError: " +
                 e.getClass() +
                 e.getMessage() +
@@ -153,4 +157,82 @@ class Debug {
         tree.apply(adapter);
     }
 
+}
+
+
+
+class CCompiler {
+
+    public static void check(String filepath) {
+        try {
+            String[] command = {"gcc", "-fsyntax-only", filepath};
+
+            // Create a ProcessBuilder object with the command
+            ProcessBuilder proc = new ProcessBuilder(command);
+
+            // Redirect the standard error stream to the standard output stream
+            proc.redirectErrorStream(true);
+
+            // Start the process
+            Process process = proc.start();
+
+            // Get the input stream of the process to read the output
+            BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+            // Read and print the output of the command
+            String line;
+            while ((line = input.readLine()) != null) {
+                ElipLogger.info(line);
+            }
+
+            // Wait for the process to complete
+            int code = process.waitFor();
+
+            if (code == 0) {
+                ElipLogger.info("C code is compilable");
+                // Call the method to compile the C code from Java
+                compile(filepath);
+            } else {
+                ElipLogger.info("C code is not compilable. Exit code: " + code);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void compile(String filepath) {
+        try {
+            // Command to compile the C code
+            String[] command = {"gcc",  filepath, "-o", filepath.replace(".c", "").replace(".elip", "")};
+
+            // Create a ProcessBuilder object with the command
+            ProcessBuilder proc = new ProcessBuilder(command);
+
+            // Redirect the standard error stream to the standard output stream
+            proc.redirectErrorStream(true);
+
+            // Start the process
+            Process process = proc.start();
+
+            // Get the input stream of the process to read the output
+            BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+            // Read and print the output of the command
+            String line;
+            while ((line = input.readLine()) != null) {
+                ElipLogger.info(line);
+            }
+
+            // Wait for the compilation process to complete
+            int code = process.waitFor();
+
+            if (code == 0) {
+                ElipLogger.info("C code compiled successfully");
+            } else {
+                ElipLogger.info("Failed to compile C code. Exit code: " + code);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
