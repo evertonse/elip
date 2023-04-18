@@ -27,7 +27,7 @@ public class Main {
     String format = "   %-25s %s%n";
     String help = 
           "Usage: elip [--gui] [--ast] [--help] [-c] <input_files>\n\n"
-          +"If no flags are specified, elip will create C code and compile it using gcc for all <input_files>,\n"
+          +"If no flags are specified, elip will create C code and compile it using gcc for all <input_files>, "
           +"if gcc is not on the path, an error will occur.\n"
         + String.format(format, 
             "--gui", "JavaFX gui representation of the AST for <input_files>.")
