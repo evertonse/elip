@@ -40,6 +40,7 @@ entrada( inteiro main(inteiro a ):(
 )
 {--
 ( inteiro shifted_fib(inteiro x) :
+    
     (
         se (x < 1 ou x = 1) entao x senao (
             fibonacci(x-1) + fibonacci(x-2)

@@ -21,8 +21,16 @@ public class Main {
   static boolean use_gui = false;
   static boolean print_ast = false;
   static boolean print_tokens = false;
+  static boolean DEBUG = 
+    //true
+    false
+    ;
 
   public static void main(String[] args) {
+    if(DEBUG) {
+        input_files.add("test/IR/block.elip");
+    }
+
     String usage = "Usage: elip [--gui] [--ast] [--help] [--c] [--info] <input_file>"; 
     String format = "   %-25s %s%n";
     String help = 
@@ -49,7 +57,7 @@ public class Main {
 
 
     try {   
-        if (args.length == 0) {
+        if (args.length == 0 && ! DEBUG) {
             ElipLogger.info(usage);
             System.exit(1);
         }
@@ -97,11 +105,6 @@ public class Main {
         }
 
         for (String elip_file : input_files) {
-            adapter = new CCodeGenerator(elip_file);
-            Debug.debug(elip_file, adapter, print_tokens);
-            boolean ok = CCompiler.check(elip_file + ".c"); 
-            if (ok)
-                CCompiler.compile(elip_file + ".c");
             if (use_gui) {
                 adapter = new ASTDisplay(elip_file);
                 Debug.debug(elip_file, adapter,print_tokens);
@@ -110,6 +113,12 @@ public class Main {
                 adapter = new ASTPrinter(elip_file);
                 Debug.debug(elip_file, adapter,print_tokens);
             }
+            adapter = new CCodeGenerator(elip_file);
+            Debug.debug(elip_file, adapter, print_tokens);
+            boolean ok = CCompiler.check(elip_file + ".c"); 
+
+            if (ok)
+                CCompiler.compile(elip_file + ".c");
         }
 
     } catch (Exception e) {
@@ -162,6 +171,8 @@ class Debug {
             ElipLogger.success(" Tokenized with success.");
             Debug.parser(f, adapter);
         } catch (Exception e) {
+
+            e.printStackTrace();
             ElipLogger.info(e.getClass() + e.getMessage());
             System.exit(1);
         }

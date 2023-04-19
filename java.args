@@ -93,6 +93,7 @@ src\elipses\parser\ParserException.java
 src\elipses\parser\State.java 
 src\elipses\parser\TokenIndex.java 
 src\elipses\util\ElipLogger.java 
+src\elipses\util\IndentedStringBuilder.java 
 src\elipses\walker\ASTDisplay.java 
 src\elipses\walker\ASTPrinter.java 
 src\elipses\walker\CCodeGenerator.java 

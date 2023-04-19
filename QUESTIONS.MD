@@ -1,0 +1,1 @@
+- Does it make sense to expect a function signature as entry point of the .elip program?

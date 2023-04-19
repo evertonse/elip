@@ -2,18 +2,20 @@
 package elipses.walker;
 import elipses.analysis.*;
 import elipses.node.*;
+import elipses.util.*;
 import java.util.*;
 import java.io.*;
 import elipses.util.ElipLogger;
 import java.util.HashMap;
 
+
 class CCodeData {
 
     private PrintWriter out;
 
-    public StringBuffer header = new StringBuffer();
-    public StringBuffer body   = new StringBuffer();
-    public StringBuffer footer = new StringBuffer();
+    public IndentedStringBuilder header   = new IndentedStringBuilder();
+    public IndentedStringBuilder body     = new IndentedStringBuilder();
+    public IndentedStringBuilder footer   = new IndentedStringBuilder();
     public String filepath;
 
     public CCodeData(String filename) {
@@ -35,23 +37,33 @@ class CCodeData {
     }
 }
 
+
+
 class SemanticFlags {
     public boolean entry_found = false;
     public int lambda_count = 0;
+    public int block_count = 0;
 };
+
 
 public class CCodeGenerator extends DepthFirstAdapter {
     CCodeData code;
     SemanticFlags flags;
-    StringBuffer header;
-    StringBuffer body;
-    StringBuffer footer;
+    IndentedStringBuilder header;
+    IndentedStringBuilder body;
+    IndentedStringBuilder footer;
     String filename;
+    String curr_block;
+    IndentedStringBuilder block = new IndentedStringBuilder();
+
+    Stack<IndentedStringBuilder > blocks = new Stack<>();
+    Stack<String> block_names = new Stack<>();
 
     int lambda_count = 0;
     private Map<String,String> C;
 
     public CCodeGenerator(String out_filename) {
+        blocks.push(new IndentedStringBuilder());
         filename = new File(out_filename)
             .getName()
             .replaceAll("[^a-zA-Z_]", "_");
@@ -72,7 +84,7 @@ public class CCodeGenerator extends DepthFirstAdapter {
             
     }
 
-    public void setUpArgv(PParam e, StringBuffer buffer, int argv_index) {
+    public void setUpArgv(PParam e, IndentedStringBuilder buffer, int argv_index) {
         
         String[] data = e.toString().split(" ");
         String type = C.get(data[0].strip()) ;
@@ -147,12 +159,6 @@ public class CCodeGenerator extends DepthFirstAdapter {
             +"} bool;\n\n"
         );
 
-        footer.append(
-            "int main(int argc, char *argv[]) {\n"
-          + "    setlocale(LC_ALL, \"en_US.UTF-8\");"
-          + "    char *arg;\n"
-          + "    int arg_len;\n"
-        );
     }
 
     public String getHeader(){
@@ -171,7 +177,6 @@ public class CCodeGenerator extends DepthFirstAdapter {
     // >>  [Exp]
     @Override public void 
     caseAOrExp(AOrExp node) {
-        // TODO Auto-generated method stub
         inAOrExp(node);
         body.append("("); 
         if(node.getLeft() != null)
@@ -440,11 +445,101 @@ public class CCodeGenerator extends DepthFirstAdapter {
     {
         body.append("false");
     }
-
+    
     @Override
     public void caseABlockExp(ABlockExp node) {
-        // TODO Auto-generated method stub
-        super.caseABlockExp(node);
+        inABlockExp(node);
+        String new_block_name = new String("block_" + flags.block_count++);
+        IndentedStringBuilder block = blocks.peek();
+        
+        block.append("float " + new_block_name + ";\n");
+        block.append( "{\n")
+                 .pushIndent();
+        
+        IndentedStringBuilder temp = body;
+        body = block;
+        {
+            List<PDeclConst> copy = new ArrayList<PDeclConst>(node.getDeclConst());
+            int len = copy.size();
+            for (int i = 0; i < len; i++) {
+                PDeclConst e = copy.get(i);
+                e.apply(this);
+            }
+        }
+
+
+        PExp exp = node.getExp();
+        if(exp != null) {
+            block_names.push(new_block_name);
+            if (exp  instanceof ABlockExp) {
+                exp.apply(this);
+                String block_name = this.block_names.pop() ;
+                block.append( new_block_name  + " = " +  block_name);   
+            }
+            else {
+                block.append( new_block_name + " = "  );   
+                exp.apply(this);
+            }
+
+            block.append(";\n")
+                .popIndent()
+                .append("}\n");
+        }
+
+        body = temp;
+        
+        
+        outABlockExp(node);
+    }
+
+    public void caseADeclConst(ADeclConst node) {
+        inADeclConst(node);
+        PExp exp = node.getExp();
+        
+        if (exp instanceof ABlockExp) {
+            if (exp != null) {
+                body.append("\n/*delcconst next is ABlockExp ")
+                    .append(" */\n");
+                exp.apply(this);
+
+                body.append("const ");
+                if(node.getType() != null)
+                {
+                    node.getType().apply(this);
+                }
+                body.append(" ");
+                if(node.getIdentifier() != null)
+                {
+                    node.getIdentifier().apply(this);
+                }
+                body.append(" = ")
+                    .append(block_names.peek() + ";\n");
+            }
+
+            outADeclConst(node);
+            return;
+        }
+
+
+        body.append("const ");
+        if(node.getType() != null)
+        {
+            node.getType().apply(this);
+        }
+        body.append(" ");
+        if(node.getIdentifier() != null)
+        {
+            node.getIdentifier().apply(this);
+        }
+
+        body.append(" = ");
+        if(node.getExp() != null)
+        {
+            node.getExp().apply(this);
+        }
+        body.append("  ;\n");
+
+        outADeclConst(node);
     }
 
     @Override
@@ -502,7 +597,7 @@ public class CCodeGenerator extends DepthFirstAdapter {
 
         if(node.getBody() != null)
         {
-            StringBuffer temp = body;
+            IndentedStringBuilder temp = body;
             body = header;
             node.getBody().apply(this);
             body = temp;
@@ -615,8 +710,7 @@ public class CCodeGenerator extends DepthFirstAdapter {
     }
     
     @Override
-    public void caseADeclFunc(ADeclFunc node)
-    {
+    public void caseADeclFunc(ADeclFunc node) {
 
         boolean is_entry = node.getKwEntry() != null;
         String id =  sanitize(node.getIdentifier());
@@ -625,6 +719,12 @@ public class CCodeGenerator extends DepthFirstAdapter {
 
         if (is_entry) {
         
+            footer.append(
+                "int main(int argc, char *argv[]) {\n"
+            + "    setlocale(LC_ALL, \"fr_FR.UTF-8\");\n"
+            + "    char *arg;\n"
+            + "    int arg_len;\n"
+            );
             List<PParam> copy = new ArrayList<PParam>(node.getParam());
             int argc = copy.size();
             footer.append(
@@ -693,8 +793,9 @@ public class CCodeGenerator extends DepthFirstAdapter {
         }
 
         // Define the function on Header to use functions outta order   
-        header.append('\n');
-        StringBuffer temp = body;
+
+        header.append("\n");
+        IndentedStringBuilder temp = body;
         body = header;
         if(node.getType() != null)
         {
@@ -718,15 +819,15 @@ public class CCodeGenerator extends DepthFirstAdapter {
             }
         }
 
-        body = temp;
         header.append(");");
-
+        
+        body = temp;
         // Define the function on code body
         if(node.getKwEntry() != null)
         {
             node.getKwEntry().apply(this);
         }
-        body.append('\n');
+        body.append("\n");
         if(node.getType() != null)
         {
             node.getType().apply(this);
@@ -737,7 +838,7 @@ public class CCodeGenerator extends DepthFirstAdapter {
             node.getIdentifier().apply(this);
         }
 
-        body.append(" ( ");
+        body.append("(");
         {
             List<PParam> copy = new ArrayList<PParam>(node.getParam());
             int len = copy.size();
@@ -751,17 +852,56 @@ public class CCodeGenerator extends DepthFirstAdapter {
 
         body.append(") ");
 
+        body.pushIndent();
         body.append(
-            " {\n"
-            +"  return ("
+              " {\n"
         );
 
-        if(node.getExp() != null)
-        {
-            node.getExp().apply(this);
-        }
 
-        body.append(");\n}");
+        temp = body;
+        IndentedStringBuilder function_return_exp = new IndentedStringBuilder();
+        block_names.push("place_holder");
+        block_names.push("place_holder");
+        block_names.push("place_holder");
+        block_names.push("place_holder");
+        block_names.push("place_holder");
+        block_names.push("place_holder");
+        block_names.push("return_data");
+
+        body = function_return_exp;
+        PExp exp = node.getExp();
+        if(exp != null)
+        {
+            exp.apply(this);
+        }
+        body = temp;
+        Stack<IndentedStringBuilder> reversed = new Stack<>();        
+        while(!blocks.empty()) {
+            IndentedStringBuilder sb = blocks.pop();
+            reversed.push(sb);
+        }
+        while(!reversed.empty()) {
+
+            IndentedStringBuilder sb = reversed.pop();
+            body.append(sb.toString());
+        } 
+
+
+        body.append(block.toString());
+        block.clear();
+
+        body.append( 
+              type+ " return_data;\n"
+            + "return_data = "
+        );
+
+        if (exp instanceof ABlockExp)
+            body.append(block_names.pop());
+        body.append(function_return_exp  + ";\n");
+        body.append("return (return_data);");
+
+        body.popIndent();
+        body.append("\n}");
         outADeclFunc(node);
     }
 

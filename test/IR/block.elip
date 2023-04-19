@@ -1,0 +1,14 @@
+
+entrada (inteiro shifted_fib(inteiro x) : (
+    (
+        (const inteiro a (2))
+        (const inteiro b (
+            (
+                (const inteiro ba (2))
+                (const inteiro bb (2))
+                ba ou bb
+            )
+        ))
+        a + b
+    )
+))
