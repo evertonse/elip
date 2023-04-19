@@ -13,22 +13,33 @@ typedef enum {
 int elip_shifted_fib( int elip_x);
 
 int elip_shifted_fib( int elip_x)  {
+    
     float block_0;
     {
         const int elip_a = 2  ;
         
-        /*delcconst next is ABlockExp  */
         float block_1;
         {
-            const int elip_ba = 2  ;
-            const int elip_bb = 2  ;
-            block_1 = (elip_ba||elip_bb);
+            const int elip_q = 2  ;
+            const int elip_r = 3  ;
+            block_1 = (elip_q + elip_r);
         }
-        const int elip_b = block_1;
-        block_0 = (elip_a + elip_b);
+        /*escrevo no block*/        const int elip_b = /*escrevo no body*/block_1  ;
+        
+        float block_2;
+        {
+            
+            float block_3;
+            {
+                const int elip_ba = 2  ;
+                const int elip_bb = 2  ;
+                block_3 = (elip_ba||elip_bb);
+            }
+            /*escrevo no block*/            block_2 = /*escrevo no body*/block_3;
+        }
+        /*escrevo no block*/        block_0 = (elip_a + /*escrevo no body*/block_2);
     }
-    int return_data;
-    return_data = block_0;
+    /*escrevo no block*/    int return_data = (/*escrevo no body*/block_0 + (123*(true ? 2:3)));
     return (return_data);
 }
 int main(int argc, char *argv[]) {

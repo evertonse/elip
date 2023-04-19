@@ -27,8 +27,7 @@ public class IndentedStringBuilder {
     public IndentedStringBuilder(IndentedStringBuilder other) {
         sb = new StringBuilder();
         this.indentation_level = other.indentation_level;
-        popIndent();
-        pushIndent();
+        this.indentation = other.indentation.substring(0);
     }
     
     public IndentedStringBuilder pushIndent() {
@@ -66,6 +65,24 @@ public class IndentedStringBuilder {
         }
         return this;
     }
+
+    public IndentedStringBuilder insertAtPreviousLine(String str) {
+        int index = sb.lastIndexOf("\n");
+        if (index == -1) {
+            sb.append(this.indentation +str);
+        } else {
+            sb.insert(index + 1, this.indentation + str);
+        }
+        return this;
+    }
+
+    public IndentedStringBuilder insert(int index, String str) {
+        if (index < 0) {
+            index = 0;
+        }
+        sb.insert(index, this.indentation + str);
+        return this;
+    }
     
     public IndentedStringBuilder appendln(String str) {
         this.append(str);
@@ -80,5 +97,8 @@ public class IndentedStringBuilder {
     
     public String toString() {
         return sb.toString();
+    }
+    public int size() {
+        return sb.length();
     }
 }

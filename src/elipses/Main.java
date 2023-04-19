@@ -22,8 +22,8 @@ public class Main {
   static boolean print_ast = false;
   static boolean print_tokens = false;
   static boolean DEBUG = 
-    //true
-    false
+    true
+    //false
     ;
 
   public static void main(String[] args) {

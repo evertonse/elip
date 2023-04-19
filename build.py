@@ -12,9 +12,9 @@ sablegrammar = "src/Elipses.sable"
 autorun = True 
 runargs = [
     #"--gui",
-    #r"test/IR/ir.elip",
-    r"test/IR/block.elip",
-    #r"test/analysis/exp.elip",
+    r"test/IR/ir.elip",
+    #"test/IR/block.elip",
+    #"test/analysis/exp.elip",
     #r"test/etapa1/code2.elip",
     #r"test/etapa1/code3.elip"
 ]

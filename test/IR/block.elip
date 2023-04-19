@@ -4,11 +4,17 @@ entrada (inteiro shifted_fib(inteiro x) : (
         (const inteiro a (2))
         (const inteiro b (
             (
+                (const inteiro q (2))
+                (const inteiro r (3))
+                q+r
+            )
+        ))
+        a + (
+            (
                 (const inteiro ba (2))
                 (const inteiro bb (2))
                 ba ou bb
             )
-        ))
-        a + b
-    )
+        )
+    ) + 123 * se (verdadeiro) entao 2 senao 3
 ))

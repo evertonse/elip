@@ -6,7 +6,8 @@ import elipses.util.*;
 import java.util.*;
 import java.io.*;
 import elipses.util.ElipLogger;
-import java.util.HashMap;
+
+import javax.print.attribute.standard.RequestingUserName;
 
 
 class CCodeData {
@@ -54,10 +55,10 @@ public class CCodeGenerator extends DepthFirstAdapter {
     IndentedStringBuilder footer;
     String filename;
     String curr_block;
-    IndentedStringBuilder block = new IndentedStringBuilder();
+
+    Stack<String> block_return = new Stack<>();
 
     Stack<IndentedStringBuilder > blocks = new Stack<>();
-    Stack<String> block_names = new Stack<>();
 
     int lambda_count = 0;
     private Map<String,String> C;
@@ -449,12 +450,18 @@ public class CCodeGenerator extends DepthFirstAdapter {
     @Override
     public void caseABlockExp(ABlockExp node) {
         inABlockExp(node);
-        String new_block_name = new String("block_" + flags.block_count++);
-        IndentedStringBuilder block = blocks.peek();
-        
-        block.append("float " + new_block_name + ";\n");
-        block.append( "{\n")
-                 .pushIndent();
+        String block_name = new String("block_" + flags.block_count++);
+        block_return.push(block_name);
+
+        IndentedStringBuilder block = new IndentedStringBuilder(body); 
+
+        // We might use this strategy of remembering the return site
+        // instead of assuming its safe to write on previous line
+        int return_index = body.size();
+
+        block.append("\nfloat " + block_name + ";\n")
+            .append( "{\n")
+            .pushIndent();
         
         IndentedStringBuilder temp = body;
         body = block;
@@ -467,26 +474,23 @@ public class CCodeGenerator extends DepthFirstAdapter {
             }
         }
 
-
         PExp exp = node.getExp();
         if(exp != null) {
-            block_names.push(new_block_name);
-            if (exp  instanceof ABlockExp) {
-                exp.apply(this);
-                String block_name = this.block_names.pop() ;
-                block.append( new_block_name  + " = " +  block_name);   
-            }
-            else {
-                block.append( new_block_name + " = "  );   
-                exp.apply(this);
-            }
+            boolean is_block = exp  instanceof ABlockExp;
+
+            block.append( block_name + " = "  );   
+            exp.apply(this);
 
             block.append(";\n")
                 .popIndent()
                 .append("}\n");
         }
 
+        body.append( "/*escrevo no block*/" );
         body = temp;
+        body.append( "/*escrevo no body*/" );
+        body.insertAtPreviousLine(block.toString());
+        body.append(block_return.pop());
         
         
         outABlockExp(node);
@@ -496,9 +500,9 @@ public class CCodeGenerator extends DepthFirstAdapter {
         inADeclConst(node);
         PExp exp = node.getExp();
         
-        if (exp instanceof ABlockExp) {
+        if (false && exp instanceof ABlockExp) {
             if (exp != null) {
-                body.append("\n/*delcconst next is ABlockExp ")
+                body.append("\n/*delcconst next is AbodyExp ")
                     .append(" */\n");
                 exp.apply(this);
 
@@ -512,8 +516,7 @@ public class CCodeGenerator extends DepthFirstAdapter {
                 {
                     node.getIdentifier().apply(this);
                 }
-                body.append(" = ")
-                    .append(block_names.peek() + ";\n");
+                body.append(" = ");
             }
 
             outADeclConst(node);
@@ -857,18 +860,10 @@ public class CCodeGenerator extends DepthFirstAdapter {
               " {\n"
         );
 
+        body.append( 
+              type + " return_data = "
+        );
 
-        temp = body;
-        IndentedStringBuilder function_return_exp = new IndentedStringBuilder();
-        block_names.push("place_holder");
-        block_names.push("place_holder");
-        block_names.push("place_holder");
-        block_names.push("place_holder");
-        block_names.push("place_holder");
-        block_names.push("place_holder");
-        block_names.push("return_data");
-
-        body = function_return_exp;
         PExp exp = node.getExp();
         if(exp != null)
         {
@@ -885,20 +880,7 @@ public class CCodeGenerator extends DepthFirstAdapter {
             IndentedStringBuilder sb = reversed.pop();
             body.append(sb.toString());
         } 
-
-
-        body.append(block.toString());
-        block.clear();
-
-        body.append( 
-              type+ " return_data;\n"
-            + "return_data = "
-        );
-
-        if (exp instanceof ABlockExp)
-            body.append(block_names.pop());
-        body.append(function_return_exp  + ";\n");
-        body.append("return (return_data);");
+        body.append(";\nreturn (return_data);");
 
         body.popIndent();
         body.append("\n}");
