@@ -11,6 +11,13 @@ typedef enum {
 
 
 int elip_shifted_fib( int elip_x);
+int elip_other( int elip_x);
+
+float block_6;
+{
+    block_6 = elip_z;
+}
+/*escrevo no block*/#define lambda_block_elip_1(elip_x, elip_y, elip_z) (((/*escrevo no body*/block_6 + elip_x) + 3) )
 
 int elip_shifted_fib( int elip_x)  {
     
@@ -22,7 +29,7 @@ int elip_shifted_fib( int elip_x)  {
         {
             const int elip_q = 2  ;
             const int elip_r = 3  ;
-            block_1 = (elip_q + elip_r);
+            block_1 = elip_shifted_fib((elip_q + elip_r));
         }
         /*escrevo no block*/        const int elip_b = /*escrevo no body*/block_1  ;
         
@@ -39,7 +46,25 @@ int elip_shifted_fib( int elip_x)  {
         }
         /*escrevo no block*/        block_0 = (elip_a + /*escrevo no body*/block_2);
     }
-    /*escrevo no block*/    int return_data = (/*escrevo no body*/block_0 + (123*(true ? 2:3)));
+    
+    float block_4;
+    {
+        const int elip_ca = 2  ;
+        const int elip_cb = 2  ;
+        block_4 = (elip_ca%elip_cb);
+    }
+    
+    float block_5;
+    {
+        const int elip_ca = 2  ;
+        const int elip_cb = 2  ;
+        block_5 = (40*elip_cb);
+    }
+    /*escrevo no block*/    /*escrevo no block*/    /*escrevo no block*/    int return_data = (/*escrevo no body*/block_0 + (123*(true ? /*escrevo no body*/block_4:/*escrevo no body*/block_5)));
+    return (return_data);
+}
+int elip_other( int elip_x)  {
+    int return_data =  (lambda_block_elip_1(true,2,3)) ;
     return (return_data);
 }
 int main(int argc, char *argv[]) {

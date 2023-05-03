@@ -54,8 +54,8 @@ public class ElipLogger {
         error(String.format("%s:%d: %s", filename, line, err_msg));
     }
 
-    public static void error(String filename, int line,int column, String err_msg) {
-        error(String.format("%s:[%d:%d]: %s", filename, line,column, err_msg));
+    public static void error(String filename, int line, int column, String err_msg) {
+        error(String.format("%s[%d:%d]: %s", filename, line,column, err_msg));
     }
  
 }

@@ -12,7 +12,7 @@ typedef enum {
 
 int elip_main( int elip_a);
 float elip_another( int elip_a,  int elip_b);
-#define lambda_ir_elip_1(elip_x, elip_y) ((2||(elip_x + (elip_y*5))) )
+#define lambda_ir_elip_1(elip_x, elip_y) (((elip_fibonacci(3) + 2)||(elip_x + (elip_y*5))) )
 int elip_fibonacci( int elip_x);
 int elip_exemploAltaOrdem( int elip_digito,  float (*elip_multiplicarPorPi)( int (*elip_random)(), float));
 int elip_number();

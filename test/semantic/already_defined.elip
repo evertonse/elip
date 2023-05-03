@@ -1,0 +1,10 @@
+entrada ( inteiro already_defined_parameters(inteiro a | inteiro a) : 
+	(2)
+)
+
+(inteiro already_defined_const_declaration() : (
+      ( (const inteiro x (2)) (const real x(2,4)) x + y) 
+))
+
+
+

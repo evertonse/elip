@@ -2,13 +2,10 @@
 package elipses.walker;
 import elipses.analysis.*;
 import elipses.node.*;
+import elipses.semantic.SemanticFlags;
 import elipses.util.*;
 import java.util.*;
 import java.io.*;
-import elipses.util.ElipLogger;
-
-import javax.print.attribute.standard.RequestingUserName;
-
 
 class CCodeData {
 
@@ -39,12 +36,6 @@ class CCodeData {
 }
 
 
-
-class SemanticFlags {
-    public boolean entry_found = false;
-    public int lambda_count = 0;
-    public int block_count = 0;
-};
 
 
 public class CCodeGenerator extends DepthFirstAdapter {
@@ -339,7 +330,7 @@ public class CCodeGenerator extends DepthFirstAdapter {
         {
             node.getRight().apply(this);
         }
-        body.append("("); 
+        body.append(")"); 
         outAModExp(node);
     }
 
@@ -498,31 +489,6 @@ public class CCodeGenerator extends DepthFirstAdapter {
 
     public void caseADeclConst(ADeclConst node) {
         inADeclConst(node);
-        PExp exp = node.getExp();
-        
-        if (false && exp instanceof ABlockExp) {
-            if (exp != null) {
-                body.append("\n/*delcconst next is AbodyExp ")
-                    .append(" */\n");
-                exp.apply(this);
-
-                body.append("const ");
-                if(node.getType() != null)
-                {
-                    node.getType().apply(this);
-                }
-                body.append(" ");
-                if(node.getIdentifier() != null)
-                {
-                    node.getIdentifier().apply(this);
-                }
-                body.append(" = ");
-            }
-
-            outADeclConst(node);
-            return;
-        }
-
 
         body.append("const ");
         if(node.getType() != null)

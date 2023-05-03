@@ -6,7 +6,7 @@ entrada (inteiro shifted_fib(inteiro x) : (
             (
                 (const inteiro q (2))
                 (const inteiro r (3))
-                q+r
+                shifted_fib(q+r)
             )
         ))
         a + (
@@ -16,5 +16,19 @@ entrada (inteiro shifted_fib(inteiro x) : (
                 ba ou bb
             )
         )
-    ) + 123 * se (verdadeiro) entao 2 senao 3
+    ) + 123 * se (verdadeiro) entao (
+                (const inteiro ca (2))
+                (const inteiro cb (2))
+                ca % cb
+        ) senao 
+        (
+                (const inteiro ca (2))
+                (const inteiro cb (2))
+                40 * cb
+        )
+
 ))
+
+(inteiro other(inteiro x):
+    ((lambda(x|y|z):( (z) + x + 3 )[verdadeiro|2|3]))
+)

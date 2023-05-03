@@ -6,6 +6,7 @@ import elipses.parser.*;
 import elipses.walker.ASTDisplay;
 import elipses.walker.ASTPrinter;
 import elipses.walker.CCodeGenerator;
+import elipses.walker.SemanticAnalysis;
 import elipses.util.ElipLogger;
 
 import java.io.BufferedReader;
@@ -14,17 +15,23 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class Main {
 
   static List<String> input_files = new ArrayList<String>();
-  static Switch adapter = null;
-  static boolean use_gui = false;
-  static boolean print_ast = false;
-  static boolean print_tokens = false;
+  static Switch adapter  = null;
+
+  static boolean use_gui            = false;
+  static boolean print_ast          = false;
+  static boolean generate_exe       = false;
+  static boolean generate_c         = false;
+  static boolean print_tokens       = false;
+  static boolean semantic_analisys  = true;
+
   static boolean DEBUG = 
-    true
-    //false
-    ;
+    //true
+    false
+   ;
 
   public static void main(String[] args) {
     if(DEBUG) {
@@ -81,7 +88,15 @@ public class Main {
                          "INFO: elip is gonna show you a representation of the AST generated from .elip files on the console"
                     );
                     break;  
+                case "--exe":
+                    generate_c  = true;
+                    generate_exe = true;
+                    ElipLogger.info(
+                         "INFO: elip is gonna generate C code as Target Language." 
+                        +" but this is already the default bevahiour :P (for now)"
+                    );
                 case "--c":
+                    generate_c = true;
                     ElipLogger.info(
                          "INFO: elip is gonna generate C code as Target Language." 
                         +" but this is already the default bevahiour :P (for now)"
@@ -90,8 +105,7 @@ public class Main {
                 case "--token":
                 case "--tokens":
                     ElipLogger.info(
-                         "INFO: elip is gonna generate C code as Target Language." 
-                        +" but this is already the default bevahiour :P (for now)"
+                         "INFO: elip print tokens found"
                     );
                     print_tokens = true;
                     break;
@@ -113,12 +127,19 @@ public class Main {
                 adapter = new ASTPrinter(elip_file);
                 Debug.debug(elip_file, adapter,print_tokens);
             }
-            adapter = new CCodeGenerator(elip_file);
-            Debug.debug(elip_file, adapter, print_tokens);
-            boolean ok = CCompiler.check(elip_file + ".c"); 
-
-            if (ok)
+            if (semantic_analisys) {
+                adapter = new SemanticAnalysis(elip_file);
+                Debug.debug(elip_file, adapter, print_tokens);
+            }
+            boolean ok = false;
+            if (generate_c) {
+                adapter = new CCodeGenerator(elip_file);
+                Debug.debug(elip_file, adapter, print_tokens);
+                ok = CCompiler.check(elip_file + ".c"); 
+            }
+            if (ok && generate_exe){
                 CCompiler.compile(elip_file + ".c");
+            }
         }
 
     } catch (Exception e) {
