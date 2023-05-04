@@ -1,0 +1,10 @@
+ 
+(inteiro incorrect_bool_on_add() : (
+    verdadeiro + 2
+))
+
+(inteiro incorrect_bool_on_if() : (
+    se ((1 > 2) e verdadeiro *1) entao 2 senao 3
+))
+
+

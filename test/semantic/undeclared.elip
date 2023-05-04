@@ -1,0 +1,28 @@
+
+(inteiro existent_function() : (
+    2
+))
+
+entrada ( inteiro use_of_undeclared_func() : (
+    # No problem here
+	existent_function() 
+    # Problem here
+    + non_existent_function(2)
+))
+
+(inteiro use_of_undeclared_identifier_x(real b) : (
+    ( b % x)
+))
+
+(inteiro undeclared_decl_const_x_y() : (
+      ( 
+        (const inteiro z (
+            (
+                (const real w(2,4))
+                x + y
+            ) 
+        )) 
+        x
+      ) 
+))
+

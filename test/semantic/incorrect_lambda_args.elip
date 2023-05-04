@@ -1,0 +1,11 @@
+
+entrada (inteiro incorrect_lambda_args() : (
+    # Correct amount  of args
+    (lambda (x|y):(x+y)[1,2|2])
+    +
+    # incorrect amount of expected 2 got 1 
+    (lambda (x|y):(x+y)[1])
+    #+
+    # incorrect amount of expected 2 got 3 
+    #(lambda (x|y):(x*y)[1|2|3])
+))

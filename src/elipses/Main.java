@@ -174,18 +174,6 @@ class Debug {
     public static void
     debug(String file, Switch adapter, boolean print_tokens) {
         ElipLogger.info("Tokenizing file: " + file);
-        if (file.endsWith("*")) {
-            File folder = new File(file.replace("*", ""));
-            File[] child_files = folder.listFiles();
-
-            for (File cf : child_files) {
-                if (cf.isFile()) {
-                    Debug.debug(cf.getPath(),adapter, print_tokens);
-                }
-            }
-            return;
-        }
-
         try {
             String f = file;
             Debug.lexer(f, print_tokens);
@@ -209,24 +197,49 @@ class Debug {
                     ElipLogger.info(Utils.pretify(token));
                 }
             }
-        } catch (Exception e) {
-            ElipLogger.info(
-                "\nError: " +
+        }
+        catch (LexerException e) {
+            int line = e.getToken().getLine();
+            int pos = e.getToken().getPos();
+            ElipLogger.error(file, line,pos, e.getMessage());
+        } 
+        catch (Exception e) {
+            ElipLogger.error(
                 e.getMessage() +
-                "\nWon't continue with next tokens ...\n"
+                " Won't continue with next tokens ...\n"
             );
             System.exit(1);
         }
     }
 
     public static void 
-    parser(String file, Switch adapter) throws Exception {
-        Lexer lexer = new Lexer(new PushbackReader(new FileReader(file), 4024));
-        Parser p = new Parser(lexer);
-        Start tree = p.parse();
-        ElipLogger.success(" Parsed into AST with success.");
+    parser(String file, Switch adapter)  {
+        
+        try {
 
-        tree.apply(adapter);
+            Lexer lexer = new Lexer(new PushbackReader(new FileReader(file), 4024));
+            Parser p = new Parser(lexer);
+            Start tree = p.parse();
+            ElipLogger.success(" Parsed into AST with success.");
+    
+            tree.apply(adapter);
+        } catch (ParserException e) {
+            int line = e.getToken().getLine();
+            int pos = e.getToken().getPos();
+            ElipLogger.error(file, line,pos, e.getMessage());
+        }
+        catch (LexerException e) {
+            int line = e.getToken().getLine();
+            int pos = e.getToken().getPos();
+            ElipLogger.error(file, line,pos, e.getMessage());
+        } 
+        catch (Exception e) {
+            ElipLogger.error(
+                e.getMessage() +
+                "Won't continue"
+            );
+            System.exit(1);
+        }
     }
 
 }

@@ -1,0 +1,39 @@
+ 
+(inteiro add(inteiro x | inteiro y) : (
+    x+y
+))
+
+(real add_real(real x | real y) : (
+    x+y
+))
+
+(inteiro high_order(inteiro func(inteiro|inteiro)) : (
+    # correct
+    func(2|3)
+    *
+    # incorrect
+    func(2)
+))
+
+entrada (inteiro incorrect_args_call() : (
+    # incorrect number of args
+    add(2)
+    + 
+    # incorrect add
+    high_order(add_real)
+    + 
+    # inncorrect type of args
+    add(2,3 | 2,4)
+    +
+    # no problem 
+    add(2 | 3)
+    +
+    # correct add
+    high_order(add)
+    
+))
+
+
+
+
+

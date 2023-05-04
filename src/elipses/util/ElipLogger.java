@@ -50,6 +50,11 @@ public class ElipLogger {
         logger.flush();
     }
 
+    public static void debug(String message) {
+        logger.println(message);
+        logger.flush();
+    }
+
     public static void error(String filename, int line, String err_msg) {
         error(String.format("%s:%d: %s", filename, line, err_msg));
     }

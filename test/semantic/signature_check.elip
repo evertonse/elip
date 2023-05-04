@@ -1,0 +1,21 @@
+
+( inteiro exemploAltaOrdem (inteiro digito | real multiplicarPorPi ( inteiro random() | real)):
+    (
+        #bloco_exp
+        (
+            (const real pi (3,1415))
+            multiplicarPorPi(2| pi)
+        )
+    )
+)
+
+
+( inteiro exemploAltaOrdem (inteiro digito | real multiplicarPorPi ( inteiro random() | real)):
+    (
+        #bloco_exp
+        (
+            #(const real pi (3,1415))
+            multiplicarPorPi(number| 3,1415)
+        )
+    )
+)

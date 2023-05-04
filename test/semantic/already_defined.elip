@@ -7,4 +7,25 @@ entrada ( inteiro already_defined_parameters(inteiro a | inteiro a) :
 ))
 
 
+# Function already defined 
+( inteiro already_defined_func() :(1)) 
+( inteiro already_defined_func() :(1)) 
+
+(inteiro already_defined_nested_const_declaration() : (
+      ( 
+        (const inteiro x (
+            (
+                # No problem here, real x shadow the earlier int x 
+                (const real x(2,4))
+                # Problem occur here, should get an error on booleano x
+                (const booleano x( verdadeiro ))
+                x
+            ) 
+        )) 
+
+        x
+      ) 
+))
+
+
 

@@ -1,0 +1,10 @@
+
+entrada (inteiro incorrect_return_type() : (
+    # returning bool instead of int 
+    verdadeiro
+))
+
+(inteiro correct_return_type() : (
+    # returning correct type, should not have problems
+    2
+))

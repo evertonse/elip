@@ -1,20 +1,23 @@
 package elipses.semantic;
 
-import java.util.HashMap;
+import java.util.Map;
+import java.util.Hashtable;
 import java.util.Stack;
 
 
 
 public class SymbolTable {
-    private Stack<HashMap<String, Symbol>> stack;
+    private Stack<Map<String, Symbol>> stack;
+    private Map<String, Symbol> global;
 
     public SymbolTable() {
         stack = new Stack<>();
-        stack.push(new HashMap<>());
+        stack.push(new Hashtable<>());
+        global = stack.peek();
     }
 
     public void enterScope() {
-        stack.push(new HashMap<>());
+        stack.push(new Hashtable<>());
     }
 
     public void exitScope() {
@@ -22,7 +25,7 @@ public class SymbolTable {
     }
 
     public boolean add(String name, Symbol symbol) {
-        HashMap<String, Symbol> current_scope = stack.peek();
+        Map<String, Symbol> current_scope = stack.peek();
         if (current_scope.containsKey(name)) {
             return false; // Symbol with the same name already exists
         } else {
@@ -32,7 +35,7 @@ public class SymbolTable {
     }
 
     public boolean add(Symbol symbol) {
-        HashMap<String, Symbol> current_scope = stack.peek();
+        Map<String, Symbol> current_scope = stack.peek();
         if (current_scope.containsKey(symbol.getName())) {
             return false; // Symbol with the same name already exists
         } else {
@@ -43,7 +46,7 @@ public class SymbolTable {
 
     public Symbol get(String name) {
         for (int i = stack.size() - 1; i >= 0; i--) {
-            HashMap<String, Symbol> current_scope = stack.get(i);
+            Map<String, Symbol> current_scope = stack.get(i);
             if (current_scope.containsKey(name)) {
                 return current_scope.get(name);
             }
@@ -52,7 +55,7 @@ public class SymbolTable {
     }
 
     public boolean remove(String name) {
-        HashMap<String, Symbol> current_scope = stack.peek();
+        Map<String, Symbol> current_scope = stack.peek();
         if (current_scope.containsKey(name)) {
             current_scope.remove(name);
             return true; 
@@ -64,8 +67,9 @@ public class SymbolTable {
 
     // If exists in current scope
     public boolean existsInCurrentScope(String name) {
-        HashMap<String, Symbol> current_scope = stack.peek();
-        return current_scope.containsKey(name);
+        Map<String, Symbol> current_scope = stack.peek();
+        boolean exist = current_scope.containsKey(name);
+        return exist;
     }
 
     // If exists in any scope 
@@ -77,6 +81,36 @@ public class SymbolTable {
         }
         return false;
     }
+
+    // If exists in Global Scope
+    public boolean existsInGlobalScope(String name) {
+        if (global.containsKey(name)) {
+            return true;
+        }
+        return false;
+    }
+
+    public void printCurrentScope() {
+        Map<String, Symbol> current_scope = stack.peek();
+        System.out.println("Current scope:");
+        for (String name : current_scope.keySet()) {
+            System.out.println(name + ": " + current_scope.get(name));
+        }
+    }
+
+    public void printAllScopes() {
+        for (int i = stack.size() - 1; i >= 0; i--) {
+            Map<String, Symbol> current_scope = stack.get(i);
+            int depth = stack.size() - i - 1;
+            String indent = "  ".repeat(depth);
+            System.out.println(indent + "Scope " + (i + 1) + ":");
+            for (String name : current_scope.keySet()) {
+                Symbol symbol = current_scope.get(name);
+                System.out.println(indent + "  " + name + ": " + symbol.getType());
+            }
+        }
+    }
+
 
     // Hashes a string using the djb2 algorithm
     private int hash(String s) {

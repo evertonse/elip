@@ -1,2 +1,0 @@
-- Test for double entry
-- Warn about operating real with integer
