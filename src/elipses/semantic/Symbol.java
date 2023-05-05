@@ -1,6 +1,4 @@
 package elipses.semantic;
-
-import elipses.analysis.*;
 import elipses.node.*;
 import elipses.util.ElipLogger;
 
@@ -11,7 +9,7 @@ import java.util.List;
 
 public class Symbol {
 
-    public enum Type {
+    static public enum Type {
         UNKOWN, INT,BOOL,REAL, FUNCTION, COUNT;
 
         @Override
@@ -27,7 +25,7 @@ public class Symbol {
         }
     }
 
-    public class SignatureParam {
+    static public class SignatureParam {
         Type type = null;
         Signature sig = null;
 
@@ -44,13 +42,14 @@ public class Symbol {
         public Type getType() {
             return type;
         }
+
     }
 
-
-    public class Signature {
+    static public class Signature {
         Type return_type;
         List<SignatureParam> parameters = new ArrayList<>();
-        Signature (Type return_type, List<SignatureParam> params) {
+
+        public Signature (Type return_type, List<SignatureParam> params) {
             this.return_type = return_type;
             this.parameters = params;
         }
@@ -89,17 +88,17 @@ public class Symbol {
 
         public String toString() {
             StringBuilder sb = new StringBuilder();
-            sb.append(return_type.name());
-            sb.append("(");
+            sb.append(return_type);
+            sb.append(" (");
             for (int i = 0; i < parameters.size(); i++) {
                 if (i > 0) {
-                    sb.append(", ");
+                    sb.append("|");
                 }
                 SignatureParam param = parameters.get(i);
                 if (param.sig != null) {
-                    sb.append(param.sig.toString());
+                    sb.append(param.sig);
                 } else {
-                    sb.append(param.type.name());
+                    sb.append(param.type);
                 }
             }
             sb.append(")");
@@ -118,7 +117,22 @@ public class Symbol {
     private Type type;
     private Signature signature;
     private int value;
+    private Token token;
 
+
+    public Symbol(Symbol other) { 
+        this.name = other.name;
+        this.type = other.type;
+        this.signature = other.signature;
+        this.value = other.value;
+        this.token = other.token;
+    }
+
+    public Symbol(String name, Signature signature) {
+        this.name = name;
+        this.type = Type.FUNCTION;
+        this.signature = signature;
+    }
 
     public Symbol(String name, String return_type, List<PParam> params) {
         this.name = name;
@@ -260,10 +274,23 @@ public class Symbol {
         return this.type == Type.FUNCTION;
     }
 
-
+    public Token getToken() {
+        return this.token;
+    }
+    public Token setToken(Token token) {
+        return this.token = token;
+    }
 
     public int getValue() {
         return value;
+    }
+
+    @Override
+    public String toString() {
+        if (this.isFunction()) {
+            return this.name + "->" + this.signature.toString();
+        }
+        return this.name + "->" + this.type.toString();
     }
 
 }

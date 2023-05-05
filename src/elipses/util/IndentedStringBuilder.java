@@ -1,13 +1,6 @@
 package elipses.util;
-
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.ObjectStreamField;
-import java.io.Serial;
-import java.io.Serializable;
-import java.io.StreamCorruptedException;
 import java.lang.StringBuilder;
+import java.util.Stack;
 
 /**
  * IndentedStringBuffer
@@ -18,30 +11,52 @@ public class IndentedStringBuilder {
     private StringBuilder sb;
     private String indentation;
     private int indentation_level;
+    Stack<Integer> index_stack = new Stack<>();
     
     public IndentedStringBuilder() {
         sb = new StringBuilder();
         indentation = "";
+        index_stack.add(0);
     }
 
     public IndentedStringBuilder(IndentedStringBuilder other) {
         sb = new StringBuilder();
         this.indentation_level = other.indentation_level;
         this.indentation = other.indentation.substring(0);
+        this.index_stack = other.index_stack;
     }
-    
-    public IndentedStringBuilder pushIndent() {
+        
+    public IndentedStringBuilder pushIndex() { 
+        this.index_stack.push(this.size());
+        return this;
+    }
 
+    public IndentedStringBuilder popIndex() { 
+        this.index_stack.pop();
+        return this;
+    }
+
+    public int getCurrentIndex() {
+        return this.index_stack.peek();
+    }
+
+    public IndentedStringBuilder pushIndent() {
         this.indentation_level++;
         this.indentation = " ".repeat(this.indentation_level * 4);
         return this;
     }
     
-    public  IndentedStringBuilder popIndent() {
+    public IndentedStringBuilder popIndent() {
         if (this.indentation_level > 0) {
                 this.indentation_level--;
                 this.indentation = " ".repeat(this.indentation_level * 4);
             }
+        return this;
+    }
+
+    public IndentedStringBuilder insertAtCurrentIndex(String str) {
+        int i = index_stack.peek();
+        this.insert(i,str);
         return this;
     }
     
@@ -66,7 +81,7 @@ public class IndentedStringBuilder {
         return this;
     }
 
-    public IndentedStringBuilder insertAtPreviousLine(String str) {
+    public IndentedStringBuilder insertAtBeginningOfPreviousLine(String str) {
         int index = sb.lastIndexOf("\n");
         if (index == -1) {
             sb.append(this.indentation +str);
@@ -76,6 +91,15 @@ public class IndentedStringBuilder {
         return this;
     }
 
+    public IndentedStringBuilder insertAtPreviousLine(String str) {
+        int index = sb.lastIndexOf("\n");
+        if (index == -1) {
+            sb.append(this.indentation +str);
+        } else {
+            sb.insert(index + 1, this.indentation + str);
+        }
+        return this;
+    }
     public IndentedStringBuilder insert(int index, String str) {
         if (index < 0) {
             index = 0;

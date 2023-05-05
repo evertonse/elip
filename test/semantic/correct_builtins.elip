@@ -1,0 +1,8 @@
+entrada (real using_math():(
+    # No erros should occur
+    seno(2,1) 
+    + cosseno(2,2) 
+    + tangente(3,3) 
+    + logaritmo(4,4)
+    + potencia(5,5 | 6,6)
+))

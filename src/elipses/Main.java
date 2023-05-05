@@ -32,34 +32,41 @@ public class Main {
     //true
     false
    ;
+    static boolean DEBUG_LOG = 
+        true
+        //false
+    ;
 
-  public static void main(String[] args) {
-    if(DEBUG) {
-        input_files.add("test/IR/block.elip");
-    }
+    public static void main(String[] args) {
+        if(DEBUG) {
+            //input_files.add("test/IR/block.elip");
+            input_files.add("test/semantic/incorrect_args.elip");
+        }
 
-    String usage = "Usage: elip [--gui] [--ast] [--help] [--c] [--info] <input_file>"; 
-    String format = "   %-25s %s%n";
-    String help = 
-          "Usage: elip [--gui] [--ast] [--help] [-c] <input_files>\n\n"
-          +"If no flags are specified, elip will create C code and compile it using gcc for all <input_files>, "
-          +"if gcc is not on the path, an error will occur.\n"
-        + String.format(format, 
-            "--gui", "JavaFX gui representation of the AST for <input_files>.")
-        + String.format(format, 
-            "--help", "This Help Section.")
-        + String.format(format, 
-            "--ast", "print the AST of <input_files> into the console.")
-        + String.format(format, 
-            "--token,--tokens", "print Tokens of <input_files into the console>.")
-        + String.format(format, 
-            "--c", "Compile into <input_files> into C target language.")
-        + String.format(format, 
-            "--info", "Will print information about the current state of this compiler,") 
-        + String.format(format, 
-            "", "if something isn't supported, it'll be stated there,")
-        + String.format(format, 
-            "", "plus whatever other info deemed important.");
+        ElipLogger.setDebugMode(DEBUG_LOG);
+
+        String usage = "Usage: elip [--gui] [--ast] [--help] [--c] [--info] <input_file>"; 
+        String format = "   %-25s %s%n";
+        String help = 
+            "Usage: elip [--gui] [--ast] [--help] [-c] <input_files>\n\n"
+            +"If no flags are specified, elip will create C code and compile it using gcc for all <input_files>, "
+            +"if gcc is not on the path, an error will occur.\n"
+            + String.format(format, 
+                "--gui", "JavaFX gui representation of the AST for <input_files>.")
+            + String.format(format, 
+                "--help", "This Help Section.")
+            + String.format(format, 
+                "--ast", "print the AST of <input_files> into the console.")
+            + String.format(format, 
+                "--token,--tokens", "print Tokens of <input_files into the console>.")
+            + String.format(format, 
+                "--c", "Compile into <input_files> into C target language.")
+            + String.format(format, 
+                "--info", "Will print information about the current state of this compiler,") 
+            + String.format(format, 
+                "", "if something isn't supported, it'll be stated there,")
+            + String.format(format, 
+                "", "plus whatever other info deemed important.");
 
 
 
@@ -118,36 +125,39 @@ public class Main {
             }
         }
 
-        for (String elip_file : input_files) {
-            if (use_gui) {
-                adapter = new ASTDisplay(elip_file);
-                Debug.debug(elip_file, adapter,print_tokens);
+            for (String elip_file : input_files) {
+                if (use_gui) {
+                    adapter = new ASTDisplay(elip_file);
+                    Debug.debug(elip_file, adapter,print_tokens);
+                }
+                if (print_ast) {
+                    adapter = new ASTPrinter(elip_file);
+                    Debug.debug(elip_file, adapter,print_tokens);
+                }
+                if (semantic_analisys) {
+                    adapter = new SemanticAnalysis(elip_file);
+                    Debug.debug(elip_file, adapter, print_tokens);
+                }
+                boolean ok = false;
+                String cfile = elip_file + ".c";
+                if (generate_c) {
+                    adapter = new CCodeGenerator(elip_file);
+                    Debug.debug(elip_file, adapter, print_tokens);
+                    ElipLogger.success("C code generated at " + cfile);
+                    ok = CCompiler.check(cfile); 
+
+                }
+                if (ok && generate_exe){
+                    CCompiler.compile(cfile);
+                }
             }
-            if (print_ast) {
-                adapter = new ASTPrinter(elip_file);
-                Debug.debug(elip_file, adapter,print_tokens);
-            }
-            if (semantic_analisys) {
-                adapter = new SemanticAnalysis(elip_file);
-                Debug.debug(elip_file, adapter, print_tokens);
-            }
-            boolean ok = false;
-            if (generate_c) {
-                adapter = new CCodeGenerator(elip_file);
-                Debug.debug(elip_file, adapter, print_tokens);
-                ok = CCompiler.check(elip_file + ".c"); 
-            }
-            if (ok && generate_exe){
-                CCompiler.compile(elip_file + ".c");
-            }
-        }
 
     } catch (Exception e) {
         e.printStackTrace();
         ElipLogger.info(e.getClass() + e.getMessage());
         System.exit(1);
     }
-  }
+    }
 }
 
 class Utils {
@@ -176,7 +186,9 @@ class Debug {
         ElipLogger.info("Tokenizing file: " + file);
         try {
             String f = file;
-            Debug.lexer(f, print_tokens);
+            if (print_tokens) {
+                Debug.lexer(f, print_tokens);
+            }
             ElipLogger.success(" Tokenized with success.");
             Debug.parser(f, adapter);
         } catch (Exception e) {

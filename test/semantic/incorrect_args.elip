@@ -15,6 +15,27 @@
     func(2)
 ))
 
+(real high_order_real(inteiro func(inteiro|inteiro)) : (
+    2,2
+))
+
+(inteiro high_order_complex( inteiro f(inteiro g(inteiro|inteiro) )) : (
+
+    # correct
+    f(add)
+    *
+    # incorrect
+    f(add_real)
+))
+
+ (inteiro incorrect_args_call_complex() : ( 
+    # correct
+    high_order_complex(high_order)
+    +
+    # incorrect
+    high_order_complex(high_order_real)
+ ))
+
 entrada (inteiro incorrect_args_call() : (
     # incorrect number of args
     add(2)
@@ -30,6 +51,9 @@ entrada (inteiro incorrect_args_call() : (
     +
     # correct add
     high_order(add)
+    #+
+    ## correct
+    #high_order_compex(high_order)
     
 ))
 

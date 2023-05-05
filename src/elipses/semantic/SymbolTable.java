@@ -111,14 +111,5 @@ public class SymbolTable {
         }
     }
 
-
-    // Hashes a string using the djb2 algorithm
-    private int hash(String s) {
-        int hash = 5381;
-        for (int i = 0; i < s.length(); i++) {
-            hash = ((hash << 5) + hash) + s.charAt(i);
-        }
-        return hash;
-    }
 }
     

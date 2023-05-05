@@ -8,3 +8,14 @@ entrada (inteiro incorrect_return_type() : (
     # returning correct type, should not have problems
     2
 ))
+
+
+(real expects_real() : (
+    # incorrect returning integer
+    2
+))
+
+(real expects_real_() : (
+    # correct returning integer + real which results in real
+    2 + 0,1
+))

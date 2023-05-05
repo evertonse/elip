@@ -14,6 +14,12 @@ public class ElipLogger {
     public static PrintWriter logger = new PrintWriter(System.out);
     public static PrintWriter old_logger;
 
+    private static boolean debug_mode = false;
+    
+    public static void setDebugMode(boolean mode) {
+        ElipLogger.debug_mode = mode;
+    }
+
 
     public static void push(PrintWriter out) {
         stack.push(out);
@@ -51,8 +57,10 @@ public class ElipLogger {
     }
 
     public static void debug(String message) {
-        logger.println(message);
-        logger.flush();
+        if(debug_mode) {
+            logger.println(message);
+            logger.flush();
+        }
     }
 
     public static void error(String filename, int line, String err_msg) {

@@ -1,5 +1,18 @@
-
-entrada (inteiro shifted_fib(inteiro x) : (
+entrada (inteiro block_creation():(
+    (
+        (const inteiro a (2))
+        (const inteiro b (2))
+        a + b +
+        (
+            (const inteiro ba (2))
+            (const inteiro bb ((2)))
+            ba + bb
+        )
+    )
+    +((2))
+))
+{--
+(inteiro shifted_fib(inteiro x) : (
     (
         (const inteiro a (2))
         (const inteiro b (
@@ -32,3 +45,4 @@ entrada (inteiro shifted_fib(inteiro x) : (
 (inteiro other(inteiro x):
     ((lambda(x|y|z):( (z) + x + 3 )[verdadeiro|2|3]))
 )
+--}

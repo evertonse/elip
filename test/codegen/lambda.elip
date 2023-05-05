@@ -1,0 +1,10 @@
+( inteiro mdc(inteiro a | inteiro b) :(
+    se (b = 0) entao a senao mdc(b | a % b)
+))
+
+entrada( inteiro main():(
+    (2)*(2)
+    + (lambda () : (2) [])
+    + (lambda (x | y) : ((((x))) / mdc(x | (y)) * y) [15 | 20]) # calculo mmc
+    + (lambda (x | mdc) : (x / mdc(x | 2) *2) [15 | mdc])  # passing a func make problems arise
+))
