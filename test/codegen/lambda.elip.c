@@ -17,51 +17,10 @@ float elip_logaritmo(float x);
 float elip_potencia(float x, float y);
 
 int elip_mdc( int elip_a,  int elip_b);
-int elip_main();
-#define def_lambda_1()\
-\
-\
-    int lambda_1;    \
-    {\
-        lambda_1 = 2;\
-    }\
-    /*escrevo no block*/
-#define def_lambda_2(elip_x, elip_y)\
-\
-\
-    int lambda_2;    \
-    {\
-        \
-        int block_2;        \
-        {\
-            \
-            int block_3;            \
-            {\
-                \
-                int block_4;                \
-                {\
-                    block_4 = elip_x;\
-                }\
-                /*escrevo no block*/                block_3 = /*escrevo no body*/block_4;\
-            }\
-            /*escrevo no block*/            block_2 = /*escrevo no body*/block_3;\
-        }\
-        \
-        int block_5;        \
-        {\
-            block_5 = elip_y;\
-        }\
-        /*escrevo no block*/        /*escrevo no block*/        lambda_2 = ((/*escrevo no body*/block_2/elip_mdc(elip_x, /*escrevo no body*/block_5))*elip_y);\
-    }\
-    /*escrevo no block*/
-#define def_lambda_3(elip_x, elip_mdc)\
-\
-\
-    int lambda_3;    \
-    {\
-        lambda_3 = ((elip_x/elip_mdc(elip_x, 2))*2);\
-    }\
-    /*escrevo no block*/
+int elip_home( int (*elip_mdc)( int (*elip_md)(int, int, int)));
+int elip_a( int elip_b,  int elip_c);
+int elip_higher_order_lambda_wrapped_in_block();
+int elip_higher_order_lambda();
 float elip_cosseno(float x) {
     return cosf(x);
 }
@@ -86,21 +45,60 @@ int elip_mdc( int elip_a, int elip_b)  {
     int return_data = ((elip_b == 0) ? elip_a:elip_mdc(elip_b, (elip_a%elip_b)));
     return (return_data);
 }
-int elip_main()  {
+int elip_home( int (*elip_mdc)( int (*elip_md)(int, int, int)))  {
+    int return_data = 2;
+    return (return_data);
+}
+int elip_a( int elip_b, int elip_c)  {
     
-    int block_0;    
+    int lambda_1;    
     {
-        block_0 = 2;
+        
+        int lambda_2;        
+        {
+            lambda_2 = 2;
+        }
+        /*antes do temp*/        int elip_x = /*depois*/lambda_2 ;
+        lambda_1 = elip_x;
+    }
+    /*antes do temp*/    int return_data = /*depois*/lambda_1;
+    return (return_data);
+}
+int elip_higher_order_lambda_wrapped_in_block()  {
+    
+    int lambda_3;    
+    {
+        
+        int(*block_0)(int(*)(int(*)(int, int, int)));        
+        {
+            block_0 = elip_home;
+        }
+        /*escrevo no block*/        int(*elip_wraped)(int(*)(int(*)(int, int, int)))  = /*escrevo no body*/block_0 ;
+        lambda_3 = 2;
+    }
+    /*antes do temp*/    int return_data = /*depois*/lambda_3;
+    return (return_data);
+}
+int elip_higher_order_lambda()  {
+    
+    int lambda_4;    
+    {
+        int elip_y = 2 ;
+        
+        int(*block_1)(int, int);        
+        {
+            block_1 = elip_mdc;
+        }
+        /*escrevo no block*/        int(*elip_fn)(int, int)  = /*escrevo no body*/block_1 ;
+        lambda_4 = ((elip_y/elip_fn(elip_y, 2))*2);
     }
     
-    int block_1;    
+    int lambda_5;    
     {
-        block_1 = 2;
+        int(*elip_y)(int(*)(int(*)(int, int, int)))  = elip_home ;
+        lambda_5 = 2;
     }
-    def_lambda_1();
-    def_lambda_2(15,20);
-    def_lambda_3(15,elip_mdc);
-    /*escrevo no block*/    /*escrevo no block*/    int return_data = ((((/*escrevo no body*/block_0*/*escrevo no body*/block_1) + /*escrevo no body*/lambda_1) + /*escrevo no body*/lambda_2) + /*escrevo no body*/lambda_3);
+    /*antes do temp*/    /*antes do temp*/    int return_data = (/*depois*/lambda_4 + /*depois*/lambda_5);
     return (return_data);
 }
 int main(int argc, char *argv[]) {
@@ -112,7 +110,7 @@ int main(int argc, char *argv[]) {
        printf("The expected types are  ");
         return 1;
     }
-    printf("%d\n",((int)elip_main()));
+    printf("%d\n",((int)elip_higher_order_lambda()));
 }
 
 //*** EOF ***//

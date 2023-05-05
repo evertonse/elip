@@ -72,6 +72,11 @@ public class SymbolTable {
         return exist;
     }
 
+    public Symbol getInCurrentScope(String name) {
+        Map<String, Symbol> current_scope = stack.peek();
+        return current_scope.getOrDefault(name, null);
+    }
+
     // If exists in any scope 
     public boolean exists(String name) {
         for (int i = stack.size() - 1; i >= 0; i--) {
@@ -88,6 +93,10 @@ public class SymbolTable {
             return true;
         }
         return false;
+    }
+
+    public Symbol getInGlobalScope(String name) {
+        return global.getOrDefault(name,null);
     }
 
     public void printCurrentScope() {

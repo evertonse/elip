@@ -210,14 +210,13 @@ public class SemanticAnalysis extends DepthFirstAdapter {
                 ));
                 return;
             }
-            if (e instanceof AIdExp) {
-                // If it is a identitifer we need add NEW symbol by COPY
-                // because it might be a function and inferente type checking
-                // only return the return type of the function
-                TIdentifier identifier = ((AIdExp)e).getIdentifier();
-                Symbol identifier_symbol = table.get(id);
+            // If somewhoe it  finds identitifer we need add NEW symbol by COPY
+            // because it might be a function and inferente type checking
+            // only return the return type of the function
+            Symbol identifier_symbol = inference.getSymbolOrNull(e);
+            if (identifier_symbol != null) {
                 table.add(id, new Symbol(identifier_symbol));
-                ElipLogger.debug(" Lambda -> added id "+ id + " with type" + identifier_symbol);
+                ElipLogger.debug(" Lambda -> added id "+ id + " from already defined symbol :" + identifier_symbol);
             }
             else {
                 type = inference.getType(e); 
@@ -242,9 +241,8 @@ public class SemanticAnalysis extends DepthFirstAdapter {
 
         Token t = node.getIdentifier();
         String name = node.getIdentifier().getText();
-        assert !table.existsInGlobalScope(name);
 
-        if (table.exists(name)) {
+        if (table.existsInCurrentScope(name)) {
            errors.add(new SemanticError(
                 SemanticErrorType.ALREADY_DECLARED, t, " on parameter " + node.toString()
             )); 
@@ -265,9 +263,12 @@ public class SemanticAnalysis extends DepthFirstAdapter {
         Token t = node.getIdentifier();
         String name = node.getIdentifier().getText();
 
-        assert !table.existsInGlobalScope(name);
+        assert !table.existsInCurrentScope(name);
 
-        if (table.exists(name)) {
+        // If the current parameters already exists in current scope 
+        // i.e. the function scope, then it's a error, it is an already 
+        // declared parameter
+        if (table.existsInCurrentScope(name)) {
            errors.add(new SemanticError(
                 SemanticErrorType.ALREADY_DECLARED, t, " on parameter " + node.toString()
             )); 
@@ -325,12 +326,25 @@ public class SemanticAnalysis extends DepthFirstAdapter {
         // After the declaration is finished then we get the type and add to the table
         String name = node.getIdentifier().getText().strip();
         table.add(name, new Symbol(name, node.getType().toString()));
+        Symbol.Type expect = inference.fromPType(node.getType());
+        Symbol.Type got= inference.getType(node.getExp());
+        if (expect != got) {
+            errors.add(new SemanticError(
+                SemanticErrorType.INCOMPATIBLE_TYPES, node.getIdentifier(),
+                "on const declaration'" + node.getIdentifier().getText() + "'"
+                ));
+        }
         ElipLogger.info(table.get(name).toString());
 
     }
 
     @Override
     public void caseEOF(EOF node) {
+        if(flags.entry_found == false) {
+            errors.add(new SemanticError(
+                SemanticErrorType.NO_ENTRY," missing 'entrada'"
+            ));    
+        }
         
         for (SemanticError e : errors) {
             e.inform();

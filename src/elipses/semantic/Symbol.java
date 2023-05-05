@@ -43,6 +43,10 @@ public class Symbol {
             return type;
         }
 
+        public boolean isSignature() {
+            return this.sig != null;
+        }
+
     }
 
     static public class Signature {
@@ -107,6 +111,9 @@ public class Symbol {
         
         public List<SignatureParam> getParameters() {
             return parameters;
+        }
+        public Type getReturnType() {
+            return this.return_type;
         }
     }
 

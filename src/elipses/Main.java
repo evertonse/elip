@@ -29,8 +29,8 @@ public class Main {
   static boolean semantic_analisys  = true;
 
   static boolean DEBUG = 
-    //true
-    false
+    true
+    //false
    ;
     static boolean DEBUG_LOG = 
         true
@@ -40,7 +40,7 @@ public class Main {
     public static void main(String[] args) {
         if(DEBUG) {
             //input_files.add("test/IR/block.elip");
-            input_files.add("test/semantic/incorrect_args.elip");
+            input_files.add("test/codegen/lambda.elip");
         }
 
         ElipLogger.setDebugMode(DEBUG_LOG);
@@ -137,6 +137,7 @@ public class Main {
                 if (semantic_analisys) {
                     adapter = new SemanticAnalysis(elip_file);
                     Debug.debug(elip_file, adapter, print_tokens);
+                    ElipLogger.info( "" + ((SemanticAnalysis)adapter).allGood());
                 }
                 boolean ok = false;
                 String cfile = elip_file + ".c";
@@ -214,13 +215,14 @@ class Debug {
             int line = e.getToken().getLine();
             int pos = e.getToken().getPos();
             ElipLogger.error(file, line,pos, e.getMessage());
+            System.exit(69);
         } 
         catch (Exception e) {
             ElipLogger.error(
                 e.getMessage() +
                 " Won't continue with next tokens ...\n"
             );
-            System.exit(1);
+            System.exit(420);
         }
     }
 
@@ -233,17 +235,18 @@ class Debug {
             Parser p = new Parser(lexer);
             Start tree = p.parse();
             ElipLogger.success(" Parsed into AST with success.");
-    
             tree.apply(adapter);
         } catch (ParserException e) {
             int line = e.getToken().getLine();
             int pos = e.getToken().getPos();
             ElipLogger.error(file, line,pos, e.getMessage());
+            System.exit(69);
         }
         catch (LexerException e) {
             int line = e.getToken().getLine();
             int pos = e.getToken().getPos();
             ElipLogger.error(file, line,pos, e.getMessage());
+            System.exit(420);
         } 
         catch (Exception e) {
             ElipLogger.error(

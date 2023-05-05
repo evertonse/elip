@@ -1,0 +1,4 @@
+( inteiro mdc(inteiro a | inteiro b) :(
+    # use of function when it's not a function
+   (lambda (sum) : (sum(2|2)) [2]) 
+))

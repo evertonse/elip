@@ -43,12 +43,68 @@ public class TypeInference {
         this.table = table;
         this.errors = error_list;
     }
-
+    
     public TypeInference(SymbolTable  table, List<SemanticError> error_list, DepthFirstAdapter adapter) {
         this.table = table;
         this.errors = error_list;
         // here we reserve the  right to travel in and out of nodes from the adptare travel
         this.adapter = adapter;
+    }
+
+    public Symbol.Type fromPType(PType p) {
+        if (p instanceof AIntType) {
+            return Type.INT;
+        }
+        else if (p instanceof ARealType) { 
+            return Type.REAL;
+        }
+        else if (p instanceof ABoolType) { 
+            return Type.BOOL;
+        }
+        else {
+            return Type.UNKOWN;
+        }
+    }
+
+    public Symbol getSymbolOrNull(PExp node) {
+        Symbol return_symbol = null;
+        if (node instanceof ALambdaExp) {
+            ALambdaExp e = (ALambdaExp)node;
+            return_symbol = getSymbolOrNull(e.getBody());
+        } 
+        else if (node instanceof ABlockExp) {
+            ABlockExp e = (ABlockExp)node;
+            return_symbol = getSymbolOrNull(e.getExp());
+        } 
+        else if (node instanceof AIdExp) {
+            AIdExp e = (AIdExp)node;
+            String id = e.getIdentifier().getText();
+            return_symbol = table.get(id);
+        } 
+        else if (node instanceof AIfExp) {
+            AIfExp e = (AIfExp)node;
+            Symbol truthy = getSymbolOrNull(e.getTruthy());
+            Symbol falsy  = getSymbolOrNull(e.getFalsy());
+            // Both truthy and Falsy MUST have the same type
+            // and there fore if any of them are not null
+            // hey must have the same signtura, but not necessarily the same
+            // symbol, but for all purposes we only call the functin to get
+            // the Signature / type not the id itsself
+            if (truthy != null ) {
+                return_symbol = truthy;
+            }
+            else if (falsy != null ) {
+                return_symbol = falsy;
+            }
+        } 
+        // Cant do node instanceof ACallExp because a call expr
+        // can't ever return a ID and therefore can't have symbol
+
+        // Any binary operator return an R-Value and therefore
+        // can't have a symbol storage 
+        // Unary operation as well, negate/not an id returns an R-Value
+
+        return return_symbol;
     }
 
     public Symbol.Type getType(PExp node) {
@@ -364,6 +420,12 @@ public class TypeInference {
         Symbol fn_symbol = table.get(function_id);
         // Might be null, let the error class handle that
         Token token = fn_symbol.getToken();
+        if (! fn_symbol.isFunction()) {
+            return new SemanticError(SemanticErrorType.INCORRECT_USE_OF_ARGUMENTS,token,
+                "'"  +function_id + "' is NOT a function but it's used as one."
+            );
+        }
+
         List<Symbol.SignatureParam> params = fn_symbol.getSignature().getParameters();
 
         int params_count = params.size();

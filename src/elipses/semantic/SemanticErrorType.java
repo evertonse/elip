@@ -3,6 +3,7 @@ package elipses.semantic;
 public enum SemanticErrorType {
     NONE(""),
     DUPLICATE_ENTRY("Duplicate entry"),
+    NO_ENTRY("No entry point"),
     ALREADY_DECLARED("Identifier already declared in this scope"),
     UNDECLARED("Use of undeclared indentifier"),
     UNDEFINED_FUNCTION("Undefined function"),

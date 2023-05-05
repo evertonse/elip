@@ -4,16 +4,16 @@ import elipses.analysis.*;
 import elipses.node.*;
 import elipses.semantic.SemanticFlags;
 import elipses.util.*;
+
 import java.util.*;
 import java.io.*;
 import elipses.semantic.TypeInference;
+import elipses.semantic.Symbol.Signature;
 import elipses.semantic.Symbol.Type;
 import elipses.semantic.Symbol;
 import elipses.semantic.SymbolTable;
 import elipses.semantic.*;
-import elipses.walker.SemanticAnalysis;
 
-import java.util.*;
 
 
 class CCodeData {
@@ -48,6 +48,8 @@ class CCodeData {
 
 
 public class CCodeGenerator extends DepthFirstAdapter {
+    Map<Signature,String> sig2str = new HashMap<>();
+    int typedef_count = 0;
     CCodeData code;
     SemanticFlags flags;
     IndentedStringBuilder header;
@@ -60,6 +62,8 @@ public class CCodeGenerator extends DepthFirstAdapter {
 
     Stack<String> block_return = new Stack<>();
     Stack<String> lambda_return = new Stack<>();
+    IndentedStringBuilder lambda_header = new IndentedStringBuilder();
+    IndentedStringBuilder lambda_temp;
 
     Stack<IndentedStringBuilder > blocks = new Stack<>();
 
@@ -171,6 +175,10 @@ public class CCodeGenerator extends DepthFirstAdapter {
 
     public String sanitize(TIdentifier id) {
         return "elip_" + id.getText(); 
+    }
+
+    public String sanitize(String id) {
+        return "elip_" + id;
     }
 
     public String sanitize(PType type) {
@@ -535,15 +543,40 @@ public class CCodeGenerator extends DepthFirstAdapter {
             .popIndent()
             .append("}\n");
 
-        Type t = inference.getType(node.getExp()); 
-        ElipLogger.debug("from c we got the block type as " + t);
-        String block_type = t == Type.UNKOWN? "float" : C.get(t.toString());
+        String block_type = "float";
+        boolean write_name = true;
+        Symbol s = inference.getSymbolOrNull(exp);
+        if (s != null) {
+            if (s.isFunction()){
+                block_type = fromSignatureToCType(s.getSignature(),block_name);
+                write_name = false;
+            }
+            else {
+                block_type = C.get(s.getType().toString().strip());
+            }
+        }
+        else {
+            Type t = inference.getType(node.getExp()); 
+            if (t != Type.UNKOWN){
+                block_type = C.get(t.toString());
+            }
+        }
+        ElipLogger.debug("from c we got the block type as " + block_type);
+        
+        if (write_name) {
+            block
+                //.insertAtCurrentIndex("/*lê  "+ block_name + " " + block_type +" */" )
+                .insertAtCurrentIndex(block_type + " " + block_name + ";")
+                .popIndex()
+            ;
+        } 
+        else {
+            block
+                .insertAtCurrentIndex(block_type + ";")
+                .popIndex()
+            ;
 
-        block
-            //.insertAtCurrentIndex("/*lê  "+ block_name + " " + block_type +" */" )
-            .insertAtCurrentIndex(block_type + " " + block_name + ";")
-            .popIndex()
-        ;
+        }
 
         body.append( "/*escrevo no block*/" );
         body = temp;
@@ -623,7 +656,37 @@ public class CCodeGenerator extends DepthFirstAdapter {
         outACallExp(node);
     }
     
-   @Override
+     String fromSignatureToCType(Symbol.Signature s,String func_name) {
+        Symbol.Signature signature = s;
+        StringBuilder sb = new StringBuilder();
+        sb.append( C.get(signature.getReturnType().toString()));
+        //sb.append("(*fn_" + (typedef_count++) +")");
+        if(func_name != null){
+            sb.append("(*" + func_name + ")");
+        }
+        else {
+            sb.append("(*)");
+        }
+        sb.append("(");
+        List<Symbol.SignatureParam> parameters = signature.getParameters();
+        for (int i = 0; i < parameters.size(); i++) {
+            Symbol.SignatureParam param = parameters.get(i);
+            if (i > 0) {
+                sb.append(", ");
+            }
+            if (param.isSignature()) {
+                Symbol.Signature param_sig = param.getSignature();
+                sb.append(fromSignatureToCType(param_sig,null));
+            } 
+            else {
+                sb.append(C.get(param.getType().toString()));
+            }
+        }
+        sb.append(")");
+        return sb.toString();
+    }
+
+    @Override
     public void inALambdaExp(ALambdaExp node) {
 
         flags.lambda_count++;
@@ -638,23 +701,122 @@ public class CCodeGenerator extends DepthFirstAdapter {
         // We need to add the ids and type on next scope
         // so this need to me on inNode and not outNode, ok?
         for (int i = 0; i < count; i++) {
-           String id = ids.get(i).getText(); 
-           Symbol.Type type = inference.getType(args.get(i)); 
-           table.add(id, new Symbol(id, type));
-           ElipLogger.debug(id +  " has type " + type + " in lambda_" + lambda_count);
+            String id = ids.get(i).getText(); 
+            PExp arg = args.get(i);
+
+             Symbol identifier_symbol = inference.getSymbolOrNull(arg);
+            if (identifier_symbol != null) {
+                table.add(id, new Symbol(identifier_symbol));
+                ElipLogger.debug(" Lambda -> added id "+ id + " from already defined symbol :" + identifier_symbol);
+            }
+            else {
+                Symbol.Type type;
+                type = inference.getType(arg); 
+                table.add(id, new Symbol(id, type));
+                ElipLogger.debug(" Lambda -> added id "+ id + " with type" + type);
+            }
         }
     }
+
 
     @Override 
     public void 
     caseALambdaExp(ALambdaExp node) {
         this.inALambdaExp(node);
+        //lambda_temp = header; 
+        //header = def_header;
         String lambda_name = new String("lambda_" + flags.lambda_count);
-                header.append(
-                    "\n#define " 
-                    + "def_"+lambda_name
-                    + "("
-                );
+
+        lambda_return.push(lambda_name);
+        IndentedStringBuilder block = new IndentedStringBuilder(body); 
+
+        block
+            .append("\n")
+            .pushIndex()
+            .append("\n")
+            .append("{\n")
+            .pushIndent()
+        ;
+        
+        IndentedStringBuilder temp = body;
+        body = block;
+        {
+            List<TIdentifier> ids = new ArrayList<TIdentifier>(node.getId());
+            List<PExp> args = new ArrayList<PExp>(node.getArgs());
+            int len = args.size();
+            boolean apply_id = true;
+            for (int i = 0; i < len; i++) {
+                TIdentifier id = ids.get(i); 
+                PExp arg = args.get(i); 
+                String ctype = "float";
+                if(table.exists(id.getText())){
+                    Symbol s = table.get(id.getText());
+                    if (s.isFunction()){
+                        ctype = fromSignatureToCType(s.getSignature(),sanitize(id.getText()));
+                        ElipLogger.debug(" [C] >> " + id.getText()+ " does exist in table and its a function" + ctype);
+                        apply_id = false;
+                    }
+                    else {
+                        ctype = C.get(s.getType().toString().strip());
+                        ElipLogger.debug(" [C] >> " + id.getText()+ " does exist in table and its not a function");
+                    }
+                }
+                else {
+                    ctype = C.get(inference.getType(arg).toString().strip());
+                    ElipLogger.debug(" [C] >> " + id.getText()+ " does not exist in table");
+                }
+
+                block.append(ctype + " ");
+                if(apply_id){
+                    id.apply(this);
+                }
+                block.append( " = " );
+                arg.apply(this);
+                block.append( " ;\n" );
+            }
+        }
+
+        PExp exp = node.getBody();
+        if(exp != null) {
+            block.append( lambda_name + " = "  );   
+            exp.apply(this);
+        }
+        block.append(";\n")
+            .popIndent()
+            .append("}\n");
+
+            
+        String lambda_type = C.get(inference.getType(node.getBody()).toString());
+        ElipLogger.debug("from c we got the block type as " + lambda_type);
+
+        body.append( "/*antes do temp*/" );
+        body = temp;
+        body.append( "/*depois*/" );
+        
+        block 
+            .insertAtCurrentIndex(lambda_type  + " " + lambda_name + ";")
+            .popIndex()
+        ;
+
+        body.insertAtBeginningOfPreviousLine(
+            block.toString()
+        );
+        body.append(lambda_return.pop());
+        this.outALambdaExp(node);
+       
+    }
+    //@Override 
+    public void 
+    __caseALambdaExp(ALambdaExp node) {
+        this.inALambdaExp(node);
+        //lambda_temp = header; 
+        //header = def_header;
+        String lambda_name = new String("lambda_" + flags.lambda_count);
+        header.append(
+            "\n#define " 
+            + "def_"+lambda_name
+            + "("
+        );
         {
             List<TIdentifier> copy = new ArrayList<TIdentifier>(node.getId());
             int len = copy.size();
@@ -670,8 +832,9 @@ public class CCodeGenerator extends DepthFirstAdapter {
         }
 
         header
-            .append(")\\\n\\\n")
+            .append(")\\\n")
         ; 
+        header.pushIndex(); 
 
         lambda_return.push(lambda_name);
         IndentedStringBuilder block = new IndentedStringBuilder(body); 
@@ -701,15 +864,16 @@ public class CCodeGenerator extends DepthFirstAdapter {
         String lambda_type = C.get(inference.getType(node.getBody()).toString());
         ElipLogger.debug("from c we got the block type as " + lambda_type);
 
-        block
-            //.insertAtCurrentIndex("/*lê  "+ block_name + " " + block_type +" */" )
-            .insertAtCurrentIndex(lambda_type  + " " + lambda_name + ";")
-            .popIndex()
-        ;
+        //block
+            //.insertAtCurrentIndex(lambda_type  + " " + lambda_name + ";")
+            //.popIndex()
+            //.pushIndex();
+        //;
 
-        body.append( "/*escrevo no block*/" );
+
+        body.append( "/*antes do temp*/" );
         body = temp;
-        body.append( "/*escrevo no body*/" );
+        body.append( "/*depois*/" );
         
         IndentedStringBuilder def_lambda = new IndentedStringBuilder();
         def_lambda.append("def_"+lambda_name + "(");
@@ -728,99 +892,23 @@ public class CCodeGenerator extends DepthFirstAdapter {
         }
         def_lambda.append(");\n");
         body = temp;
+        block 
+            .popIndex()
+            .insertAtCurrentIndex(lambda_type  + " " + lambda_name + ";")
+        ;
+        body.insertAtBeginningOfPreviousLine(def_lambda.toString());
+        
 
-        body.insertAtPreviousLine(def_lambda.toString());
-        header.insertAtPreviousLine(
+        header.insertAtCurrentIndex(
             block.toString()
                 .replaceAll("^\\(|\\)$", "")
                 .replaceAll("\n", "\\\\\n")
-        );
+        ).popIndex();
         body.append(lambda_return.pop());
         this.outALambdaExp(node);
        
     }
     
-    //@Override
-    public void 
-    __caseALambdaExp(ALambdaExp node) {
-        String lambda = "lambda_" + filename + "_" +  flags.lambda_count;
-        header.append(
-            "\n#define " 
-            + "def_"+lambda
-            + "("
-        );
-
-        this.inALambdaExp(node);
-        {
-            List<TIdentifier> copy = new ArrayList<TIdentifier>(node.getId());
-            int len = copy.size();
-            for (int i = 0; i < len; i++) {
-                TIdentifier e = copy.get(i); 
-                //e.apply(this);
-                header.append(sanitize(e));
-                if (i != len -1) {
-
-                    header.append(", ");
-                }
-            }
-        }
-
-        header
-            .append(")\\\n\\\n")
-        ; 
-
-        IndentedStringBuilder content = new IndentedStringBuilder();
-        if(node.getBody() != null)
-        {
-            IndentedStringBuilder temp = body;
-            //body = header;
-            body = content;
-            node.getBody().apply(this);
-            body = temp;
-
-        }
-        content.insertAtPreviousLine("float " + lambda + " = ") ;
-        header.append(
-            content.toString()
-                .replaceAll("^\\(|\\)$", "")
-                .replaceAll("\n", "\\\\\n")
-        );
-        content.clear();
-        header.append("\\\n\\\n");
-
-
-        IndentedStringBuilder temp = body;
-        body = content;
-        body.append("");
-        body.append("def_"+lambda);
-        body.append("(");
-        {
-            List<PExp> copy = new ArrayList<PExp>(node.getArgs());
-            int len = copy.size();
-            for (int i = 0; i < len; i++) {
-
-               PExp e = copy.get(i);
-                e.apply(this);
-                if (i != len -1) {
-                   body.append(",");
-                }
-            }
-        }
-        body.append(")");
-        body.append(";\n");
-        body = temp;
-
-        body.insertAtPreviousLine("\n");
-        body.insertAtPreviousLine(content.toString());
-        body.append(lambda);
-        this.outALambdaExp(node);
-    }
-
-    @Override public void 
-    outALambdaExp(ALambdaExp node) {
-        table.exitScope(); 
-    }
-
     // << [Exp]
     
 
