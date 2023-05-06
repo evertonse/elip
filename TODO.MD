@@ -28,3 +28,6 @@ declarações
 - [ ] Show case if a function call is being used on something that is not a function
 - [ ] IFEXP check if we can return a identifier from if and if we can put an identifier of a function as both func pointer and call exp to an if condition exp;
 - [ ] IFEXP check is signature of truthy and falsy are the same type
+- [ ] Make sure signature inference works for nested blocks
+- [ ] Make sure signature inference works for nested lambdas 
+- [ ] Make sure signature inference works arbitratily complex function signatures

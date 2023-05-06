@@ -7,6 +7,7 @@ sablejar = "vendor/sablecc.jar"
 mainclass = package + ".Main"
 
 sablegrammar = "src/ElipsesCST.sable"
+sablegrammar = "src/endy.sable"
 sablegrammar = "src/Elipses.sable"
 
 autorun = True 
