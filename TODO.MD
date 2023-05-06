@@ -31,3 +31,5 @@ declarações
 - [ ] Make sure signature inference works for nested blocks
 - [ ] Make sure signature inference works for nested lambdas 
 - [ ] Make sure signature inference works arbitratily complex function signatures
+- [x] teste decl const return type ad add error if return type is a function and its not a callexp
+- [x] add type coercion in in return, in call and declare const

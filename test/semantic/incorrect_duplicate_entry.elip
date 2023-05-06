@@ -1,8 +1,12 @@
+(inteiro baskara(real a | real b):(
+    2
+))
+
 entrada ( inteiro principal () : 
 	(2)
 )
 
 entrada (inteiro mais_principal(real x | real y):(
-  baskara(2,3 | 3,2) +
-  baskara(0b100011 | 3,2)
+   baskara(2,3 | 3,2) +
+   baskara(0b100011 | 3,2)
 ))

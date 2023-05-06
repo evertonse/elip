@@ -704,7 +704,7 @@ public class CCodeGenerator extends DepthFirstAdapter {
             String id = ids.get(i).getText(); 
             PExp arg = args.get(i);
 
-             Symbol identifier_symbol = inference.getSymbolOrNull(arg);
+            Symbol identifier_symbol = inference.getSymbolOrNull(arg);
             if (identifier_symbol != null) {
                 table.add(id, new Symbol(identifier_symbol));
                 ElipLogger.debug(" Lambda -> added id "+ id + " from already defined symbol :" + identifier_symbol);

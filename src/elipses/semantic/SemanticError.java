@@ -4,10 +4,18 @@ import elipses.util.*;
 
 public class SemanticError {
     SemanticErrorType type;
-    public static String filename;
+    private static String filename;
     String custom_msg;
     int line, pos;
     Token node;
+
+    static public void setFileName(String filename) {
+        SemanticError.filename = filename;
+    }
+
+    static public String getFileName(String filename) {
+        return SemanticError.filename;
+    }
 
     public SemanticError(SemanticErrorType error_type) {
         this.type = error_type;

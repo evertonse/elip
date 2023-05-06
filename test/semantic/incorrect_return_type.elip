@@ -19,3 +19,13 @@ entrada (inteiro incorrect_return_type() : (
     # correct returning integer + real which results in real
     2 + 0,1
 ))
+
+(real expects_real_but_returning_function() : (
+    # correct returning integer + real which results in real
+    expects_real
+))
+
+(real expects_real_but_returning_function_inside_a_lambda() : (
+    # correct returning integer + real which results in real
+    (lambda ():(expects_real)[])
+))

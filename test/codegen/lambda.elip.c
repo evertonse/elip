@@ -59,14 +59,19 @@ int elip_a( int elip_b, int elip_c)  {
             lambda_2 = 2;
         }
         /*antes do temp*/        int elip_x = /*depois*/lambda_2 ;
-        lambda_1 = elip_x;
+        
+        int lambda_3;        
+        {
+            lambda_3 = 2;
+        }
+        /*antes do temp*/        lambda_1 = /*depois*/lambda_3;
     }
     /*antes do temp*/    int return_data = /*depois*/lambda_1;
     return (return_data);
 }
 int elip_higher_order_lambda_wrapped_in_block()  {
     
-    int lambda_3;    
+    int lambda_4;    
     {
         
         int(*block_0)(int(*)(int(*)(int, int, int)));        
@@ -74,14 +79,14 @@ int elip_higher_order_lambda_wrapped_in_block()  {
             block_0 = elip_home;
         }
         /*escrevo no block*/        int(*elip_wraped)(int(*)(int(*)(int, int, int)))  = /*escrevo no body*/block_0 ;
-        lambda_3 = 2;
+        lambda_4 = 2;
     }
-    /*antes do temp*/    int return_data = /*depois*/lambda_3;
+    /*antes do temp*/    int return_data = /*depois*/lambda_4;
     return (return_data);
 }
 int elip_higher_order_lambda()  {
     
-    int lambda_4;    
+    int lambda_5;    
     {
         int elip_y = 2 ;
         
@@ -90,15 +95,25 @@ int elip_higher_order_lambda()  {
             block_1 = elip_mdc;
         }
         /*escrevo no block*/        int(*elip_fn)(int, int)  = /*escrevo no body*/block_1 ;
-        lambda_4 = ((elip_y/elip_fn(elip_y, 2))*2);
+        lambda_5 = ((elip_y/elip_fn(elip_y, 2))*2);
     }
     
-    int lambda_5;    
+    int lambda_6;    
     {
-        int(*elip_y)(int(*)(int(*)(int, int, int)))  = elip_home ;
-        lambda_5 = 2;
+        
+        int(*block_2)(int(*)(int(*)(int, int, int)));        
+        {
+            
+            int(*block_3)(int(*)(int(*)(int, int, int)));            
+            {
+                block_3 = elip_home;
+            }
+            /*escrevo no block*/            block_2 = /*escrevo no body*/block_3;
+        }
+        /*escrevo no block*/        int(*elip_y)(int(*)(int(*)(int, int, int)))  = /*escrevo no body*/block_2 ;
+        lambda_6 = 2;
     }
-    /*antes do temp*/    /*antes do temp*/    int return_data = (/*depois*/lambda_4 + /*depois*/lambda_5);
+    /*antes do temp*/    /*antes do temp*/    int return_data = (/*depois*/lambda_5 + /*depois*/lambda_6);
     return (return_data);
 }
 int main(int argc, char *argv[]) {

@@ -13,6 +13,8 @@ import java.util.*;
 
 public class SemanticAnalysis extends DepthFirstAdapter {
     List<SemanticError> errors = new ArrayList<>();
+    List<SemanticWarning> warnings = new ArrayList<>();
+
     SemanticFlags flags = new SemanticFlags();
     SymbolTable table = new SymbolTable();
 
@@ -28,8 +30,9 @@ public class SemanticAnalysis extends DepthFirstAdapter {
 
     public SemanticAnalysis(String filename) {
         this.filename = filename;
-        SemanticError.filename = filename;
-        this.inference = new TypeInference(table, errors);
+        SemanticError.setFileName(filename);
+        SemanticWarning.setFileName(filename);
+        this.inference = new TypeInference(table, errors,warnings);
     }
     
     static public void addBuiltinFunctions(SymbolTable table) {
@@ -140,7 +143,7 @@ public class SemanticAnalysis extends DepthFirstAdapter {
                     "\n\t First defined in line " 
                     + entry.getLine() 
                     + " position " + entry.getPos()
-                    + " on function " + node.getIdentifier() + node.getParam()
+                    + " on function '" + node.getIdentifier() + "' with params '" + node.getParam() + " '"
                 ;
             } 
             else {
@@ -159,15 +162,43 @@ public class SemanticAnalysis extends DepthFirstAdapter {
     public void outADeclFunc(ADeclFunc node) {
         // This check needs to be down on outNode,
         // Since it need to compute various types
-        String name = node.getIdentifier().getText(); 
+        String func_id = node.getIdentifier().getText(); 
         // Check for expression and return
-        Symbol.Type got = inference.getType(node.getExp());
-        Symbol.Type expect = table.get(name).getType();
-        if ( got != expect  ) {
-           errors.add(new SemanticError(
-                SemanticErrorType.INCOMPATIBLE_RETURN_TYPE, node.getIdentifier(), 
-                " on " + name + " expected: " + expect + " got: " + got 
-            )); 
+        Symbol.Type expect = table.get(func_id ).getType();
+        Symbol.Type got = null;
+
+        PExp exp = node.getExp();
+        Symbol identifier_symbol = inference.getSymbolOrNull(exp);
+
+        if (identifier_symbol != null) {
+            if (identifier_symbol.isFunction()) {
+                errors.add(new SemanticError(
+                    SemanticErrorType.INCOMPATIBLE_RETURN_TYPE, node.getIdentifier(), 
+                    " on '" + func_id + "'' expected: '" + expect 
+                    + "' got function signature '" + identifier_symbol.getSignature() + "'"
+                )); 
+            }
+            else {
+                got = identifier_symbol.getType();
+            }
+        }
+        else {
+            if (got == null) {
+                got = inference.getType(exp); 
+            }
+            if ( !inference.canApplyCoercion(expect, got)) {
+                errors.add(new SemanticError(
+                    SemanticErrorType.INCOMPATIBLE_RETURN_TYPE, node.getIdentifier(), 
+                    " on '" + func_id + "'' expected: '" + expect + "' got: '" + got + "'" 
+                )); 
+            }
+            else if (expect != got) {
+                warnings.add( new SemanticWarning(node.getIdentifier(),
+                    "on '" + func_id+  "' Coercion from given '" + got +"' to " + " '" + expect + "'"
+                ));
+
+            }
+
         }
         table.exitScope();
     }
@@ -184,13 +215,13 @@ public class SemanticAnalysis extends DepthFirstAdapter {
             if (ids_count > 0) {
                 errors.add(new SemanticError(
                     SemanticErrorType.INCORRECT_NUMBER_OF_ARGUMENTS, ids.get(0),
-                    "on lambda expectd: " + ids_count + " got: " + args_count 
+                    "on lambda expectd: " + ids_count + ", got: " + args_count 
                 ));
             }
             else {
                 errors.add(new SemanticError(
                     SemanticErrorType.INCORRECT_NUMBER_OF_ARGUMENTS,
-                    "on lambda expectd: " + ids_count + " got: " + args_count 
+                    "on lambda expectd: " + ids_count + ", got: " + args_count 
                 ));
             }
         }
@@ -244,7 +275,7 @@ public class SemanticAnalysis extends DepthFirstAdapter {
 
         if (table.existsInCurrentScope(name)) {
            errors.add(new SemanticError(
-                SemanticErrorType.ALREADY_DECLARED, t, " on parameter " + node.toString()
+                SemanticErrorType.ALREADY_DECLARED, t, " on parameter  '" + node.toString() + "'"
             )); 
         }
         else {
@@ -327,13 +358,40 @@ public class SemanticAnalysis extends DepthFirstAdapter {
         String name = node.getIdentifier().getText().strip();
         table.add(name, new Symbol(name, node.getType().toString()));
         Symbol.Type expect = inference.fromPType(node.getType());
-        Symbol.Type got= inference.getType(node.getExp());
-        if (expect != got) {
-            errors.add(new SemanticError(
-                SemanticErrorType.INCOMPATIBLE_TYPES, node.getIdentifier(),
-                "on const declaration'" + node.getIdentifier().getText() + "'"
-                ));
+        Symbol.Type got = null;
+
+        PExp exp = node.getExp();
+        Symbol identifier_symbol = inference.getSymbolOrNull(exp);
+
+        if (identifier_symbol != null) {
+            if (identifier_symbol.isFunction()) {
+                errors.add(new SemanticError(
+                    SemanticErrorType.INCOMPATIBLE_TYPES, node.getIdentifier(), 
+                    " on '" + name + "' declaration const: expected: '" + expect + "' got function signature '" + identifier_symbol.getSignature() + "'"
+                )); 
+            }
+            else {
+                got = identifier_symbol.getType();
+            }
         }
+        else {
+            if (got == null) {
+                got = inference.getType(exp); 
+            }
+            if ( !inference.canApplyCoercion(expect, got)  ) {
+                errors.add(new SemanticError(
+                    SemanticErrorType.INCOMPATIBLE_TYPES, node.getIdentifier(), 
+                    " on '" + name + "' declaration const: expected: '" + expect + "' got: " + got 
+                )); 
+            }
+            else if (expect != got) {
+                warnings.add( new SemanticWarning(
+                    node.getIdentifier(),
+                    "on '" + name+  "' Coercion from given '" + got +"' to " + " '" + expect + "'"
+                ));
+            }
+        }
+
         ElipLogger.info(table.get(name).toString());
 
     }
@@ -349,8 +407,13 @@ public class SemanticAnalysis extends DepthFirstAdapter {
         for (SemanticError e : errors) {
             e.inform();
         }
+
+        for (SemanticWarning w : warnings) {
+            w.inform();
+        }
+
         if (!allGood()){
-            System.exit(1);
+            System.exit(69);
         } 
     }
     

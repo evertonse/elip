@@ -95,6 +95,7 @@ src\elipses\parser\TokenIndex.java
 src\elipses\semantic\SemanticError.java 
 src\elipses\semantic\SemanticErrorType.java 
 src\elipses\semantic\SemanticFlags.java 
+src\elipses\semantic\SemanticWarning.java 
 src\elipses\semantic\Symbol.java 
 src\elipses\semantic\SymbolTable.java 
 src\elipses\semantic\TypeInference.java 

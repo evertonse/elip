@@ -1,0 +1,19 @@
+
+(inteiro random_func():(
+    2
+))
+
+entrada (inteiro incorrect_decl_const() : (
+    (
+        # Error here boolean is not integer 
+        (const inteiro x(verdadeiro))
+        # Error here function declaretion can't be in a type
+        (const inteiro y(random_func))
+        # Real got falso infered from a block
+        (const real z( ((falso)) ))
+        (const real w((lambda ():(random_func)[])))
+        (const real r((lambda ():(2)[])))
+        x + y
+
+    )
+))

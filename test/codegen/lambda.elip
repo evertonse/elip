@@ -1,3 +1,4 @@
+#!/usr/bin/elipc
 ( inteiro mdc(inteiro a | inteiro b) :(
    se (b = 0) entao a senao mdc(b | a % b)
 ))
@@ -7,7 +8,7 @@
 ))
 
 ( inteiro a(inteiro b | inteiro c) :(
-    (lambda (x) : (x) [
+    (lambda (x) : ((lambda () : (2) [])) [
         (lambda () : (2) [])
     ])
 ))
@@ -18,7 +19,7 @@
 
 entrada ( inteiro higher_order_lambda():(
    (lambda (y | fn) : (y / fn(y | 2) *2) [2| (mdc)])  # passing a func make problems arise
-   +(lambda (y) : (2) [home])  # passing a func make problems arise
+   +(lambda (y) : (2) [((home))])  # passing a func make problems arise
 ))
 
 {--

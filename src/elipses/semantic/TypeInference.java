@@ -3,7 +3,6 @@ package elipses.semantic;
 import elipses.node.*;
 import elipses.semantic.Symbol.Type;
 import elipses.util.ElipLogger;
-
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -33,15 +32,23 @@ class TypeCache {
     }
 }
 
+
 public class TypeInference {
 
     SymbolTable table = null;
     List<SemanticError> errors = null;
+    List<SemanticWarning> warnings = null;
     DepthFirstAdapter adapter;
     
     public TypeInference(SymbolTable  table, List<SemanticError> error_list) {
         this.table = table;
         this.errors = error_list;
+    }
+
+    public TypeInference(SymbolTable  table, List<SemanticError> error_list, List<SemanticWarning> warnings_list) {
+        this.table = table;
+        this.errors = error_list;
+        this.warnings = warnings_list;
     }
     
     public TypeInference(SymbolTable  table, List<SemanticError> error_list, DepthFirstAdapter adapter) {
@@ -64,6 +71,22 @@ public class TypeInference {
         else {
             return Type.UNKOWN;
         }
+    }
+
+    public boolean canApplyCoercion (Type t1, Type t2) {
+        if (t1 == Type.UNKOWN || t2 == Type.UNKOWN){
+            return false;
+        }
+        else if (t1 == t2) {
+            return true;
+        }
+        else if (t1 == Type.REAL && t2 == Type.INT) {
+            return true;
+        }
+        else if (t1 == Type.INT && t2 == Type.REAL) {
+            return true;
+        }
+        return false;
     }
 
     public Symbol getSymbolOrNull(PExp node) {
@@ -466,7 +489,20 @@ public class TypeInference {
                     }
                 }
                 else {
-                    if (param.getType() != id_symbol.getType()) {
+                    Type param_type = param.getType();
+                    Type id_symbol_type =  id_symbol.getType();
+                    if (canApplyCoercion(param_type, id_symbol_type) && param_type != id_symbol_type) {
+                        if(warnings != null){
+                            warnings.add( new SemanticWarning(
+                                token,
+                                "on '" + id_symbol.getName()
+                                + " the " +(i+1) + "th arguments:   " 
+                                +  "' Coercion from given argument'" + id_symbol_type 
+                                +"' to " + " '" + param_type + "'"
+                            ));
+                        }
+                    }
+                    else if (param_type  != id_symbol_type) {
                         return new SemanticError(SemanticErrorType.INCORRECT_USE_OF_ARGUMENTS,token,
                             "on function '" + function_id+ "'"
                             + " the " +(i+1) + "th arguments:   " + id_symbol.getType()
@@ -478,7 +514,19 @@ public class TypeInference {
             else {
                 Type arg_type = getType(arg);
                 Type param_type = param.getType();
-                if ( arg_type != param_type ) {
+
+                if (canApplyCoercion(param_type, arg_type) && param_type != arg_type) {
+                    if(warnings != null){
+                        warnings.add( new SemanticWarning(
+                            token,
+                            "on '" + arg.toString()
+                            + "' the " +(i+1) + "th argument " 
+                            +  "' were coerced from given argument '" +arg_type 
+                            +"' to " + "'" + param_type + "'"
+                        ));
+                    }
+                }
+                else if (arg_type != param_type  ) {
                     return new SemanticError(SemanticErrorType.INCORRECT_USE_OF_ARGUMENTS,token,
                         "on function '" + function_id+ "'"
                         + " the " +(i+1)+ "th parameter expected type: " + param_type

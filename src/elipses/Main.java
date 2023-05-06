@@ -18,20 +18,20 @@ import java.util.List;
 
 public class Main {
 
-  static List<String> input_files = new ArrayList<String>();
-  static Switch adapter  = null;
+    static List<String> input_files = new ArrayList<String>();
+    static Switch adapter  = null;
 
-  static boolean use_gui            = false;
-  static boolean print_ast          = false;
-  static boolean generate_exe       = false;
-  static boolean generate_c         = false;
-  static boolean print_tokens       = false;
-  static boolean semantic_analisys  = true;
+    static boolean use_gui            = false;
+    static boolean print_ast          = false;
+    static boolean generate_exe       = false;
+    static boolean generate_c         = false;
+    static boolean print_tokens       = false;
+    static boolean semantic_analisys  = true;
 
-  static boolean DEBUG = 
-    true
-    //false
-   ;
+    static boolean DEBUG = 
+        //true
+        false
+    ;
     static boolean DEBUG_LOG = 
         true
         //false

@@ -42,7 +42,7 @@ public class ElipLogger {
     }
 
     public static void warn(String message) {
-        logger.println( YELLOW + prefix + RESET + "warn: " + message );
+        logger.println( YELLOW + prefix + RESET + "warning: " + message );
         logger.flush();
     }
 
@@ -69,6 +69,10 @@ public class ElipLogger {
 
     public static void error(String filename, int line, int column, String err_msg) {
         error(String.format("%s[%d:%d]: %s", filename, line,column, err_msg));
+    }
+
+    public static void warn(String filename, int line, int column,String message) {
+        warn(String.format("%s[%d:%d]: %s", filename, line,column, message));
     }
  
 }
