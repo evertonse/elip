@@ -1,17 +1,11 @@
 
-(inteiro existent_function() : (
-    2
-))
-
-entrada ( inteiro use_of_undeclared_func() : (
-    # No problem here
-	existent_function() 
-    # Problem here
-    + non_existent_function(2)
-))
 
 (inteiro use_of_undeclared_identifier_x(real b) : (
     ( b % x)
+))
+
+(inteiro existent_function() : (
+    2
 ))
 
 (inteiro undeclared_decl_const_x_y() : (
@@ -24,5 +18,12 @@ entrada ( inteiro use_of_undeclared_func() : (
         )) 
         x
       ) 
+))
+
+entrada ( inteiro use_of_undeclared_func() : (
+    # No problem here
+	existent_function() 
+    # Problem here
+    + non_existent_function(2)
 ))
 

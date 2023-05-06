@@ -1,0 +1,7 @@
+
+SableCC version 3.7
+Copyright (C) 1997-2012 Etienne M. Gagnon <egagnon@j-meg.com> and
+others.  All rights reserved.
+
+This software comes with ABSOLUTELY NO WARRANTY.  This is free software,
+and you are welcome to redistribute it under certain conditions.

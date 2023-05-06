@@ -1,0 +1,25 @@
+(booleano func_ref_as_condition(): (
+    se (func_ref_as_condition) entao verdadeiro senao (2 >3)
+))
+
+(booleano truthy_as_func_ref(): (
+    se (falso) entao truthy_as_func_ref senao (verdadeiro)
+))
+
+
+(inteiro falsy_as_func_ref(): (
+    se (falso) entao 2 senao falsy_as_func_ref 
+))
+
+(inteiro cond_as_real(): (
+    se (1,0) entao 2 senao (3)
+))
+
+# if  expr must have the same type on all branches
+(real different_type_on_branch(): (
+    se (falso) entao 2 senao (3,3)
+))
+
+entrada (inteiro main(): (
+   (2)
+))

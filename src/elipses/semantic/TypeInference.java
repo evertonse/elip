@@ -89,6 +89,25 @@ public class TypeInference {
         return false;
     }
 
+    public boolean isFunctionPointer(PExp node) { 
+        Symbol s = getSymbolOrNull(node);
+        if (s!=null) {
+            return s.isFunction();
+        }
+        return false;
+    }
+
+    public Symbol isFunctionPointerOrNull(PExp node) { 
+        Symbol s = getSymbolOrNull(node);
+        if (s!=null) {
+            if (s.isFunction()) {
+                return s;
+            }
+        }
+
+        return null;
+    }
+
     public Symbol getSymbolOrNull(PExp node) {
         Symbol return_symbol = null;
         if (node instanceof ALambdaExp) {
@@ -176,26 +195,47 @@ public class TypeInference {
         
         // Unary
         else if(node instanceof ANegativeExp) {
-            Symbol.Type type = getType(((ANotExp)node).getExp());
-            if (type == Symbol.Type.BOOL) {
+            Symbol s = isFunctionPointerOrNull(((ANegativeExp)node).getExp()); 
+            if (s != null) {
                 errors.add(new SemanticError(
-                    SemanticErrorType.INCOMPATIBLE_TYPES, "  - Trying to use '-' negate operator on boolean expression " + node.toString()));
+                    SemanticErrorType.INVALID_OPERATION_ON_FN_REFENRECE, s.getToken(), ". Trying to use '-' negate  on a function reference'" 
+                    + s.getName() + "' with signature " + s.getSignature()
+                ));
                 return_symbol = Symbol.Type.UNKOWN;
             }
             else {
-                return_symbol = type;
+                Symbol.Type type = getType(((ANegativeExp)node).getExp());
+                if (type == Symbol.Type.BOOL) {
+                    errors.add(new SemanticError(
+                        SemanticErrorType.INCOMPATIBLE_TYPES, ". Trying to use '-' negate operator on boolean expression " + node.toString()));
+                    return_symbol = Symbol.Type.UNKOWN;
+                }
+                else {
+                    return_symbol = type;
+                }
             }
         }
 
         else if(node instanceof ANotExp) {
-            Symbol.Type type = getType(((ANotExp)node).getExp());
-            if (type != Symbol.Type.BOOL) {
+            Symbol s = isFunctionPointerOrNull(((ANotExp)node).getExp()); 
+            if (s != null) {
                 errors.add(new SemanticError(
-                    SemanticErrorType.INCOMPATIBLE_TYPES, " - Trying to use 'no' boolean negate operator on type " + type + " " + node.toString()));
+                    SemanticErrorType.INVALID_OPERATION_ON_FN_REFENRECE, s.getToken(), ". Trying to use 'no' boolean negate operator  on a function reference'" 
+                    + s.getName() + "' with signature " + s.getSignature()
+                ));
                 return_symbol = Symbol.Type.UNKOWN;
             }
             else {
-                return_symbol = Symbol.Type.BOOL; 
+
+                Symbol.Type type = getType(((ANotExp)node).getExp());
+                if (type != Symbol.Type.BOOL) {
+                    errors.add(new SemanticError(
+                        SemanticErrorType.INCOMPATIBLE_TYPES, ". Trying to use 'no' boolean negate operator on type " + type + " " + node.toString()));
+                        return_symbol = Symbol.Type.UNKOWN;
+                }
+                else {
+                    return_symbol = Symbol.Type.BOOL; 
+                }
             }
         }
         // Binaries Relational
@@ -238,23 +278,68 @@ public class TypeInference {
             return_symbol = type;
         } 
         else if (node instanceof AIfExp) {
+            Symbol cond_symbol = isFunctionPointerOrNull(((AIfExp)node).getCond()); 
+            Symbol truthy_symbol = isFunctionPointerOrNull(((AIfExp)node).getTruthy()); 
+            Symbol falsy_symbol = isFunctionPointerOrNull(((AIfExp)node).getFalsy()); 
             Symbol.Type cond = getType(((AIfExp)node).getCond());
             Symbol.Type truthy = getType(((AIfExp)node).getTruthy());
             Symbol.Type falsy = getType(((AIfExp)node).getFalsy());
-            if (cond != Type.BOOL) {
+            if (cond_symbol != null) {
                 errors.add(new SemanticError(
-                    SemanticErrorType.INCOMPATIBLE_TYPES, " trying to use non boolean expression of if condition when type is" + cond + " " + node.toString()));
-                    return_symbol = Type.UNKOWN;
+                    SemanticErrorType.INCOMPATIBLE_TYPES, cond_symbol.getToken(), ". Trying to use function reference as a boolean on if-expression " 
+                    + "func: '" + cond_symbol.getName() + "' with signature " + cond_symbol.getSignature()
+                ));
+                return_symbol = Symbol.Type.UNKOWN;
             }
-            else if (truthy != falsy) {
-                errors.add(new SemanticError(
-                    SemanticErrorType.INCOMPATIBLE_TYPES, " in a if expression both possible values must have the same type " + " " + node.toString()));
+            else if (truthy_symbol != null && cond == Type.BOOL) {
+                if (falsy_symbol != null ){
+                    if (truthy_symbol.getSignature().equals(falsy_symbol.getSignature())) {
+                        return_symbol = truthy_symbol.getType();
+                    }
+                    else {
+                        errors.add(new SemanticError(
+                            SemanticErrorType.INCOMPATIBLE_TYPES, falsy_symbol.getToken(), ". both branches of the the if-expression has to have the same type even if it's a function reference" 
+                        + "  then-branch: '" + truthy_symbol.getName() + "' with signature " + truthy_symbol.getSignature()
+                        + "  else-branch: '" + falsy_symbol.getName() + "' with signature " + falsy_symbol.getSignature()
+                        ));
+                        return_symbol = Type.UNKOWN;
+                    }
+                }
+                else {
+                    errors.add(new SemanticError(
+                        SemanticErrorType.INCOMPATIBLE_TYPES, truthy_symbol.getToken(), ". both branches of the the if-expression has to have the same type" 
+                    + "  then-branch: '" + truthy_symbol.getName() + "' with signature " + truthy_symbol.getSignature()
+                    + "  else-branch: with type '" + falsy  + "'"
+                    ));
                     return_symbol = Type.UNKOWN;
+                }
+
             }
             else {
-                assert truthy == falsy;
-                return_symbol = truthy;
-            } 
+                if (cond != Type.BOOL) {
+                    errors.add(new SemanticError(
+                        SemanticErrorType.INCOMPATIBLE_TYPES, ". Trying to use non boolean expression of if condition  on " 
+                            + "'" + node.toString()+ "'"
+                            +"when type is '" + cond + "'' " 
+                        ));
+                        return_symbol = Type.UNKOWN;
+                }
+                else if (truthy != falsy) {
+                    errors.add(new SemanticError(
+                        SemanticErrorType.INCOMPATIBLE_TYPES, 
+                            " in a if expression both possible values must have the same type " 
+                            + " on '" + node.toString() + "' "
+                            + " then-branch: with type '" +  truthy  + "' "
+                            + " else-branch: with type '" +  falsy + "' "  
+                        ));
+                        return_symbol = Type.UNKOWN;
+                }
+                else {
+                    assert truthy == falsy;
+                    return_symbol = truthy;
+                } 
+            }
+
         } 
         // @important this assumes that each id* is mapped to a type from exp*
         // and it is properly place on a new scope inside the lambda, otherwise 
@@ -280,6 +365,7 @@ public class TypeInference {
     }
 
     public <T extends PExp> Symbol.Type getTypeBinaryLogic(T node) {
+
         Method getRight;
         Method getLeft;
 
@@ -292,27 +378,42 @@ public class TypeInference {
             right_node = (PExp)getRight.invoke(node);
             left_node = (PExp)getLeft.invoke(node);;
 
+            Symbol right_symbol = isFunctionPointerOrNull(right_node); 
+            Symbol left_symbol = isFunctionPointerOrNull(left_node); 
+            String error_msg = (right_symbol != null ? " right:'" + right_symbol.getName()+"' " : "")
+                                +(left_symbol != null ? " left:'" + left_symbol.getName()+"' " : "")
+                            ;
+            Token fn_token = (right_symbol != null ? right_symbol.getToken(): (left_symbol != null? left_symbol.getToken(): null ));
+            if (right_symbol != null || left_symbol != null) {
+                errors.add(new SemanticError(
+                    SemanticErrorType.INVALID_OPERATION_ON_FN_REFENRECE, fn_token,
+                    "  - Trying to use boolean binary operator  on a function reference'" 
+                    + error_msg
+                ));
+                return Symbol.Type.UNKOWN;
+            }
+
             Symbol.Type left = getType(left_node);
             Symbol.Type right = getType(right_node);
             if (left == right && right == Symbol.Type.BOOL) {
                 return Symbol.Type.BOOL;
             }
             else if(left == Symbol.Type.BOOL) {
-                errors.add(new SemanticError(SemanticErrorType.INCOMPATIBLE_TYPES, " right side is not a boolean, on "
+                errors.add(new SemanticError(SemanticErrorType.INCOMPATIBLE_TYPES, " Incorrect logic operator usage. right side is not a boolean, on "
                     + " left: " + left_node
                     + " right: " + right_node
                 ));
                 return Type.UNKOWN;
             }
             else if(right == Symbol.Type.BOOL) {
-                errors.add(new SemanticError(SemanticErrorType.INCOMPATIBLE_TYPES, " left side is not a boolean, on "
+                errors.add(new SemanticError(SemanticErrorType.INCOMPATIBLE_TYPES, " Incorrect logic operator usage. left side is not a boolean, on "
                     + " left: " + left_node
                     + " right: " + right_node
                 ));
                 return Type.UNKOWN;
             }
             else {
-                errors.add(new SemanticError(SemanticErrorType.INCOMPATIBLE_TYPES, " neither side  expression is not a boolean, on " 
+                errors.add(new SemanticError(SemanticErrorType.INCOMPATIBLE_TYPES, "Incorrect logic operator usage. neither side  expression is not a boolean, on " 
                     + " left: " + left_node
                     + " right: " + right_node
                 ));
@@ -342,6 +443,22 @@ public class TypeInference {
             right_node = (PExp)getRight.invoke(node);
             left_node = (PExp)getLeft.invoke(node);;
 
+
+            Symbol right_symbol = isFunctionPointerOrNull(right_node); 
+            Symbol left_symbol = isFunctionPointerOrNull(left_node); 
+            String error_msg = (right_symbol != null ? " right:'" + right_symbol.getName()+"' " : "")
+                                +(left_symbol != null ? " left:'" + left_symbol.getName()+"' " : "")
+                            ;
+
+            Token fn_token = (right_symbol != null ? right_symbol.getToken(): (left_symbol != null? left_symbol.getToken(): null ));
+            if (right_symbol != null || left_symbol != null) {
+                errors.add(new SemanticError(
+                    SemanticErrorType.INVALID_OPERATION_ON_FN_REFENRECE,fn_token, "  - Trying to use boolean binary operator  on a function reference'" 
+                    + error_msg
+                ));
+                return Symbol.Type.UNKOWN;
+            }
+
             Symbol.Type left = getType(left_node);
             Symbol.Type right = getType(right_node);
             if (left == right && right == Symbol.Type.BOOL) {
@@ -354,7 +471,7 @@ public class TypeInference {
                 return Type.UNKOWN;
             }
             else if(left == Symbol.Type.BOOL) {
-                errors.add(new SemanticError(SemanticErrorType.INCOMPATIBLE_TYPES, "left side of a comparison is a boolean"  
+                errors.add(new SemanticError(SemanticErrorType.INCOMPATIBLE_TYPES, "left side of a relational operator is a boolean"  
                     + " left: " + left_node
                     + " right: " + right_node
                     + extra_msg
@@ -362,7 +479,7 @@ public class TypeInference {
                 return Type.UNKOWN;
             }
             else if(right == Symbol.Type.BOOL) {
-                errors.add(new SemanticError(SemanticErrorType.INCOMPATIBLE_TYPES, "right side of a comparison a boolean"
+                errors.add(new SemanticError(SemanticErrorType.INCOMPATIBLE_TYPES, "right side of a relational operator a boolean"
                     + " left: " + left_node
                     + " right: " + right_node
                     + extra_msg
@@ -401,12 +518,36 @@ public class TypeInference {
             right_node = (PExp)getRight.invoke(node);
             left_node = (PExp)getLeft.invoke(node);;
 
+            Symbol right_symbol = isFunctionPointerOrNull(right_node); 
+            Symbol left_symbol = isFunctionPointerOrNull(left_node); 
+            String error_msg = (right_symbol != null ? " right:'" + right_symbol.getName()+"' " : "")
+                                +(left_symbol != null ? " left:'" + left_symbol.getName()+"' " : "")
+                            ;
+
+            Token fn_token = (right_symbol != null ? right_symbol.getToken(): (left_symbol != null? left_symbol.getToken(): null ));
+            if (right_symbol != null || left_symbol != null) {
+                errors.add(new SemanticError(
+                    SemanticErrorType.INVALID_OPERATION_ON_FN_REFENRECE,fn_token, "  - Trying to use boolean binary operator  on a function reference'" 
+                    + error_msg
+                ));
+                return Symbol.Type.UNKOWN;
+            }
+
             Symbol.Type left = getType(left_node);
             Symbol.Type right = getType(right_node);
+            if( node instanceof AModExp
+            && ((left !=  Type.INT) || (right != Type.INT))
+            ) {
+                errors.add(new SemanticError(SemanticErrorType.INVALID_MODULUS_OPERATION, ". Modulus operator of non-integral types is undefined"  
+                    + " left: '"  + left_node   + "'"
+                    + " right: '" + right_node  + "'"
+                ));
+                return Symbol.Type.UNKOWN;
+            }
             if (left == Symbol.Type.BOOL || right == Symbol.Type.BOOL) {
                 errors.add(new SemanticError(SemanticErrorType.INCOMPATIBLE_TYPES, " binary operation on bool"  
-                    + " left: " + left_node
-                    + " right: " + right_node
+                    + " left: '" + left_node + "'"
+                    + " right: '" + right_node + "'"
                 ));
                 return Symbol.Type.UNKOWN;
             }
@@ -417,13 +558,13 @@ public class TypeInference {
                 return Type.INT;
             }
             else if(right == Symbol.Type.UNKOWN ){ 
-                errors.add(new SemanticError(SemanticErrorType.INCOMPATIBLE_TYPES, " Binary Operation with Unkown Type "
-                    + " left: " + left_node
-                    + " right: " + right_node
+                errors.add(new SemanticError(SemanticErrorType.INCOMPATIBLE_TYPES, " binary Operation with Unkown Type "
+                    + " left: '" + left_node + "'"
+                    + " right: '" + right_node + "'"
                 ));
             }
             else {
-                errors.add(new SemanticError(SemanticErrorType.INCOMPATIBLE_TYPES, " Binary Operation with Unkown Type "
+                errors.add(new SemanticError(SemanticErrorType.INCOMPATIBLE_TYPES, " binary Operation with Unkown Type "
                     + " left: " + left_node
                     + " right: " + right_node
                 ));
@@ -521,7 +662,7 @@ public class TypeInference {
                             token,
                             "on '" + arg.toString()
                             + "' the " +(i+1) + "th argument " 
-                            +  "' were coerced from given argument '" +arg_type 
+                            +  "' was coerced from '" +arg_type 
                             +"' to " + "'" + param_type + "'"
                         ));
                     }

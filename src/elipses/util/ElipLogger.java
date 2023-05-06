@@ -64,15 +64,15 @@ public class ElipLogger {
     }
 
     public static void error(String filename, int line, String err_msg) {
-        error(String.format("%s:%d: %s", filename, line, err_msg));
+        error(String.format("%s,%d: %s", filename, line, err_msg));
     }
 
     public static void error(String filename, int line, int column, String err_msg) {
-        error(String.format("%s[%d:%d]: %s", filename, line,column, err_msg));
+        error(String.format("%s[%d,%d]: %s", filename, line,column, err_msg));
     }
 
     public static void warn(String filename, int line, int column,String message) {
-        warn(String.format("%s[%d:%d]: %s", filename, line,column, message));
+        warn(String.format("%s[%d,%d]: %s", filename, line,column, message));
     }
  
 }

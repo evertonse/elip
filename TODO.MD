@@ -33,3 +33,5 @@ declarações
 - [ ] Make sure signature inference works arbitratily complex function signatures
 - [x] teste decl const return type ad add error if return type is a function and its not a callexp
 - [x] add type coercion in in return, in call and declare const
+- [ ] add checking for signature on main function
+- [ ] Make sure operation on mod, is only defined for integer, see what what be the best for div as well

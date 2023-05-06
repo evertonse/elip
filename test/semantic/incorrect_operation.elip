@@ -1,0 +1,21 @@
+entrada (inteiro main(): (
+      # modulus operation on non-integral types
+    ( (const inteiro mod  (2,0 % 2,0))    
+      (const inteiro mult  (verdadeiro * 2))    
+      # warning should occur here
+      (const inteiro coercion (2,3 * 4))    
+      # relational operador on boolean type
+      (const booleano relation_on_bool (verdadeiro > falso))    
+      # logic operator on real type
+      (const booleano logical_on_real (0,4 e 3,4))    
+      # logic operator on integer type
+      (const booleano  logical_on_int (1 ou  2))    
+      # use of binary operator with function reference
+      (const inteiro sum_on_function_ref (main +  2))    
+      # minus a boolean
+      (const booleano minus_bool (-verdadeiro))    
+      # logic negating a numbers
+      (const real negating_number ( nao 2,3))    
+        2
+    )
+))

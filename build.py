@@ -17,9 +17,11 @@ codegen_files = [
 ]
 
 semantic_files = [
-    "test/semantic/incorrect_duplicate_entry.elip",
-    #"test/semantic/already_defined.elip",
-    #"test/semantic/undeclared.elip",
+    #"test/semantic/incorrect_duplicate_entry.elip",
+    #"test/semantic/incorrect_already_defined.elip",
+    #"test/semantic/incorrect_undeclared.elip",
+    #"test/semantic/incorrect_operation.elip" , # ok
+    "test/semantic/incorrect_if_expr.elip" , # not ok
     #"test/semantic/signature.elip",
     #"test/semantic/incorrect_args.elip",
     #"test/semantic/incorrect_return_type.elip",

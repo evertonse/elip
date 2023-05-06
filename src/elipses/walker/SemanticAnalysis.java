@@ -14,7 +14,7 @@ import java.util.*;
 public class SemanticAnalysis extends DepthFirstAdapter {
     List<SemanticError> errors = new ArrayList<>();
     List<SemanticWarning> warnings = new ArrayList<>();
-
+    Token last_if = null;
     SemanticFlags flags = new SemanticFlags();
     SymbolTable table = new SymbolTable();
 
@@ -145,6 +145,13 @@ public class SemanticAnalysis extends DepthFirstAdapter {
                     + " position " + entry.getPos()
                     + " on function '" + node.getIdentifier() + "' with params '" + node.getParam() + " '"
                 ;
+                for (PParam param : node.getParam()) {
+                    if (param instanceof ASignatureParam) {
+                        errors.add(
+                            new SemanticError( SemanticErrorType.SIGANTURE_ON_ENTRY, node.getIdentifier(), " , theres no way to expect a higher order function given from cmd line! " + param.toString())
+                        );
+                    }
+                }
             } 
             else {
                 this.errors.add(new SemanticError(
@@ -169,12 +176,11 @@ public class SemanticAnalysis extends DepthFirstAdapter {
 
         PExp exp = node.getExp();
         Symbol identifier_symbol = inference.getSymbolOrNull(exp);
-
         if (identifier_symbol != null) {
             if (identifier_symbol.isFunction()) {
                 errors.add(new SemanticError(
                     SemanticErrorType.INCOMPATIBLE_RETURN_TYPE, node.getIdentifier(), 
-                    " on '" + func_id + "'' expected: '" + expect 
+                    " on '" + func_id + "' expected: '" + expect 
                     + "' got function signature '" + identifier_symbol.getSignature() + "'"
                 )); 
             }
@@ -201,6 +207,10 @@ public class SemanticAnalysis extends DepthFirstAdapter {
 
         }
         table.exitScope();
+    }
+    @Override
+    public void caseTKwIf(TKwIf node) {
+        last_if = node;
     }
 
     @Override
