@@ -660,26 +660,35 @@ public class TypeInference {
                 }
             } 
             else {
-                Type arg_type = getType(arg);
-                Type param_type = param.getType();
-
-                if (canApplyCoercion(param_type, arg_type) && param_type != arg_type) {
-                    if(warnings != null){
-                        warnings.add( new SemanticWarning(
-                            token,
-                            "on '" + arg.toString()
-                            + "' the " +(i+1) + "th argument " 
-                            +  "' was coerced from '" +arg_type 
-                            +"' to " + "'" + param_type + "'"
-                        ));
-                    }
+                if (param.isSignature()) {
+                        return new SemanticError(SemanticErrorType.INCORRECT_USE_OF_ARGUMENTS,token,
+                            "on function '" + function_id+ "'"
+                            + " the " +(i+1) + "th arguments '" + arg.toString() +"' is not a function" 
+                            + " which is is different from expected: "  + param.getSignature()
+                        );
                 }
-                else if (arg_type != param_type  ) {
-                    return new SemanticError(SemanticErrorType.INCORRECT_USE_OF_ARGUMENTS,token,
-                        "on function '" + function_id+ "'"
-                        + " the " +(i+1)+ "th parameter expected type: " + param_type
-                        + " is different from given type: "  +  arg_type
-                    );
+                else {
+                    Type arg_type = getType(arg);
+                    Type param_type = param.getType();
+                    
+                    if (canApplyCoercion(param_type, arg_type) && param_type != arg_type) {
+                        if(warnings != null){
+                            warnings.add( new SemanticWarning(
+                                token,
+                                "on '" + arg.toString()
+                                + "' the " +(i+1) + "th argument " 
+                                +  "' was coerced from '" +arg_type 
+                                +"' to " + "'" + param_type + "'"
+                            ));
+                        }
+                    }
+                    else if (arg_type != param_type  ) {
+                        return new SemanticError(SemanticErrorType.INCORRECT_USE_OF_ARGUMENTS,token,
+                            "on function '" + function_id+ "'"
+                            + " the " +(i+1)+ "th parameter expected type: " + param_type
+                            + " is different from given type: "  +  arg_type
+                        );
+                    }
                 }
             }
         }

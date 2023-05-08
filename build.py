@@ -8,13 +8,13 @@ mainclass = package + ".Main"
 
 sablegrammar = "src/ElipsesCST.sable"
 sablegrammar = "src/Elipses.sable"
-
 autorun = True 
 
 codegen_files = [
-    #"test/codegen/block.elip"
-    "test/codegen/function_references.elip"
-    #"test/codegen/lambda.elip"
+    "test/codegen/block.elip",
+    "test/codegen/function_references.elip",
+    "test/codegen/lambda.elip",
+    "test/codegen/ir.elip",
 ]
 
 semantic_files = [
@@ -23,7 +23,6 @@ semantic_files = [
     #"test/semantic/incorrect_undeclared.elip",
     #"test/semantic/incorrect_operation.elip",
     #"test/semantic/incorrect_if_expr.elip",
-    #"test/semantic/signature.elip",
     #"test/semantic/incorrect_args.elip",
     #"test/semantic/incorrect_return_type.elip",
     #"test/semantic/incorrect_decl_const_type.elip",
@@ -34,8 +33,8 @@ semantic_files = [
 
 runargs = [
     #"--gui",
-    "--c",
-    "--exe",
+    #"--c",
+    #"--exe",
     #*semantic_files
     *codegen_files
 ]

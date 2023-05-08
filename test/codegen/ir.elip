@@ -1,23 +1,13 @@
-entrada( inteiro main(inteiro a ):(
-   exemploAltaOrdem(2| modificarDigito) 
-))
-
-( real another(inteiro a | inteiro b):(
-    se (verdadeiro) entao
-        1+2*5*6 
-    senao se (verdadeiro) entao
-       falso 
-    senao
-        (lambda(x|y):( fibonacci(3) + 2 ou x + y * 5 )[1|2]) 
-))
 
 
-( inteiro fibonacci   (inteiro x) :
+entrada( inteiro fibonacci   (inteiro x) :
     (
         se (x < 1 ou x = 1) entao x senao (fibonacci(x-1) + fibonacci(x-2))
     )
 )
 
+
+(inteiro number():(2))
 
 (
     inteiro exemploAltaOrdem (inteiro digito | real multiplicarPorPi ( inteiro random() | real)):
@@ -30,7 +20,6 @@ entrada( inteiro main(inteiro a ):(
     )
 )
 
-(inteiro number():(2))
 
 (
     real modificarDigito (inteiro random() | real pi):
@@ -38,7 +27,16 @@ entrada( inteiro main(inteiro a ):(
         random()* pi
     )
 )
+
 {--
+entrada ( real another(inteiro a | inteiro b):(
+    se (verdadeiro) entao
+        1+2*5*6 
+    senao se (verdadeiro) entao
+       falso 
+    senao
+        (lambda(x|y):( fibonacci(3) + 2 ou x + y * 5 )[1|2]) 
+))
 ( inteiro shifted_fib(inteiro x) :
     
     (

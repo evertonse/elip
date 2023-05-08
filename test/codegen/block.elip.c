@@ -60,29 +60,38 @@ int elip_block_creation()  {
         int block_3;        
         {
             
-            int block_4;            
+            int if_0;            
             {
-                block_4 = 2;
-            }
-            
-            int block_5;            
-            {
-                
-                int lambda_1;                
-                {
+                if ((elip_b>1)) {
                     
-                    int block_7;                    
+                    int block_4;                    
                     {
-                        const int elip_a = 2  ;
-                        const int elip_b = 2  ;
-                        block_7 = (elip_a + elip_b);
+                        block_4 = 2;
                     }
-                    int elip_x = (elip_a + block_7) ;
-                    lambda_1 = elip_a;
+                    if_0 = block_4;
+                } else {
+                    
+                    int block_5;                    
+                    {
+                        
+                        int lambda_0;                        
+                        {
+                            
+                            int block_7;                            
+                            {
+                                const int elip_a = 2  ;
+                                const int elip_b = 2  ;
+                                block_7 = (elip_a*elip_b);
+                            }
+                            int elip_x = (elip_a%block_7) ;
+                            lambda_0 = elip_a;
+                        }
+                        block_5 = lambda_0;
+                    }
+                    if_0 = block_5;
                 }
-                block_5 = lambda_1;
             }
-            block_3 = ((elip_b>1) ? block_4:block_5);
+            block_3 = if_0;
         }
         block_0 = (((elip_a + elip_b) + block_1) + block_3);
     }
@@ -91,52 +100,61 @@ int elip_block_creation()  {
 }
 int elip_shifted_fib( int elip_x)  {
     
-    int block_8;    
+    int block_0;    
     {
         const int elip_a = 2  ;
         
-        int block_9;        
+        int block_1;        
         {
             const int elip_q = 2  ;
             const int elip_r = 3  ;
-            block_9 = elip_shifted_fib((elip_q + elip_r));
+            block_1 = elip_shifted_fib((elip_q + elip_r));
         }
-        const int elip_b = block_9  ;
+        const int elip_b = block_1  ;
         
-        int block_10;        
+        int block_2;        
         {
             
-            int block_11;            
+            int block_3;            
             {
                 const int elip_ba = 2  ;
                 const int elip_bb = 2  ;
-                block_11 = (elip_ba*elip_bb);
+                block_3 = (elip_ba*elip_bb);
             }
-            block_10 = block_11;
+            block_2 = block_3;
         }
-        block_8 = (elip_a + block_10);
+        block_0 = (elip_a + block_2);
     }
     
-    int block_12;    
+    int if_0;    
     {
-        const int elip_ca = 2  ;
-        const int elip_cb = 2  ;
-        block_12 = (elip_ca%elip_cb);
+        if (true) {
+            
+            int block_4;            
+            {
+                const int elip_ca = 2  ;
+                const int elip_cb = 2  ;
+                block_4 = (elip_ca%elip_cb);
+            }
+            if_0 = block_4;
+        } else {
+            
+            int block_5;            
+            {
+                const int elip_ca = 2  ;
+                const int elip_cb = 2  ;
+                block_5 = (40*elip_cb);
+            }
+            if_0 = block_5;
+        }
     }
-    
-    int block_13;    
-    {
-        const int elip_ca = 2  ;
-        const int elip_cb = 2  ;
-        block_13 = (40*elip_cb);
-    }
-    int return_data = (block_8 + (123*(true ? block_12:block_13)));
+    int return_data = (block_0 + (123*if_0));
     return (return_data);
 }
 int main(int argc, char *argv[]) {
     setlocale(LC_ALL, "fr_FR.UTF-8");
     char *arg;
-    int arg_len;
+    size_t arg_len;
    if (argc <2) {
        printf("%s expects 1 arguments from cmd line\n", argv[0]);
        printf("The expected types are inteiro x ");

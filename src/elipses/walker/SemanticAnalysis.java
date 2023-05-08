@@ -424,7 +424,7 @@ public class SemanticAnalysis extends DepthFirstAdapter {
             }
         }
 
-        ElipLogger.info(table.get(name).toString());
+        ElipLogger.debug(table.get(name).toString());
 
     }
 

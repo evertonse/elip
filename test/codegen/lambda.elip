@@ -15,9 +15,6 @@ entrada (inteiro other(inteiro x): (
    se (b = 0) entao a senao mdc(b | a % b)
 ))
 
-( inteiro home(inteiro mdc(inteiro md(inteiro| inteiro| inteiro))) :(
-    2
-))
 
 ( inteiro a(inteiro b | inteiro c) :(
     (lambda (x) : ((lambda () : (2) [])) [
@@ -25,6 +22,9 @@ entrada (inteiro other(inteiro x): (
     ])
 ))
 
+( inteiro home(inteiro mdc(inteiro md(inteiro| inteiro| inteiro))) :(
+    2
+))
 ( inteiro higher_order_lambda_wrapped_in_block():(
    (lambda (wraped) : (2) [(home)]) 
 ))
@@ -34,13 +34,10 @@ entrada (inteiro other(inteiro x): (
    +(lambda (y) : (2) [((home))])  # passing a func make problems arise
 ))
 
-{--
 
-entrada( inteiro complex_lambda():(
+( inteiro complex_lambda():(
     (2)*(2)
     + (lambda () : (2) [])
     + (lambda (x | y) : ( (lambda () : ((lambda () : ((lambda (x | mdc) : (x / mdc(x | 2) *2) [15 | mdc])) [])) [])+(((x))) / mdc(x | (y)) * y) [2| 20]) # calculo mmc
     + (lambda (x | mdc) : (x / mdc(x | 2) *2) [(lambda () : (2) []) | mdc])  # passing a func make problems arise
 ))
-{--
---}

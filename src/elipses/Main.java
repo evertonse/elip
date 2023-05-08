@@ -39,9 +39,7 @@ public class Main {
 
     public static void main(String[] args) {
         if(DEBUG) {
-            //input_files.add("test/debug.elip");
-            input_files.add("test/codegen/function_references.elip");
-            
+            input_files.add("DEBUG FILE HERE");
         }
 
         ElipLogger.setDebugMode(DEBUG_LOG);

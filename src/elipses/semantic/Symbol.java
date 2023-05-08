@@ -121,10 +121,10 @@ public class Symbol {
 
 
     private String name;
-    private Type type;
     private Signature signature;
-    private int value;
+    private Type type;
     private Token token;
+    private int value;
 
 
     public Symbol(Symbol other) { 

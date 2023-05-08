@@ -31,7 +31,7 @@ class CCodeData {
             out = new PrintWriter(filename + ".c" );
         }
         catch(IOException exc) {
-            System.out.print(exc);
+            ElipLogger.error(exc.getMessage());
         }
     }
 
@@ -68,7 +68,6 @@ public class CCodeGenerator extends DepthFirstAdapter {
 
     Stack<IndentedStringBuilder > blocks = new Stack<>();
 
-    int lambda_count = 0;
     private Map<String,String> C;
 
     public CCodeGenerator(String out_filename) {
@@ -419,7 +418,7 @@ public class CCodeGenerator extends DepthFirstAdapter {
     @Override
     public void caseAIfExp(AIfExp node) {
         this.inAIfExp(node);
-        String if_name = new String("if_" + flags.if_count++);
+        String if_name = new String("if_" + (flags.if_count++));
         if_return.push(if_name );
 
         IndentedStringBuilder block = new IndentedStringBuilder(body); 
@@ -703,7 +702,7 @@ public class CCodeGenerator extends DepthFirstAdapter {
         // After the declaration is finished then we get the type and add to the table
         String name = node.getIdentifier().getText().strip();
         table.add(name, new Symbol(name, node.getType().toString()));
-        ElipLogger.info(table.get(name).toString());
+        ElipLogger.debug(table.get(name).toString());
     }
 
 
@@ -737,7 +736,6 @@ public class CCodeGenerator extends DepthFirstAdapter {
         Symbol.Signature signature = s;
         StringBuilder sb = new StringBuilder();
         sb.append( C.get(signature.getReturnType().toString()));
-        //sb.append("(*fn_" + (typedef_count++) +")");
         if(func_name != null){
             sb.append("(*" + func_name + ")");
         }
@@ -766,7 +764,6 @@ public class CCodeGenerator extends DepthFirstAdapter {
     @Override
     public void inALambdaExp(ALambdaExp node) {
 
-        flags.lambda_count++;
         table.enterScope();
         ElipLogger.debug("lambda entered scope");
     }
@@ -777,7 +774,7 @@ public class CCodeGenerator extends DepthFirstAdapter {
         this.inALambdaExp(node);
         //lambda_temp = header; 
         //header = def_header;
-        String lambda_name = new String("lambda_" + flags.lambda_count);
+        String lambda_name = new String("lambda_" + flags.lambda_count++);
 
         lambda_return.push(lambda_name);
         IndentedStringBuilder block = new IndentedStringBuilder(body); 
