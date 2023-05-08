@@ -32,7 +32,7 @@ public class SemanticAnalysis extends DepthFirstAdapter {
         this.filename = filename;
         SemanticError.setFileName(filename);
         SemanticWarning.setFileName(filename);
-        this.inference = new TypeInference(table, errors,warnings);
+        this.inference = new TypeInference(table, errors,warnings, this);
     }
     
     static public void addBuiltinFunctions(SymbolTable table) {
@@ -97,7 +97,6 @@ public class SemanticAnalysis extends DepthFirstAdapter {
         if ( error != null) {
             errors.add(error);
         }
-        // TODO check arguments passed with the function definition in case
         // the function is defined
     }
 
@@ -219,7 +218,6 @@ public class SemanticAnalysis extends DepthFirstAdapter {
         List<TIdentifier> ids  = node.getId();
         int ids_count = ids.size();
         int args_count = args.size();
-        int count = ids_count > args_count ? args_count : ids_count;
 
         if (args_count != ids_count) {
             if (ids_count > 0) {
@@ -238,11 +236,30 @@ public class SemanticAnalysis extends DepthFirstAdapter {
 
         table.enterScope();
         ElipLogger.debug("lambda entered scope");
+        
+    }
+    @Override
+    public void caseALambdaExp(ALambdaExp node)
+    {
+        this.inALambdaExp(node);
+        List<PExp> args = node.getArgs();
+        List<TIdentifier> ids  = node.getId();
+        int ids_count = ids.size();
+        int args_count = args.size();
+        int count = ids_count > args_count ? args_count : ids_count;
+        for(TIdentifier e : ids)
+        {
+            e.apply(this);
+        }
+        for(PExp e : args)
+        {
+            e.apply(this);
+        }
         // We need to add the ids and type on next scope
         // so this need to me on inNode and not outNode, ok?
         for (int i = 0; i < count; i++) {
             String id = ids.get(i).getText(); 
-            PExp e = args.get(i);
+            PExp arg = args.get(i);
             Symbol.Type type;
             if (table.existsInCurrentScope(id)) {
                 errors.add(new SemanticError(
@@ -254,17 +271,22 @@ public class SemanticAnalysis extends DepthFirstAdapter {
             // If somewhoe it  finds identitifer we need add NEW symbol by COPY
             // because it might be a function and inferente type checking
             // only return the return type of the function
-            Symbol identifier_symbol = inference.getSymbolOrNull(e);
+            Symbol identifier_symbol = inference.getSymbolOrNull(arg);
             if (identifier_symbol != null) {
                 table.add(id, new Symbol(identifier_symbol));
                 ElipLogger.debug(" Lambda -> added id "+ id + " from already defined symbol :" + identifier_symbol);
             }
             else {
-                type = inference.getType(e); 
+                type = inference.getType(arg); 
                 table.add(id, new Symbol(id, type));
                 ElipLogger.debug(" Lambda -> added id "+ id + " with type" + type);
             }
         }
+        if(node.getBody() != null)
+        {
+            node.getBody().apply(this);
+        }
+        this.outALambdaExp(node);
     }
 
     @Override

@@ -24,13 +24,13 @@ public class Main {
     static boolean use_gui            = false;
     static boolean print_ast          = false;
     static boolean generate_exe       = false;
-    static boolean generate_c         = false;
+    static boolean generate_c         = true;
     static boolean print_tokens       = false;
     static boolean semantic_analisys  = true;
 
     static boolean DEBUG = 
-        //true
-        false
+        true
+        //false
     ;
     static boolean DEBUG_LOG = 
         true
@@ -39,8 +39,9 @@ public class Main {
 
     public static void main(String[] args) {
         if(DEBUG) {
-            //input_files.add("test/IR/block.elip");
-            input_files.add("test/codegen/lambda.elip");
+            //input_files.add("test/debug.elip");
+            input_files.add("test/codegen/function_references.elip");
+            
         }
 
         ElipLogger.setDebugMode(DEBUG_LOG);
@@ -100,7 +101,7 @@ public class Main {
                     generate_exe = true;
                     ElipLogger.info(
                          "INFO: elip is gonna generate C code as Target Language." 
-                        +" but this is already the default bevahiour :P (for now)"
+                        +"and create a executable using gcc."
                     );
                 case "--c":
                     generate_c = true;
@@ -137,7 +138,9 @@ public class Main {
                 if (semantic_analisys) {
                     adapter = new SemanticAnalysis(elip_file);
                     Debug.debug(elip_file, adapter, print_tokens);
-                    ElipLogger.info( "" + ((SemanticAnalysis)adapter).allGood());
+                    if (((SemanticAnalysis)adapter).allGood()) {
+                        ElipLogger.success(" semantic analysis checked.");
+                    }
                 }
                 boolean ok = false;
                 String cfile = elip_file + ".c";
@@ -181,6 +184,8 @@ class Utils {
 }
 
 class Debug {
+    static boolean ok_tokenized = false;
+    static boolean ok_parsed = false;
 
     public static void
     debug(String file, Switch adapter, boolean print_tokens) {
@@ -190,7 +195,10 @@ class Debug {
             if (print_tokens) {
                 Debug.lexer(f, print_tokens);
             }
-            ElipLogger.success(" Tokenized with success.");
+            if (ok_tokenized == false) {
+                ok_tokenized  = true;
+                ElipLogger.success(" Tokenized with success.");
+            }
             Debug.parser(f, adapter);
         } catch (Exception e) {
 
@@ -234,7 +242,12 @@ class Debug {
             Lexer lexer = new Lexer(new PushbackReader(new FileReader(file), 4024));
             Parser p = new Parser(lexer);
             Start tree = p.parse();
-            ElipLogger.success(" Parsed into AST with success.");
+
+            if (ok_parsed == false) {
+                ok_parsed  = true;
+                ElipLogger.success(" Parsed into AST with success.");
+            }
+
             tree.apply(adapter);
         } catch (ParserException e) {
             int line = e.getToken().getLine();
@@ -309,7 +322,7 @@ class CCompiler {
             // Command to compile the C code
             String source = filepath;
             String executable = filepath.replace(".c", "").replace(".elip", "");
-            String[] command = {"gcc",  source, "-o", executable };
+            String[] command = {"gcc",  source, "-o", executable, "-lm" };
 
             // Create a ProcessBuilder object with the command
             ProcessBuilder proc = new ProcessBuilder(command);

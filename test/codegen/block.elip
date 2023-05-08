@@ -1,4 +1,5 @@
-entrada (inteiro block_creation():(
+
+(inteiro block_creation():(
     (
         (const inteiro a (2))
         (const inteiro b (2))
@@ -8,11 +9,19 @@ entrada (inteiro block_creation():(
             (const inteiro bb ((2)))
             ba + bb
         )
+    + (se (b > 1 ) entao (2) senao (
+        (lambda(x):(a)[ 
+            a % 
+            (   (const inteiro a (2))
+                (const inteiro b (2))
+                a * b
+            )
+        ])
+    ))
     )
-    +((2))
 ))
-{--
-(inteiro shifted_fib(inteiro x) : (
+
+entrada (inteiro shifted_fib(inteiro x) : (
     (
         (const inteiro a (2))
         (const inteiro b (
@@ -26,7 +35,7 @@ entrada (inteiro block_creation():(
             (
                 (const inteiro ba (2))
                 (const inteiro bb (2))
-                ba ou bb
+                ba * bb
             )
         )
     ) + 123 * se (verdadeiro) entao (
@@ -41,8 +50,3 @@ entrada (inteiro block_creation():(
         )
 
 ))
-
-(inteiro other(inteiro x):
-    ((lambda(x|y|z):( (z) + x + 3 )[verdadeiro|2|3]))
-)
---}

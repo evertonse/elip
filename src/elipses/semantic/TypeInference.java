@@ -45,6 +45,13 @@ public class TypeInference {
         this.errors = error_list;
     }
 
+    public TypeInference(SymbolTable  table, List<SemanticError> error_list, List<SemanticWarning> warnings_list, DepthFirstAdapter adapter) {
+        this.table = table;
+        this.errors = error_list;
+        this.warnings = warnings_list;
+        this.adapter = adapter;
+    }
+    
     public TypeInference(SymbolTable  table, List<SemanticError> error_list, List<SemanticWarning> warnings_list) {
         this.table = table;
         this.errors = error_list;
@@ -617,8 +624,8 @@ public class TypeInference {
         for (int i = 0; i < count; i++) {
             Symbol.SignatureParam param = params.get(i);
             PExp arg = args.get(i);
-            if (arg instanceof AIdExp) {
-                Symbol id_symbol = table.get(((AIdExp) arg).getIdentifier().getText());  
+            Symbol id_symbol = getSymbolOrNull(arg);
+            if (id_symbol != null) {
                 if (id_symbol.isFunction()) {
                     if (!id_symbol.getSignature().equals(param.getSignature())){
                         return new SemanticError(SemanticErrorType.INCORRECT_USE_OF_ARGUMENTS,token,

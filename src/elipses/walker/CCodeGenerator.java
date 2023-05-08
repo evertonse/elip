@@ -61,6 +61,7 @@ public class CCodeGenerator extends DepthFirstAdapter {
     String curr_block;
 
     Stack<String> block_return = new Stack<>();
+    Stack<String> if_return = new Stack<>();
     Stack<String> lambda_return = new Stack<>();
     IndentedStringBuilder lambda_header = new IndentedStringBuilder();
     IndentedStringBuilder lambda_temp;
@@ -414,8 +415,86 @@ public class CCodeGenerator extends DepthFirstAdapter {
         body.append("))");
         outANotExp(node);
     }
+    
     @Override
     public void caseAIfExp(AIfExp node) {
+        this.inAIfExp(node);
+        String if_name = new String("if_" + flags.if_count++);
+        if_return.push(if_name );
+
+        IndentedStringBuilder block = new IndentedStringBuilder(body); 
+
+        block
+            .append("\n")
+            .pushIndex()
+            .append("\n")
+            .append("{\n")
+            .pushIndent()
+        ;
+        
+        IndentedStringBuilder temp = body;
+        body = block;
+        body.append("if (");
+        node.getCond().apply(this);
+        body.append(") {").pushIndent().append("\n");
+
+        block.append(if_name + " = " );   
+        node.getTruthy().apply(this);
+        block.append(";\n")
+             .popIndent()
+             .append("} else {\n")
+             .pushIndent();
+        block.append(if_name + " = " );   
+            node.getFalsy().apply(this);
+        block.append(";\n")
+            .popIndent()
+            .append("}\n")
+            .popIndent()
+            .append("}\n");
+        
+
+        String if_type = "float";
+        boolean write_name = true;
+        Symbol s = inference.getSymbolOrNull(node.getTruthy());
+        if (s != null) {
+            if (s.isFunction()){
+                if_type = fromSignatureToCType(s.getSignature(), if_name);
+                write_name = false;
+            }
+            else {
+                if_type = C.get(s.getType().toString().strip());
+            }
+        }
+        else {
+            Type t = inference.getType(node.getFalsy()); 
+            if (t != Type.UNKOWN){
+                if_type = C.get(t.toString());
+            }
+        }
+        ElipLogger.debug("[C] we got the if type as " + if_type);
+        
+        if (write_name) {
+            block
+                .insertAtCurrentIndex(if_type + " " + if_name+ ";")
+                .popIndex()
+            ;
+        } 
+        else {
+            block
+                .insertAtCurrentIndex(if_type + ";")
+                .popIndex()
+            ;
+
+        }
+
+        body = temp;
+        body.insertAtPreviousLine(block.toString());
+        body.append(if_return.pop());
+        this.outAIfExp(node);
+    }
+
+    //@Override
+    public void oldCaseAIfExp(AIfExp node) {
         inAIfExp(node);
 
         body.append("(");
@@ -578,9 +657,7 @@ public class CCodeGenerator extends DepthFirstAdapter {
 
         }
 
-        body.append( "/*escrevo no block*/" );
         body = temp;
-        body.append( "/*escrevo no body*/" );
         body.insertAtPreviousLine(block.toString());
         body.append(block_return.pop());
         this.outABlockExp(node);
@@ -595,8 +672,8 @@ public class CCodeGenerator extends DepthFirstAdapter {
     @Override
     public void inADeclConst(ADeclConst node) {
         assert node.getIdentifier() != null;
-        String name = node.getIdentifier().getText().strip();
-        assert table.existsInCurrentScope(name);
+        //String name = node.getIdentifier().getText().strip();
+        //assert table.existsInCurrentScope(name);
     }
     public void caseADeclConst(ADeclConst node) {
         this.inADeclConst(node);
@@ -690,34 +767,9 @@ public class CCodeGenerator extends DepthFirstAdapter {
     public void inALambdaExp(ALambdaExp node) {
 
         flags.lambda_count++;
-        List<PExp> args = node.getArgs();
-        List<TIdentifier> ids  = node.getId();
-        int ids_count = ids.size();
-        int args_count = args.size();
-        int count = ids_count > args_count ? args_count : ids_count;
-
-
         table.enterScope();
-        // We need to add the ids and type on next scope
-        // so this need to me on inNode and not outNode, ok?
-        for (int i = 0; i < count; i++) {
-            String id = ids.get(i).getText(); 
-            PExp arg = args.get(i);
-
-            Symbol identifier_symbol = inference.getSymbolOrNull(arg);
-            if (identifier_symbol != null) {
-                table.add(id, new Symbol(identifier_symbol));
-                ElipLogger.debug(" Lambda -> added id "+ id + " from already defined symbol :" + identifier_symbol);
-            }
-            else {
-                Symbol.Type type;
-                type = inference.getType(arg); 
-                table.add(id, new Symbol(id, type));
-                ElipLogger.debug(" Lambda -> added id "+ id + " with type" + type);
-            }
-        }
+        ElipLogger.debug("lambda entered scope");
     }
-
 
     @Override 
     public void 
@@ -730,6 +782,23 @@ public class CCodeGenerator extends DepthFirstAdapter {
         lambda_return.push(lambda_name);
         IndentedStringBuilder block = new IndentedStringBuilder(body); 
 
+        List<TIdentifier> ids = new ArrayList<TIdentifier>(node.getId());
+        List<PExp> args = new ArrayList<PExp>(node.getArgs());
+
+
+        IndentedStringBuilder temp = body;
+        IndentedStringBuilder void_block = new IndentedStringBuilder(body); 
+        body = void_block;
+        for(TIdentifier e : ids)
+        {
+            e.apply(this);
+        }
+        for(PExp e : args)
+        {
+            e.apply(this);
+        }
+        body = temp;
+
         block
             .append("\n")
             .pushIndex()
@@ -737,43 +806,55 @@ public class CCodeGenerator extends DepthFirstAdapter {
             .append("{\n")
             .pushIndent()
         ;
+
+
         
-        IndentedStringBuilder temp = body;
+        temp = body;
         body = block;
-        {
-            List<TIdentifier> ids = new ArrayList<TIdentifier>(node.getId());
-            List<PExp> args = new ArrayList<PExp>(node.getArgs());
-            int len = args.size();
-            boolean apply_id = true;
-            for (int i = 0; i < len; i++) {
-                TIdentifier id = ids.get(i); 
-                PExp arg = args.get(i); 
-                String ctype = "float";
-                if(table.exists(id.getText())){
-                    Symbol s = table.get(id.getText());
-                    if (s.isFunction()){
-                        ctype = fromSignatureToCType(s.getSignature(),sanitize(id.getText()));
-                        ElipLogger.debug(" [C] >> " + id.getText()+ " does exist in table and its a function" + ctype);
-                        apply_id = false;
-                    }
-                    else {
-                        ctype = C.get(s.getType().toString().strip());
-                        ElipLogger.debug(" [C] >> " + id.getText()+ " does exist in table and its not a function");
-                    }
+        int len = args.size();
+        boolean apply_id = true;
+
+        for (int i = 0; i < len; i++) {
+            TIdentifier id = ids.get(i); 
+            PExp arg = args.get(i); 
+            String ctype = "float";
+
+            Symbol.Type type;
+            Symbol identifier_symbol = inference.getSymbolOrNull(arg);
+            if (identifier_symbol != null) {
+                table.add(id.getText(), new Symbol(identifier_symbol));
+                ElipLogger.debug(" Lambda -> added id "+ id + " from already defined symbol :" + identifier_symbol);
+            }
+            else {
+                type = inference.getType(arg); 
+                table.add(id.getText(), new Symbol(id.getText(), type));
+                ElipLogger.debug(" Lambda -> added id "+ id + " with type" + type);
+            }
+
+            if(table.exists(id.getText())){
+                Symbol s = table.get(id.getText());
+                if (s.isFunction()){
+                    ctype = fromSignatureToCType(s.getSignature(),sanitize(id.getText()));
+                    ElipLogger.debug(" [C] >> " + id.getText()+ " does exist in table and its a function" + ctype);
+                    apply_id = false;
                 }
                 else {
-                    ctype = C.get(inference.getType(arg).toString().strip());
-                    ElipLogger.debug(" [C] >> " + id.getText()+ " does not exist in table");
+                    ctype = C.get(s.getType().toString().strip());
+                    ElipLogger.debug(" [C] >> " + id.getText()+ " does exist in table and its not a function");
                 }
-
-                block.append(ctype + " ");
-                if(apply_id){
-                    id.apply(this);
-                }
-                block.append( " = " );
-                arg.apply(this);
-                block.append( " ;\n" );
             }
+            else {
+                ctype = C.get(inference.getType(arg).toString().strip());
+                ElipLogger.debug(" [C] >> " + id.getText()+ " does not exist in table");
+            }
+
+            block.append(ctype + " ");
+            if(apply_id){
+                id.apply(this);
+            }
+            block.append( " = " );
+            arg.apply(this);
+            block.append( " ;\n" );
         }
 
         PExp exp = node.getBody();
@@ -786,13 +867,12 @@ public class CCodeGenerator extends DepthFirstAdapter {
             .append("}\n");
 
             
-        String lambda_type = C.get(inference.getType(node.getBody()).toString());
-        ElipLogger.debug("from c we got the block type as " + lambda_type);
+        Type type = inference.getType(exp);
+        String lambda_type = C.get(type.toString());
+        ElipLogger.debug("from c we got the lambda type as " + lambda_type + 
+            " original type is " + type);
 
-        body.append( "/*antes do temp*/" );
         body = temp;
-        body.append( "/*depois*/" );
-        
         block 
             .insertAtCurrentIndex(lambda_type  + " " + lambda_name + ";")
             .popIndex()
@@ -805,110 +885,12 @@ public class CCodeGenerator extends DepthFirstAdapter {
         this.outALambdaExp(node);
        
     }
-    //@Override 
-    public void 
-    __caseALambdaExp(ALambdaExp node) {
-        this.inALambdaExp(node);
-        //lambda_temp = header; 
-        //header = def_header;
-        String lambda_name = new String("lambda_" + flags.lambda_count);
-        header.append(
-            "\n#define " 
-            + "def_"+lambda_name
-            + "("
-        );
-        {
-            List<TIdentifier> copy = new ArrayList<TIdentifier>(node.getId());
-            int len = copy.size();
-            for (int i = 0; i < len; i++) {
-                TIdentifier e = copy.get(i); 
-                //e.apply(this);
-                header.append(sanitize(e));
-                if (i != len -1) {
 
-                    header.append(", ");
-                }
-            }
-        }
-
-        header
-            .append(")\\\n")
-        ; 
-        header.pushIndex(); 
-
-        lambda_return.push(lambda_name);
-        IndentedStringBuilder block = new IndentedStringBuilder(body); 
-
-        block
-            .append("\n")
-            .pushIndex()
-            .append("\n")
-            .append("{\n")
-            .pushIndent()
-        ;
-        
-        IndentedStringBuilder temp = body;
-        body = block;
-
-
-        PExp exp = node.getBody();
-        if(exp != null) {
-            block.append( lambda_name + " = "  );   
-            exp.apply(this);
-        }
-        block.append(";\n")
-            .popIndent()
-            .append("}\n");
-
-            
-        String lambda_type = C.get(inference.getType(node.getBody()).toString());
-        ElipLogger.debug("from c we got the block type as " + lambda_type);
-
-        //block
-            //.insertAtCurrentIndex(lambda_type  + " " + lambda_name + ";")
-            //.popIndex()
-            //.pushIndex();
-        //;
-
-
-        body.append( "/*antes do temp*/" );
-        body = temp;
-        body.append( "/*depois*/" );
-        
-        IndentedStringBuilder def_lambda = new IndentedStringBuilder();
-        def_lambda.append("def_"+lambda_name + "(");
-        temp = body;
-        body = def_lambda;
-        {
-            List<PExp> copy = new ArrayList<PExp>(node.getArgs());
-            int len = copy.size();
-            for (int i = 0; i < len; i++) {
-               PExp e = copy.get(i);
-                e.apply(this);
-                if (i != len -1) {
-                    def_lambda.append(",");
-                }
-            }
-        }
-        def_lambda.append(");\n");
-        body = temp;
-        block 
-            .popIndex()
-            .insertAtCurrentIndex(lambda_type  + " " + lambda_name + ";")
-        ;
-        body.insertAtBeginningOfPreviousLine(def_lambda.toString());
-        
-
-        header.insertAtCurrentIndex(
-            block.toString()
-                .replaceAll("^\\(|\\)$", "")
-                .replaceAll("\n", "\\\\\n")
-        ).popIndex();
-        body.append(lambda_return.pop());
-        this.outALambdaExp(node);
-       
+    @Override
+    public void outALambdaExp(ALambdaExp node) {
+       ElipLogger.debug("lambda exited scope");
+       table.exitScope(); 
     }
-    
     // << [Exp]
     
 
@@ -1030,7 +1012,7 @@ public class CCodeGenerator extends DepthFirstAdapter {
                 "int main(int argc, char *argv[]) {\n"
             + "    setlocale(LC_ALL, \"fr_FR.UTF-8\");\n"
             + "    char *arg;\n"
-            + "    int arg_len;\n"
+            + "    size_t arg_len;\n"
             );
             List<PParam> copy = new ArrayList<PParam>(node.getParam());
             int argc = copy.size();
@@ -1194,6 +1176,9 @@ public class CCodeGenerator extends DepthFirstAdapter {
     @Override
     public void outADeclFunc(ADeclFunc node) {
         table.exitScope();
+        flags.block_count = 0;
+        flags.if_count  = 0;
+        flags.lambda_count = 0;
     }
 
     // << [Function Declaration]

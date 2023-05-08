@@ -6,9 +6,8 @@
     se (falso) entao truthy_as_func_ref senao (verdadeiro)
 ))
 
-
 (inteiro falsy_as_func_ref(): (
-    se (falso) entao 2 senao falsy_as_func_ref 
+    se (falso) entao 2 senao (lambda ():(falsy_as_func_ref)[]) 
 ))
 
 (inteiro cond_as_real(): (

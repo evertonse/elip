@@ -1,0 +1,30 @@
+
+(inteiro fibonacci(inteiro n):(
+    se (n < 2) entao 
+        n 
+    senao 
+        (fibonacci(n-1) + fibonacci(n-2))
+))
+
+(inteiro one ():(1))
+(inteiro two ():(2))
+
+(inteiro surprise(inteiro fn()):(fn()))
+
+(inteiro if_function_reference():(
+    surprise(
+        se (verdadeiro) entao 
+            one
+        senao 
+            two
+    )
+))
+
+(inteiro very_high_order(inteiro fn(real fn())):(
+    fn()
+))
+
+
+entrada ( inteiro main(inteiro fib) : (
+    fibonacci(fib)
+))

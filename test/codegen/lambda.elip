@@ -1,4 +1,16 @@
 #!/usr/bin/elipc
+
+entrada (inteiro other(inteiro x): ( 
+    (lambda(x|y|z):( se(x) entao (z) senao --3,1 )
+    [
+        verdadeiro
+        |2
+        |(lambda(r|p|q):( se(r) entao (p) senao --q )[verdadeiro|2,1|3,1])
+    ])
+)
+)
+
+
 ( inteiro mdc(inteiro a | inteiro b) :(
    se (b = 0) entao a senao mdc(b | a % b)
 ))
@@ -17,7 +29,7 @@
    (lambda (wraped) : (2) [(home)]) 
 ))
 
-entrada ( inteiro higher_order_lambda():(
+( inteiro higher_order_lambda():(
    (lambda (y | fn) : (y / fn(y | 2) *2) [2| (mdc)])  # passing a func make problems arise
    +(lambda (y) : (2) [((home))])  # passing a func make problems arise
 ))
