@@ -17,12 +17,6 @@ float elip_logaritmo(float x);
 float elip_potencia(float x, float y);
 
 int elip_fibonacci( int elip_n);
-int elip_one();
-int elip_two();
-int elip_surprise( int (*elip_fn)());
-int elip_if_function_reference();
-int elip_very_high_order( float (*elip_fn)( int (*elip_f)()));
-int elip_main( int elip_fib);
 float elip_cosseno(float x) {
     return cosf(x);
 }
@@ -61,63 +55,21 @@ int elip_fibonacci( int elip_n)  {
     int return_data = if_0;
     return (return_data);
 }
-int elip_one()  {
-    int return_data = 1;
-    return (return_data);
-}
-int elip_two()  {
-    int return_data = 2;
-    return (return_data);
-}
-int elip_surprise( int (*elip_fn)())  {
-    int return_data = elip_fn();
-    return (return_data);
-}
-int elip_if_function_reference()  {
-    
-    int(*if_0)();    
-    {
-        
-        bool if_1;        
-        {
-            if (true) {
-                if_1 = true;
-            } else {
-                if_1 = false;
-            }
-        }
-        if (if_1) {
-            if_0 = elip_one;
-        } else {
-            if_0 = elip_two;
-        }
-    }
-    int return_data = elip_surprise(if_0);
-    return (return_data);
-}
-int elip_very_high_order( float (*elip_fn)( int (*elip_f)()))  {
-    int return_data = elip_fn(elip_one);
-    return (return_data);
-}
-int elip_main( int elip_fib)  {
-    int return_data = elip_fibonacci(elip_fib);
-    return (return_data);
-}
 int main(int argc, char *argv[]) {
     setlocale(LC_ALL, "fr_FR.UTF-8");
     char *arg;
     size_t arg_len;
    if (argc <2) {
        printf("%s expects 1 arguments from cmd line\n", argv[0]);
-       printf("The expected types are inteiro fib ");
+       printf("The expected types are inteiro n ");
         return 1;
     }
     arg = argv[1];
 
     arg_len = strlen(arg);
-    int fib = atoi(arg);
+    int n = atoi(arg);
 
-    printf("%d\n",((int)elip_main(fib)));
+    printf("%d\n",((int)elip_fibonacci(n)));
 }
 
 //*** EOF ***//

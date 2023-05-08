@@ -1,0 +1,7 @@
+
+entrada (inteiro fibonacci(inteiro n):(
+    se (n < 2) entao 
+        n 
+    senao 
+        (fibonacci(n-1) + fibonacci(n-2))
+))

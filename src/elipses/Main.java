@@ -29,12 +29,12 @@ public class Main {
     static boolean semantic_analisys  = true;
 
     static boolean DEBUG = 
-        true
-        //false
+        //true
+        false
     ;
     static boolean DEBUG_LOG = 
-        true
-        //false
+        //true
+        false
     ;
 
     public static void main(String[] args) {
@@ -86,10 +86,9 @@ public class Main {
                 case "--gui":
                     use_gui = true;
                     ElipLogger.info(
-                         "INFO: elip is gonna show you a gui representation of the AST generated from .elip files"
+                         "INFO: elip is gonna show you a 'GUI' representation of the AST generated from .elip files"
                     );
                     break;  
-
                 case "--ast":
                     print_ast = true;
                     ElipLogger.info(
@@ -100,14 +99,13 @@ public class Main {
                     generate_c  = true;
                     generate_exe = true;
                     ElipLogger.info(
-                         "INFO: elip is gonna generate C code as Target Language." 
-                        +"and create a executable using gcc."
+                        "elipc will create a executable using gcc."
                     );
+                    break;
                 case "--c":
                     generate_c = true;
                     ElipLogger.info(
-                         "INFO: elip is gonna generate C code as Target Language." 
-                        +" but this is already the default bevahiour :P (for now)"
+                         "elipc is gonna generate C code as Target Language." 
                     );
                     break;
                 case "--token":
@@ -139,7 +137,7 @@ public class Main {
                     adapter = new SemanticAnalysis(elip_file);
                     Debug.debug(elip_file, adapter, print_tokens);
                     if (((SemanticAnalysis)adapter).allGood()) {
-                        ElipLogger.success(" semantic analysis checked.");
+                        ElipLogger.success(" Semantic Analysis passed.");
                     }
                 }
                 boolean ok = false;

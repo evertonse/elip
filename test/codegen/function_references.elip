@@ -13,15 +13,17 @@
 
 (inteiro if_function_reference():(
     surprise(
-        se (verdadeiro) entao 
+        se (
+            se (verdadeiro) entao verdadeiro senao falso
+        ) entao 
             one
         senao 
             two
     )
 ))
 
-(inteiro very_high_order(inteiro fn(real fn())):(
-    fn()
+(inteiro very_high_order(real fn(inteiro f())):(
+    fn(one)
 ))
 
 
