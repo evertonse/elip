@@ -36,5 +36,5 @@ runargs = [
     #"--c",
     #"--exe",
     #*semantic_files
-    #*codegen_files
+    *codegen_files
 ]
