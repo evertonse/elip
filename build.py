@@ -12,13 +12,13 @@ autorun = True
 
 codegen_files = [
     "test/codegen/block.elip",
-    "test/codegen/function_references.elip",
-    "test/codegen/lambda.elip",
-    "test/codegen/ir.elip",
+    #"test/codegen/function_references.elip",
+    #"test/codegen/lambda.elip",
+    #"test/codegen/ir.elip",
 ]
 
 semantic_files = [
-    #"test/semantic/incorrect_duplicate_entry.elip",
+    "test/semantic/incorrect_duplicate_entry.elip",
     #"test/semantic/incorrect_already_defined.elip",
     #"test/semantic/incorrect_undeclared.elip",
     #"test/semantic/incorrect_operation.elip",
@@ -36,5 +36,5 @@ runargs = [
     #"--c",
     #"--exe",
     #*semantic_files
-    *codegen_files
+    #*codegen_files
 ]
