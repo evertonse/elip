@@ -8,6 +8,8 @@ python3 run.py
 python run.py
 ``
 
+# To run as a script first do ``chmod +x ./run.py`` first
+
 ``
 .\run.py
 ``
@@ -17,6 +19,7 @@ python run.py
 ``
 
 # Add the Compiler to Path
+- First run the command ``chmod +x ./bin/elipc`` to let the ``elipc`` be used as an executable.
 - Add the below export to your `~/.bashrc`, or equivalente
 - `export PATH=<path-where-you've-cloned-this-repo>/elip/bin:$PATH`
 
