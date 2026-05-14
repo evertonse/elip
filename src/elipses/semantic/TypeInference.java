@@ -194,8 +194,7 @@ public class TypeInference {
                 errors.add(new SemanticError(
                     SemanticErrorType.UNDECLARED,t, "  " + ((ACallExp)node).getId()));
                 return_symbol  = Symbol.Type.UNKOWN;
-            }
-            else {
+            } else {
                 return_symbol  = table.get(name).getType();
             }
         }

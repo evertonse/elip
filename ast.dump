@@ -1,0 +1,26 @@
+Start | entrada inteiro fibonacci inteiro n n 2 n fibonacci n 1 fibonacci n 2  
+	AProgram | entrada inteiro fibonacci inteiro n n 2 n fibonacci n 1 fibonacci n 2 
+		ADeclFunc | entrada inteiro fibonacci inteiro n n 2 n fibonacci n 1 fibonacci n 2 
+			AIntType | inteiro 
+			ATypeParam | inteiro n 
+				AIntType | inteiro 
+			AIfExp | n 2 n fibonacci n 1 fibonacci n 2 
+				ALtExp | n 2 
+					AIdExp | n 
+					AIntExp | 2 
+				AIdExp | n 
+				ABlockExp | fibonacci n 1 fibonacci n 2 
+					APlusExp | fibonacci n 1 fibonacci n 2 
+						ACallExp | fibonacci n 1 
+							AMinusExp | n 1 
+								AIdExp | n 
+								AIntExp | 1 
+						ACallExp | fibonacci n 2 
+							AMinusExp | n 2 
+								AIdExp | n 
+								AIntExp | 2 
+[36m[elip] [0mTokenizing file: examples/examples/fibonacci.elip
+[32m[elip] [0msuccess:  Semantic Analysis passed.[0m
+[36m[elip] [0mTokenizing file: examples/examples/fibonacci.elip
+[32m[elip] [0msuccess: C code generated at examples/examples/fibonacci.elip.c[0m
+[36m[elip] [0mC code examples/examples/fibonacci.elip.c is compilable

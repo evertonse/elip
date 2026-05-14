@@ -30,6 +30,32 @@ def allfiles(start: Path, extension: str, ignore: set) -> list:
     ]
     return files
 
+# java  = '/usr/lib/jvm/java-21-openjdk/bin/java'
+# javac = '/usr/lib/jvm/java-21-openjdk/bin/javac'
+java  = 'java'
+javac = 'javac'
+
+def require_java11():
+    import subprocess, re, sys
+    try:
+        out = subprocess.run(['java', '-version'], capture_output=True, text=True)
+        ver = out.stderr
+    except FileNotFoundError:
+        print("INFO: Java not found. Please install JDK 11+.")
+        sys.exit(1)
+
+    m = re.search(r'version.*(\d+).*', ver)
+    if not m:
+        print("WARN: Can't parse Java version. We'll try to compile anyway assuming 11 or more java version.")
+    else:
+        version_string = str(m.group(0))
+        new_m = re.search(r'(\d+)\.(\d+)', version_string)
+        java_dir = input(f"INFO: We need at least Java 11. We found this: {version_string}, all good or not?\nPress Enter to continue or paste directory that contains 'javac' 11+\n>")
+        global java, javac
+        java = Path(java_dir, 'java')
+        javac = Path(java_dir, 'javac')
+
+require_java11()
 
 flags = {"run": build.autorun or False, "shellbin": True}
 
@@ -65,8 +91,9 @@ with open(argsfilename, "w+") as f:
     for javafile in sorted(javafiles):
         f.write(f"{javafile} \n")
 
+
 cmd_compile: str = (
-    f'javac -classpath  "{classpath}" -sourcepath "{srcpath}" -d "{classpath}" -encoding UTF-8 '
+    f'{javac} -classpath  "{classpath}" -sourcepath "{srcpath}" -d "{classpath}" -encoding UTF-8 '
     + f"@{argsfilename}"
 )
 
@@ -115,13 +142,13 @@ if flags['shellbin']:
     shell_bin.write_text(
         '#!/usr/bin/env bash\n'
         +'script_path="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"\n'
-        +f'exec java -classpath ${{script_path}} {mainclass} "$@"\n'
+        +f'exec {java} -classpath ${{script_path}} {mainclass} "$@"\n'
     )
     dos2unix(shell_bin)
 
 
 if flags["run"]:
-    cmd_run: str = f'java -classpath "{classpath}" {mainclass} {" ".join(build.runargs) or ""}'
+    cmd_run: str = f'{java} -classpath "{classpath}" {mainclass} {" ".join(build.runargs) or ""}'
     if code == 0:
         print(cmd_run)
         code: int = os.system(cmd_run)

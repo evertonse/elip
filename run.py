@@ -6,13 +6,13 @@ from pathlib import Path
 from shutil import rmtree as rmdir
 import build
 
+java  = '/usr/lib/jvm/java-21-openjdk/bin/java'
 
 ##############################################################################
 ##############################################################################
 base_path = Path(build.srcpath, build.package)
 
-refreshdirs = [Path(base_path, i)
-               for i in {"analysis", "lexer", "node", "parser"}]
+refreshdirs = [Path(base_path, i) for i in {"analysis", "lexer", "node", "parser"}]
 refreshdirs.append(Path(build.bindir))
 
 sablecc_jar_path = Path(build.sablejar)
@@ -38,6 +38,8 @@ def check_result(result: str, project: str = "Project"):
         print(f"Success {result.returncode} on compiling {project}... ")
 
 
+
+
 def __main__():
     global sablecc_grammar_path, sablecc_jar_path, refreshdirs, base_path
     refresh_dirs(dirs=refreshdirs)
@@ -45,13 +47,13 @@ def __main__():
     # Method 1 - find the main sablecc manually
     # cmd = f"java -cp {sablecc_jar_path} org.sablecc.sablecc.SableCC {sablecc_grammar_path}"
     # Method 2 - pass the flag -jar and let java find the main
-    cmd = ["java", "-jar", str(sablecc_jar_path), str(sablecc_grammar_path)]
+    cmd = [java, "-jar", str(sablecc_jar_path), str(sablecc_grammar_path)]
     print(f"INFO running cmd: \n{cmd}")
 
     result: int = run(cmd)
     check_result(result, project="SableCC")
-
     import compile
+
     # result: int = run("python compile.py")
     # check_result(result)
 

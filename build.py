@@ -11,24 +11,24 @@ sablegrammar = "src/Elipses.sable"
 autorun = True 
 
 codegen_files = [
-    "test/codegen/block.elip",
-    #"test/codegen/function_references.elip",
-    #"test/codegen/lambda.elip",
-    #"test/codegen/ir.elip",
+    "examples/codegen/block.elip",
+    #"examples/codegen/function_references.elip",
+    #"examples/codegen/lambda.elip",
+    #"examples/codegen/ir.elip",
 ]
 
 semantic_files = [
-    "test/semantic/incorrect_duplicate_entry.elip",
-    #"test/semantic/incorrect_already_defined.elip",
-    #"test/semantic/incorrect_undeclared.elip",
-    #"test/semantic/incorrect_operation.elip",
-    #"test/semantic/incorrect_if_expr.elip",
-    #"test/semantic/incorrect_args.elip",
-    #"test/semantic/incorrect_return_type.elip",
-    #"test/semantic/incorrect_decl_const_type.elip",
-    #"test/semantic/correct_builtins.elip",
-    #"test/semantic/incorrect_lambda_args.elip",
-    #"test/semantic/incorrect_use_of_bool.elip",
+    "examples/semantic/incorrect_duplicate_entry.elip",
+    #"examples/semantic/incorrect_already_defined.elip",
+    #"examples/semantic/incorrect_undeclared.elip",
+    #"examples/semantic/incorrect_operation.elip",
+    #"examples/semantic/incorrect_if_expr.elip",
+    #"examples/semantic/incorrect_args.elip",
+    #"examples/semantic/incorrect_return_type.elip",
+    #"examples/semantic/incorrect_decl_const_type.elip",
+    #"examples/semantic/correct_builtins.elip",
+    #"examples/semantic/incorrect_lambda_args.elip",
+    #"examples/semantic/incorrect_use_of_bool.elip",
 ]
 
 runargs = [
